@@ -4,12 +4,17 @@
   "private": true,
   "dependencies": {
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "react-mdl": "^1.10.2",
+    "react-particles-js": "^1.5.0",
+    "transmute-framework": "git+https://github.com/transmute-industries/transmute-framework.git#develop",
+    "truffle": "^3.2.2"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
   },
   "scripts": {
+    "welcome": "echo 🤖  && say welcome to transmute mercury, an awesome react blockchain seed app",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
