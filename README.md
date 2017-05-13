@@ -1,5 +1,4 @@
 # Transmute Mercury 
 
-A create react app seed project
+A [create react app](/app/README.md) seed project
 
-See [ABOUT](/ABOUT.md)
