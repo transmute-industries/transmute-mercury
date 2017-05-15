@@ -11,7 +11,8 @@ import {
 } from 'react-redux-firebase'
 import {
   LIST_PATH,
-  ACCOUNT_PATH
+  ACCOUNT_PATH,
+  DEBUG_PATH
 } from 'constants/paths'
 
 // Components
@@ -85,7 +86,12 @@ export default class Navbar extends Component {
 
     const mainMenu = (
       <div className={classes.menu}>
- 
+         <Link to={DEBUG_PATH}>
+          <FlatButton
+            label='Debug'
+            style={buttonStyle}
+          />
+        </Link>
         <FlatButton
           href='https://github.com/transmute-industries/transmute-mercury'
           label='Source'

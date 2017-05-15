@@ -9,7 +9,7 @@ import CircularProgress from 'material-ui/CircularProgress'
     web3: web3
   })
 )
-export default class Home extends Component {
+export default class HomeContainer extends Component {
 
   render() {
     let { web3 } = this.props

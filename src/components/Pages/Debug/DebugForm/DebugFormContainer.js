@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { submit } from 'redux-form'
-import DebugForm from 'components/DebugForm'
+import DebugForm from './DebugForm'
 import { DEBUG_FORM_NAME } from 'constants/formNames'
 
 import { updateDebugSettings } from 'store/debug'
