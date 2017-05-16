@@ -37,13 +37,13 @@ export default class HomeContainer extends Component {
         if (web3.defaultAddress !== undefined) {
           return (
             <div>
-              a
+              Welcome! {web3.defaultAddress}
             </div>
           )
         } else {
           return (
             <div>
-              b
+              Welcome! You are not logged in, use /debug or metamask
             </div>
           )
         }
