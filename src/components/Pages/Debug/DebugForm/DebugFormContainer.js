@@ -8,7 +8,8 @@ import { updateDebugSettings } from 'store/debug'
 
 @connect(
   // Map redux state to props
-  ({ debug }) => ({
+  ({ debug, web3 }) => ({
+    web3: web3,
     debug: debug
   }),
   {
@@ -21,9 +22,10 @@ import { updateDebugSettings } from 'store/debug'
 )
 export default class DebugFormContainer extends Component {
   render () {
-    const { debug, submitForm, onSubmit } = this.props
+    const { debug, web3, submitForm, onSubmit } = this.props
     return (
       <DebugForm
+        web3={web3}
         debug={debug}
         submitForm={submitForm}
         onSubmit={onSubmit}

@@ -1,6 +1,7 @@
 
 export const initialState = {
     web3Provider: localStorage.getItem('web3Provider') || 'testrpc',
+    web3DefaultAddress: localStorage.getItem('web3DefaultAddress') || null,
 }
 
 import {

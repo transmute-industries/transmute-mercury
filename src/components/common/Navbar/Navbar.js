@@ -129,6 +129,10 @@ export default class Navbar extends Component {
           onTouchTap={() => this.context.router.push(PROJECTS_PATH)}
         />
         <MenuItem
+          primaryText='Debug'
+          onTouchTap={() => this.context.router.push(DEBUG_PATH)}
+        />
+        <MenuItem
           primaryText='Sign out'
           onTouchTap={this.handleLogout}
         />
@@ -139,7 +143,7 @@ export default class Navbar extends Component {
       <AppBar
         title={
           <Link to={accountExists ? `${PROJECTS_PATH}` : '/'} className={classes.brand}>
-            Transmute Mercury
+            Transmute
           </Link>
         }
         showMenuIconButton={false}
