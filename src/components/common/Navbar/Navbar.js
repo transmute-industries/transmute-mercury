@@ -13,7 +13,7 @@ import {
   PROJECTS_PATH,
   ACCOUNT_PATH,
   DEBUG_PATH,
-  SIGNUP_PATH
+  LOGIN_PATH
 } from 'constants/paths'
 
 // Components
@@ -87,7 +87,7 @@ export default class Navbar extends Component {
 
     const mainMenu = (
       <div className={classes.menu}>
-         <Link to={SIGNUP_PATH}>
+         <Link to={LOGIN_PATH}>
           <FlatButton
             label='Register'
             style={buttonStyle}
@@ -123,6 +123,10 @@ export default class Navbar extends Component {
         <MenuItem
           primaryText='Account'
           onTouchTap={() => this.context.router.push(ACCOUNT_PATH)}
+        />
+         <MenuItem
+          primaryText='Projects'
+          onTouchTap={() => this.context.router.push(PROJECTS_PATH)}
         />
         <MenuItem
           primaryText='Sign out'
