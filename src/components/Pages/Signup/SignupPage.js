@@ -13,8 +13,11 @@ import Paper from 'material-ui/Paper'
 import Snackbar from 'material-ui/Snackbar'
 import { LOGIN_PATH } from 'constants/paths'
 import { UserIsNotAuthenticated } from 'utils/authWrapper'
-import SignupForm from './SignupForm'
+
 import classes from './SignupPage.scss'
+
+import RaisedButton from 'material-ui/RaisedButton'
+
 
 @UserIsNotAuthenticated // redirect to list page if logged in
 @firebaseConnect()
@@ -46,12 +49,10 @@ export default class SignupPage extends Component {
         login(creds)
       })
   }
-
   providerLogin = (provider) => {
     this.setState({
       snackCanOpen: true
     })
-
     this.props.firebase.login({ provider })
   }
 
@@ -61,22 +62,11 @@ export default class SignupPage extends Component {
     return (
       <div className={classes.container}>
         <Paper className={classes.panel}>
-          <SignupForm onSubmit={this.handleSignup} />
-        </Paper>
-        <div className={classes.or}>
-          or
-        </div>
-        <div className={classes.providers}>
+          <h1>Welcome </h1>
+          <h3>This test application only supports google auth for demo purposes.</h3>
+          <br/>
           <GoogleButton onClick={() => this.providerLogin('google')} />
-        </div>
-        <div className={classes.login}>
-          <span className={classes['login-label']}>
-            Already have an account?
-          </span>
-          <Link className={classes['login-link']} to={LOGIN_PATH}>
-            Login
-          </Link>
-        </div>
+        </Paper>
         {
           isLoaded(authError) && !isEmpty(authError) && snackCanOpen &&
             <Snackbar
