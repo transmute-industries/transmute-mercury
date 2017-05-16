@@ -89,19 +89,7 @@ export default class Navbar extends Component {
       <div className={classes.menu}>
          <Link to={LOGIN_PATH}>
           <FlatButton
-            label='Register'
-            style={buttonStyle}
-          />
-        </Link>
-         <Link to={ACCOUNT_PATH}>
-          <FlatButton
-            label='Account'
-            style={buttonStyle}
-          />
-        </Link>
-        <Link to={WEB3_PATH}>
-          <FlatButton
-            label='Debug'
+            label='Login'
             style={buttonStyle}
           />
         </Link>
@@ -129,7 +117,7 @@ export default class Navbar extends Component {
           onTouchTap={() => this.context.router.push(PROJECTS_PATH)}
         />
         <MenuItem
-          primaryText='Debug'
+          primaryText='Web3'
           onTouchTap={() => this.context.router.push(WEB3_PATH)}
         />
         <MenuItem
