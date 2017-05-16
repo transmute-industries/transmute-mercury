@@ -5,7 +5,8 @@ import {
   DEBUG_PATH,
   LOGIN_PATH,
   ACCOUNT_PATH,
-  PROJECTS_PATH
+  PROJECTS_PATH,
+  PROJECT_PATH
 } from './constants/paths'
 
 import CoreLayout from './layouts/CoreLayout/CoreLayout'
@@ -14,6 +15,7 @@ import DebugPage from './components/Pages/Debug'
 import SignupPage from './components/Pages/Signup'
 import AccountPage from './components/Pages/Account'
 import ProjectsPage from './components/Pages/Projects'
+import ProjectPage from './components/Pages/Projects/Project'
 
 const routes = (store) => {
   return (
@@ -23,6 +25,7 @@ const routes = (store) => {
       <Route path={LOGIN_PATH} component={SignupPage} />
       <Route path={ACCOUNT_PATH} component={AccountPage} />
       <Route path={PROJECTS_PATH} component={ProjectsPage} />
+      <Route path={PROJECT_PATH} component={ProjectPage} />
       <Redirect from='*' to='/' />
     </Route>
   )
