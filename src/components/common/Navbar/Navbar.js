@@ -12,7 +12,7 @@ import {
 import {
   PROJECTS_PATH,
   ACCOUNT_PATH,
-  DEBUG_PATH,
+  WEB3_PATH,
   LOGIN_PATH
 } from 'constants/paths'
 
@@ -99,7 +99,7 @@ export default class Navbar extends Component {
             style={buttonStyle}
           />
         </Link>
-        <Link to={DEBUG_PATH}>
+        <Link to={WEB3_PATH}>
           <FlatButton
             label='Debug'
             style={buttonStyle}
@@ -130,7 +130,7 @@ export default class Navbar extends Component {
         />
         <MenuItem
           primaryText='Debug'
-          onTouchTap={() => this.context.router.push(DEBUG_PATH)}
+          onTouchTap={() => this.context.router.push(WEB3_PATH)}
         />
         <MenuItem
           primaryText='Sign out'

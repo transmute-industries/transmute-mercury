@@ -2,7 +2,8 @@ import { Constants } from './constants'
 import { getRandomAddress } from 'env'
 
 export const initialState = {
-  defaultAddress: null,
+  provider: localStorage.getItem('provider') || 'testrpc',
+  defaultAddress: localStorage.getItem('defaultAddress') || null,
   addresses: [],
   transfers: [],
   transferInitialValue: {
@@ -21,6 +22,9 @@ const handlers = {
     return Object.assign({}, state, {
       transfers: state.transfers.concat(action.payload)
     })
+  },
+  [Constants.WEB3_SETTINGS_UPDATED]: (state, action) => {
+    return Object.assign({}, state, ...action.payload)
   }
 }
 

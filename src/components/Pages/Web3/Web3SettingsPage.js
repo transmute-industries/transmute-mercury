@@ -1,32 +1,30 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { submit } from 'redux-form'
-import DebugForm from './DebugForm'
-import { DEBUG_FORM_NAME } from 'constants/formNames'
+import Web3SettingsForm from './Web3SettingsForm'
+import { WEB3_SETTINGS_FORM_NAME } from 'constants/formNames'
 
-import { updateDebugSettings } from 'store/debug'
+import { updateDebugSettings } from 'store/ethereum/web3'
 
 @connect(
   // Map redux state to props
-  ({ debug, web3 }) => ({
-    web3: web3,
-    debug: debug
+  ({ web3 }) => ({
+    web3: web3
   }),
   {
     // action for submitting redux-form
-    submitForm: () => (dispatch) => dispatch(submit(DEBUG_FORM_NAME)),
+    submitForm: () => (dispatch) => dispatch(submit(WEB3_SETTINGS_FORM_NAME)),
     onSubmit: (formModel) => (dispatch) => {
       dispatch(updateDebugSettings(formModel))
     }
   }
 )
-export default class DebugFormContainer extends Component {
+export default class Web3SettingsPage extends Component {
   render () {
-    const { debug, web3, submitForm, onSubmit } = this.props
+    const { web3, submitForm, onSubmit } = this.props
     return (
-      <DebugForm
+      <Web3SettingsForm
         web3={web3}
-        debug={debug}
         submitForm={submitForm}
         onSubmit={onSubmit}
         />

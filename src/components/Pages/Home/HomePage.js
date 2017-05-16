@@ -44,7 +44,7 @@ export default class HomePage extends Component {
         } else {
           return (
             <div>
-              Welcome! You are not logged in, use /debug or metamask
+              Welcome! You are not logged in, use /web3 or metamask
             </div>
           )
         }

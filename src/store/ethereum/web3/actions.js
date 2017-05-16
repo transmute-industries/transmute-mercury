@@ -4,6 +4,8 @@ import {
   sendTransaction
 } from 'middleware/ethereum/web3'
 
+import { forEach } from 'lodash'
+
 export const getWeb3Accounts = () => dispatch => {
   getAccounts((addresses) => {
     dispatch({
@@ -22,9 +24,17 @@ export const sendEther = (transactionData) => dispatch => {
   })
 }
 
+const updateLocalStorage = (formModel) => {
+    forEach(formModel, (v, k) => {
+        localStorage.setItem(k, v)
+    })
+}
+
 export const updateDebugSettings = (formModel) => dispatch => {
-  dispatch({
-    type: Constants.DEBUG_SETTINGS_UPDATED,
-    payload: formModel
-  })
+    updateLocalStorage(formModel)
+    window.location.href = window.location.href
+    dispatch({
+        type: WEB3_SETTINGS_UPDATED,
+        payload: formModel
+    })
 }

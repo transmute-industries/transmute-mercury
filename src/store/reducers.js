@@ -4,14 +4,12 @@ import { firebaseStateReducer as firebase } from 'react-redux-firebase'
 import { routerReducer as routing } from 'react-router-redux'
 import { reducer as form } from 'redux-form'
 
-import { debugReducer as debug } from './debug'
 import { web3Reducer as web3 } from './ethereum/web3'
 import { uportReducer as uport } from './ethereum/uport'
 
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
-    debug,
     web3,
     uport,
     firebase,

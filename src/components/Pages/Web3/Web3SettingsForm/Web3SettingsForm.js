@@ -6,15 +6,15 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { Grid, Row } from 'react-flexbox-grid'
 import { Card, CardActions, CardHeader } from 'material-ui/Card'
 
-import { DEBUG_FORM_NAME } from 'constants/formNames'
-import classes from './DebugForm.scss'
+import { WEB3_SETTINGS_FORM_NAME } from 'constants/formNames'
+import classes from './Web3SettingsForm.scss'
 import MenuItem from 'material-ui/MenuItem'
 
 import {
   SelectField
 } from 'redux-form-material-ui'
 
-export const DebugForm = ({ web3, handleSubmit, submitForm, submitting }) => (
+export const Web3SettingsForm = ({ web3, handleSubmit, submitForm, submitting }) => (
   <form onSubmit={handleSubmit} className={classes.container} >
     <Card className={classes.card}>
       <CardHeader
@@ -23,7 +23,7 @@ export const DebugForm = ({ web3, handleSubmit, submitForm, submitting }) => (
       <Grid fluid>
         <Row className={classes.settingRow}>
           <h3>Web3 Provider</h3>
-          <Field style={{ width: '100%' }} name='web3Provider' component={SelectField} hintText='Select a provider'>
+          <Field style={{ width: '100%' }} name='provider' component={SelectField} hintText='Select a provider'>
             <MenuItem value='testrpc' primaryText='Test RPC' />
             <MenuItem value='infura' primaryText='Infura' />
             <MenuItem value='parity' primaryText='Parity' />
@@ -31,7 +31,7 @@ export const DebugForm = ({ web3, handleSubmit, submitForm, submitting }) => (
         </Row>
         <Row className={classes.settingRow}>
           <h3>Default Address</h3>
-          <Field style={{ width: '100%' }} name='web3DefaultAddress' component={SelectField} hintText='Select a default Address'>
+          <Field style={{ width: '100%' }} name='defaultAddress' component={SelectField} hintText='Select a default Address'>
             {
               web3.addresses.map((address) => {
               return <MenuItem key={address} value={address} primaryText={address}/>
@@ -54,12 +54,12 @@ export const DebugForm = ({ web3, handleSubmit, submitForm, submitting }) => (
 )
 
 const form = reduxForm({
-  form: DEBUG_FORM_NAME,
+  form: WEB3_SETTINGS_FORM_NAME,
   enableReinitialization: true
-})(DebugForm)
+})(Web3SettingsForm)
 
 export default connect(
-  ({ debug }) => ({
-    initialValues: debug
+  ({ web3 }) => ({
+    initialValues: web3
   }),
 )(form)
