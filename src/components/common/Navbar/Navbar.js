@@ -10,7 +10,7 @@ import {
   isEmpty
 } from 'react-redux-firebase'
 import {
-  LIST_PATH,
+  PROJECTS_PATH,
   ACCOUNT_PATH,
   DEBUG_PATH,
   SIGNUP_PATH
@@ -134,7 +134,7 @@ export default class Navbar extends Component {
     return (
       <AppBar
         title={
-          <Link to={accountExists ? `${LIST_PATH}` : '/'} className={classes.brand}>
+          <Link to={accountExists ? `${PROJECTS_PATH}` : '/'} className={classes.brand}>
             Transmute Mercury
           </Link>
         }

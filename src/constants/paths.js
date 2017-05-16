@@ -4,7 +4,7 @@ export const ACCOUNT_PATH = '/account'
 export const LOGIN_PATH = '/login'
 export const SIGNUP_PATH = '/signup'
 export const RECOVER_PATH = '/recover'
-export const LIST_PATH = '/projects'
+export const PROJECTS_PATH = '/projects'
 
 export default {
   DEBUG_PATH,
@@ -12,5 +12,5 @@ export default {
   LOGIN_PATH,
   SIGNUP_PATH,
   RECOVER_PATH,
-  LIST_PATH
+  PROJECTS_PATH
 }
