@@ -9,7 +9,7 @@ import CircularProgress from 'material-ui/CircularProgress'
     web3: web3
   })
 )
-export default class HomeContainer extends Component {
+export default class HomePage extends Component {
 
   render() {
     let { web3 } = this.props
@@ -21,9 +21,10 @@ export default class HomeContainer extends Component {
     const HeroContent = () => {
       if (isLoaded()) {
         return (
-          <h1 style={{ textAlign: 'center' }} >
-            Transmute Mercury
-          </h1>
+          <div style={{ textAlign: 'center' }}>
+            <h1>Mercury</h1>
+            <h3>Blockchain JavasScript Event Sourcing </h3>
+          </div>
         )
       } else {
         return (
