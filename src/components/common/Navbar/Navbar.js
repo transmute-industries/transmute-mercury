@@ -12,7 +12,8 @@ import {
 import {
   LIST_PATH,
   ACCOUNT_PATH,
-  DEBUG_PATH
+  DEBUG_PATH,
+  SIGNUP_PATH
 } from 'constants/paths'
 
 // Components
@@ -86,7 +87,13 @@ export default class Navbar extends Component {
 
     const mainMenu = (
       <div className={classes.menu}>
-         <Link to={DEBUG_PATH}>
+         <Link to={SIGNUP_PATH}>
+          <FlatButton
+            label='Register'
+            style={buttonStyle}
+          />
+        </Link>
+        <Link to={DEBUG_PATH}>
           <FlatButton
             label='Debug'
             style={buttonStyle}
