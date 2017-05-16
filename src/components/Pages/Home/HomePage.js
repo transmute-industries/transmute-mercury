@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import HeroRow from 'components/common/HeroRow'
 import CircularProgress from 'material-ui/CircularProgress'
-
+import Stepper from './Stepper'
 @connect(
   ({ web3 }) => ({
     web3: web3
@@ -24,6 +24,7 @@ export default class HomePage extends Component {
           <div style={{ textAlign: 'center' }}>
             <h1>Mercury</h1>
             <h3>Blockchain JavasScript Event Sourcing </h3>
+            <h4>{web3.defaultAddress}</h4>
           </div>
         )
       } else {
@@ -33,31 +34,12 @@ export default class HomePage extends Component {
       }
     }
 
-    const DefaultView = () => {
-      if (isLoaded()) {
-        if (web3.defaultAddress !== undefined) {
-          return (
-            <div>
-              Welcome! {web3.defaultAddress}
-            </div>
-          )
-        } else {
-          return (
-            <div>
-              Welcome! You are not logged in, use /web3 or metamask
-            </div>
-          )
-        }
-      } else {
-        return (<div />)
-      }
-    }
     return (
       <div style={{ paddingBottom: '20px' }}>
         <HeroRow renderParticles>
           <HeroContent />
         </HeroRow>
-        <DefaultView />
+        <Stepper />
       </div>
     )
   }
