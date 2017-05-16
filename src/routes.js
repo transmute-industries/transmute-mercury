@@ -3,13 +3,15 @@ import { Route, IndexRoute, Redirect } from 'react-router'
 
 import {
   DEBUG_PATH,
-  SIGNUP_PATH
+  SIGNUP_PATH,
+  ACCOUNT_PATH
 } from './constants/paths'
 
 import CoreLayout from './layouts/CoreLayout/CoreLayout'
 import HomePage from './components/Pages/Home'
 import DebugPage from './components/Pages/Debug'
 import SignupPage from './components/Pages/Signup'
+import AccountPage from './components/Pages/Account'
 
 const routes = (store) => {
   return (
@@ -17,6 +19,7 @@ const routes = (store) => {
       <IndexRoute component={HomePage} />
       <Route path={DEBUG_PATH} component={DebugPage} />
       <Route path={SIGNUP_PATH} component={SignupPage} />
+      <Route path={ACCOUNT_PATH} component={AccountPage} />
       <Redirect from='*' to='/' />
     </Route>
   )

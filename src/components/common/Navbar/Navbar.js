@@ -93,6 +93,12 @@ export default class Navbar extends Component {
             style={buttonStyle}
           />
         </Link>
+         <Link to={ACCOUNT_PATH}>
+          <FlatButton
+            label='Account'
+            style={buttonStyle}
+          />
+        </Link>
         <Link to={DEBUG_PATH}>
           <FlatButton
             label='Debug'
