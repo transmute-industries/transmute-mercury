@@ -1,0 +1,2 @@
+import AuthorizeEncounterTable from './AuthorizeEncounterTable'
+export default AuthorizeEncounterTable

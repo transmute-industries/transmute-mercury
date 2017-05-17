@@ -11,12 +11,14 @@ import FlatButton from 'material-ui/FlatButton'
 import CreateEventStore from './CreateEventStore'
 import CreateUser from './CreateUser'
 import CreateEncounter from './CreateEncounter'
+import LinkEncounter from './LinkEncounter'
+import AuthorizeEncounter from './AuthorizeEncounter'
 
 class VerticalLinearStepper extends React.Component {
 
   state = {
     finished: false,
-    stepIndex: 2,
+    stepIndex: 4,
   }
 
   handleNext = () => {
@@ -49,7 +51,7 @@ class VerticalLinearStepper extends React.Component {
           />
         )}
         <RaisedButton
-          label={stepIndex === 2 ? 'Finish' : 'Next'}
+          label={stepIndex === 4 ? 'Finish' : 'Next'}
           disableTouchRipple={true}
           disableFocusRipple={true}
           primary={true}
@@ -69,22 +71,36 @@ class VerticalLinearStepper extends React.Component {
           <Step>
             <StepLabel>Create Event Store</StepLabel>
             <StepContent>
-              <CreateEventStore />
-              {this.renderStepActions(0)}
+            <CreateEventStore />
+            {this.renderStepActions(0)}
             </StepContent>
           </Step>
           <Step>
             <StepLabel>Create User</StepLabel>
             <StepContent>
-              <CreateUser />
-              {this.renderStepActions(1)}
+            <CreateUser />
+            {this.renderStepActions(1)}
             </StepContent>
           </Step>
           <Step>
             <StepLabel>Create Encounter</StepLabel>
             <StepContent>
-             <CreateEncounter />
-              {this.renderStepActions(2)}
+            <CreateEncounter />
+            {this.renderStepActions(2)}
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>Link Encounter</StepLabel>
+            <StepContent>
+            <LinkEncounter />
+            {this.renderStepActions(3)}
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>Authorize Encounter</StepLabel>
+            <StepContent>
+            <AuthorizeEncounter />
+            {this.renderStepActions(4)}
             </StepContent>
           </Step>
         </Stepper>
