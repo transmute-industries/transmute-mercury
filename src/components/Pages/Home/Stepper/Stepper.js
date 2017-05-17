@@ -8,11 +8,15 @@ import {
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 
+import CreateEventStore from './CreateEventStore'
+import CreateUser from './CreateUser'
+import CreateEncounter from './CreateEncounter'
+
 class VerticalLinearStepper extends React.Component {
 
   state = {
     finished: false,
-    stepIndex: 0,
+    stepIndex: 2,
   }
 
   handleNext = () => {
@@ -63,32 +67,23 @@ class VerticalLinearStepper extends React.Component {
       <div>
         <Stepper activeStep={stepIndex} orientation='vertical'>
           <Step>
-            <StepLabel>Select campaign settings</StepLabel>
+            <StepLabel>Create Event Store</StepLabel>
             <StepContent>
-              <p>
-                For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.
-              </p>
+              <CreateEventStore />
               {this.renderStepActions(0)}
             </StepContent>
           </Step>
           <Step>
-            <StepLabel>Create an ad group</StepLabel>
+            <StepLabel>Create User</StepLabel>
             <StepContent>
-              <p>An ad group contains one or more ads which target a shared set of keywords.</p>
+              <CreateUser />
               {this.renderStepActions(1)}
             </StepContent>
           </Step>
           <Step>
-            <StepLabel>Create an ad</StepLabel>
+            <StepLabel>Create Encounter</StepLabel>
             <StepContent>
-              <p>
-                Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.
-              </p>
+             <CreateEncounter />
               {this.renderStepActions(2)}
             </StepContent>
           </Step>
