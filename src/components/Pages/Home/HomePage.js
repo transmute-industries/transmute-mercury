@@ -23,8 +23,8 @@ export default class HomePage extends Component {
         return (
           <div style={{ textAlign: 'center' }}>
             <h1>Mercury</h1>
-            <h3>Blockchain JavasScript Event Sourcing </h3>
-            <h4>{web3.defaultAddress}</h4>
+            <h3>Blockchain Event Sourcing </h3>
+            {/*<h4>{web3.defaultAddress}</h4>*/}
           </div>
         )
       } else {
@@ -33,7 +33,6 @@ export default class HomePage extends Component {
         )
       }
     }
-
     return (
       <div style={{ paddingBottom: '20px' }}>
         <HeroRow renderParticles>
