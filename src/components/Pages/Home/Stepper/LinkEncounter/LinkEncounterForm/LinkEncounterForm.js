@@ -78,7 +78,7 @@ class Form extends Component {
                 name='readEvents'
                 component={Toggle}
                 label='Read Events'
-                labelPosition='left'
+                labelPosition='right'
               />
             </Row>
             <Row className={classes.settingRow}>
@@ -86,7 +86,7 @@ class Form extends Component {
                 name='writeEvents'
                 component={Toggle}
                 label='Write Events'
-                labelPosition='left'
+                labelPosition='right'
               />
             </Row>
           </Grid>
