@@ -6,7 +6,8 @@ import {
   LOGIN_PATH,
   ACCOUNT_PATH,
   PROJECTS_PATH,
-  PROJECT_PATH
+  PROJECT_PATH,
+  EVENT_STORE_SUMMARY
 } from './constants/paths'
 
 import CoreLayout from './layouts/CoreLayout/CoreLayout'
@@ -17,6 +18,8 @@ import AccountPage from './components/Pages/Account'
 import ProjectsPage from './components/Pages/Projects'
 import ProjectPage from './components/Pages/Projects/Project'
 
+import EventStorePage from './components/Pages/EventStore'
+
 const routes = (store) => {
   return (
     <Route path='/' component={CoreLayout}>
@@ -25,7 +28,7 @@ const routes = (store) => {
       <Route path={LOGIN_PATH} component={SignupPage} />
       <Route path={ACCOUNT_PATH} component={AccountPage} />
       <Route path={PROJECTS_PATH} component={ProjectsPage} />
-      <Route path={PROJECT_PATH} component={ProjectPage} />
+      <Route path={EVENT_STORE_SUMMARY} component={EventStorePage} />
       <Redirect from='*' to='/' />
     </Route>
   )

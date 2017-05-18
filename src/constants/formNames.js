@@ -5,7 +5,7 @@ export const ACCOUNT_FORM_NAME = 'account'
 export const CREATE_EVENT_STORE_FORM_NAME = 'createEventStore'
 export const CREATE_USER_FORM_NAME = 'createUser'
 export const CREATE_ENCOUNTER_FORM_NAME = 'createEncounter'
-export const LINK_ENCOUNTER_FOMR_NAME = 'linkEncounter'
+export const LINK_ENCOUNTER_FORM_NAME = 'linkEncounter'
 
 
 export default {
@@ -25,7 +25,7 @@ export default {
   CREATE_ENCOUNTER_FORM_NAME,
   createEncounter: CREATE_ENCOUNTER_FORM_NAME,
 
-  LINK_ENCOUNTER_FOMR_NAME,
-  linkEncounter: LINK_ENCOUNTER_FOMR_NAME
+  LINK_ENCOUNTER_FORM_NAME,
+  linkEncounter: LINK_ENCOUNTER_FORM_NAME
 
 }

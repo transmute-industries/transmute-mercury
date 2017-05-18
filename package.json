@@ -68,6 +68,7 @@
     "fs-extra": "^1.0.0",
     "lodash": "^4.17.2",
     "material-ui": "0.16.0",
+    "material-ui-datatables": "^0.16.9",
     "material-ui-table-edit": "^3.0.0",
     "moment": "^2.18.1",
     "mui-editable-table": "^0.3.0",

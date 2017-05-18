@@ -42,40 +42,77 @@ class Form extends Component {
     const { handleSubmit, pristine, numPizzas, reset, submitting } = this.props
     return (
       <form onSubmit={handleSubmit} className={classes.container}>
-          <Card className={classes.card}>
-      <CardHeader
-        title='Encounter'
-      />
-      <Grid fluid>
-        <Row className={classes.settingRow}>
-       
-          <Field
-            name='name'
-            component={TextField}
-            hintText='Name'
-            floatingLabelText='Name'
-            validate={required}
-            ref='name'
-            withRef
+        <Card className={classes.card}>
+          <CardHeader
+            title='Encounter'
           />
-        </Row>
-         </Grid>
-      <CardActions className={classes.actions}>
-         <RaisedButton
-            type='button'
-            disabled={pristine || submitting}
-            onClick={reset}
-            label='Clear'
-          />
-        <RaisedButton
-          style={{ marginRight: 'none' }}
-          label='Save Changes'
-          primary
-          type='submit'
-          disabled={submitting}
-        />
-      </CardActions>
-      </Card>
+          <Grid fluid>
+            <Row className={classes.settingRow}>
+              <Field
+                name='name'
+                component={TextField}
+                hintText='Name'
+                floatingLabelText='Name'
+                validate={required}
+                ref='name'
+                withRef
+              />
+            </Row>
+            <Row className={classes.settingRow}>
+              <Field
+                name='lastMeal'
+                component={TimePicker}
+                format={null}
+                // and redux-form defaults to ''
+                hintText='When was your last meal?'
+                validate={required}
+              />
+            </Row>
+
+            <Row className={classes.settingRow}>
+              <Field
+                name='notes'
+                component={TextField}
+                hintText='Notes'
+                floatingLabelText='Notes'
+                multiLine
+                rows={2}
+              />
+            </Row>
+            <Row className={classes.settingRow}>
+              <Field
+                name='referral'
+                component={AutoComplete}
+                floatingLabelText='How did you find us?'
+                openOnFocus
+                filter={MUIAutoComplete.fuzzyFilter}
+                dataSourceConfig={{ text: 'name', value: 'id' }}
+                dataSource={[
+                  { id: 0, name: 'Facebook' },
+                  { id: 1, name: 'Yelp' },
+                  { id: 2, name: 'TV Ad' },
+                  { id: 3, name: 'Friend' },
+                  { id: 4, name: 'Other' }
+                ]}
+              />
+            </Row>
+          </Grid>
+          <CardActions className={classes.actions}>
+            <RaisedButton
+              type='button'
+              disabled={pristine || submitting}
+              onClick={reset}
+              label='Clear'
+            />
+            <RaisedButton
+              style={{ marginRight: 'none' }}
+              label='Save Changes'
+              primary
+              type='submit'
+              disabled={submitting}
+            />
+          </CardActions>
+        </Card>
       </form>
     )
   }

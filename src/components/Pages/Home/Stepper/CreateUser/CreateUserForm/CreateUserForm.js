@@ -42,40 +42,59 @@ class Form extends Component {
     const { handleSubmit, pristine, numPizzas, reset, submitting } = this.props
     return (
       <form onSubmit={handleSubmit} className={classes.container}>
-          <Card className={classes.card}>
-      <CardHeader
-        title='User'
-      />
-      <Grid fluid>
-        <Row className={classes.settingRow}>
-       
-          <Field
-            name='name'
-            component={TextField}
-            hintText='Name'
-            floatingLabelText='Name'
-            validate={required}
-            ref='name'
-            withRef
+        <Card className={classes.card}>
+          <CardHeader
+            title='User'
           />
-        </Row>
-         </Grid>
-      <CardActions className={classes.actions}>
-         <RaisedButton
-            type='button'
-            disabled={pristine || submitting}
-            onClick={reset}
-            label='Clear'
-          />
-        <RaisedButton
-          style={{ marginRight: 'none' }}
-          label='Save Changes'
-          primary
-          type='submit'
-          disabled={submitting}
-        />
-      </CardActions>
-      </Card>
+          <Grid fluid>
+            <Row className={classes.settingRow}>
+              <Field
+                name='name'
+                component={TextField}
+                hintText='Name'
+                floatingLabelText='Name'
+                validate={required}
+                ref='name'
+                withRef
+              />
+            </Row>
+            <Row className={classes.settingRow}>
+              <Field
+                name='role'
+                component={TextField}
+                hintText='Role'
+                floatingLabelText='Role'
+                validate={required}
+                ref='role'
+                withRef
+              />
+            </Row>
+            <Row className={classes.settingRow}>
+              <Field
+                name='birthDate'
+                component={DatePicker}
+                format={null}
+                hintText='Birthday'
+                validate={required}
+              />
+            </Row>
+          </Grid>
+          <CardActions className={classes.actions}>
+            <RaisedButton
+              type='button'
+              disabled={pristine || submitting}
+              onClick={reset}
+              label='Clear'
+            />
+            <RaisedButton
+              style={{ marginRight: 'none' }}
+              label='Save Changes'
+              primary
+              type='submit'
+              disabled={submitting}
+            />
+          </CardActions>
+        </Card>
       </form>
     )
   }

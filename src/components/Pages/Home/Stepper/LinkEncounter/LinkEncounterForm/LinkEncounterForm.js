@@ -25,6 +25,9 @@ import { Grid, Row } from 'react-flexbox-grid'
 import { Card, CardActions, CardHeader } from 'material-ui/Card'
 
 
+const expiresTooLong = value => (value > 30 ? 'Longer expirations are less safe.' : undefined)
+
+
 // validation functions
 const required = value => (value == null ? 'Required' : undefined)
 
@@ -42,40 +45,67 @@ class Form extends Component {
     const { handleSubmit, pristine, numPizzas, reset, submitting } = this.props
     return (
       <form onSubmit={handleSubmit} className={classes.container}>
-          <Card className={classes.card}>
-      <CardHeader
-        title='User'
-      />
-      <Grid fluid>
-        <Row className={classes.settingRow}>
-       
-          <Field
-            name='name'
-            component={TextField}
-            hintText='Name'
-            floatingLabelText='Name'
-            validate={required}
-            ref='name'
-            withRef
+        <Card className={classes.card}>
+          <CardHeader
+            title='Link Encounter'
           />
-        </Row>
-         </Grid>
-      <CardActions className={classes.actions}>
-         <RaisedButton
-            type='button'
-            disabled={pristine || submitting}
-            onClick={reset}
-            label='Clear'
-          />
-        <RaisedButton
-          style={{ marginRight: 'none' }}
-          label='Save Changes'
-          primary
-          type='submit'
-          disabled={submitting}
-        />
-      </CardActions>
-      </Card>
+          <Grid fluid>
+            <Row className={classes.settingRow}>
+              <Field
+                name='name'
+                component={TextField}
+                hintText='Name'
+                floatingLabelText='Name'
+                validate={required}
+                ref='name'
+                withRef
+              />
+            </Row>
+
+            <Row className={classes.settingRow}>
+              <Field
+                name='expires'
+                component={TimePicker}
+                format={null}
+                // and redux-form defaults to ''
+                hintText='Expires'
+                validate={required}
+              />
+            </Row>
+
+            <Row className={classes.settingRow}>
+              <Field
+                name='readEvents'
+                component={Toggle}
+                label='Read Events'
+                labelPosition='left'
+              />
+            </Row>
+            <Row className={classes.settingRow}>
+              <Field
+                name='writeEvents'
+                component={Toggle}
+                label='Write Events'
+                labelPosition='left'
+              />
+            </Row>
+          </Grid>
+          <CardActions className={classes.actions}>
+            <RaisedButton
+              type='button'
+              disabled={pristine || submitting}
+              onClick={reset}
+              label='Clear'
+            />
+            <RaisedButton
+              style={{ marginRight: 'none' }}
+              label='Save Changes'
+              primary
+              type='submit'
+              disabled={submitting}
+            />
+          </CardActions>
+        </Card>
       </form>
     )
   }

@@ -18,7 +18,7 @@ class VerticalLinearStepper extends React.Component {
 
   state = {
     finished: false,
-    stepIndex: 4,
+    stepIndex: 3,
   }
 
   handleNext = () => {
