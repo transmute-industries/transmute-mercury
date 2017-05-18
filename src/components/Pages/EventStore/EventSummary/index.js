@@ -1,2 +1,2 @@
-import EventSummary from './EventSummary'
-export default EventSummary
+import EventSummaryPage from './EventSummaryPage'
+export default EventSummaryPage

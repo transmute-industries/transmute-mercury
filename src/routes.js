@@ -7,7 +7,8 @@ import {
   ACCOUNT_PATH,
   PROJECTS_PATH,
   PROJECT_PATH,
-  EVENT_STORE_SUMMARY
+  EVENT_SUMMARY_PATH,
+  READ_MODEL_PATH
 } from './constants/paths'
 
 import CoreLayout from './layouts/CoreLayout/CoreLayout'
@@ -18,7 +19,8 @@ import AccountPage from './components/Pages/Account'
 import ProjectsPage from './components/Pages/Projects'
 import ProjectPage from './components/Pages/Projects/Project'
 
-import EventStorePage from './components/Pages/EventStore'
+import EventSummaryPage from './components/Pages/EventStore/EventSummary'
+import ReadModelPage from './components/Pages/EventStore/ReadModel'
 
 const routes = (store) => {
   return (
@@ -28,7 +30,8 @@ const routes = (store) => {
       <Route path={LOGIN_PATH} component={SignupPage} />
       <Route path={ACCOUNT_PATH} component={AccountPage} />
       <Route path={PROJECTS_PATH} component={ProjectsPage} />
-      <Route path={EVENT_STORE_SUMMARY} component={EventStorePage} />
+      <Route path={EVENT_SUMMARY_PATH} component={EventSummaryPage} />
+      <Route path={READ_MODEL_PATH} component={ReadModelPage} />
       <Redirect from='*' to='/' />
     </Route>
   )

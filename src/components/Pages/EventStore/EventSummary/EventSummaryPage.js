@@ -11,7 +11,7 @@ import EventSummary from './EventSummary'
     web3: web3
   })
 )
-export default class EventStorePage extends Component {
+export default class EventSummaryPage extends Component {
 
   render() {
     let { web3 } = this.props
