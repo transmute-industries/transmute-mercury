@@ -5,7 +5,8 @@ export const LOGIN_PATH = '/login'
 export const PROJECTS_PATH = '/projects'
 export const PROJECT_PATH = '/projects/:projectname'
 export const EVENT_SUMMARY_PATH = '/event-store/:address/events'
-export const READ_MODEL_PATH = '/event-store/:address/read-model'
+export const READ_MODEL_PATH = '/event-store/:address/read-model/:address'
+export const PROJECTION_PATH = '/event-store/:address/projection/:address'
 
 export default {
   WEB3_PATH,
@@ -14,5 +15,6 @@ export default {
   PROJECTS_PATH,
   PROJECT_PATH,
   EVENT_SUMMARY_PATH,
-  READ_MODEL_PATH
+  READ_MODEL_PATH,
+  PROJECTION_PATH
 }
