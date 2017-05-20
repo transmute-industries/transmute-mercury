@@ -8,6 +8,8 @@ export const EVENT_SUMMARY_PATH = '/event-store/:address/events'
 export const READ_MODEL_PATH = '/event-store/:address/read-model/:address'
 export const PROJECTION_PATH = '/event-store/:address/projection/:address'
 
+export const TOKENS_PATH = '/event-store/:address/tokens'
+
 export default {
   WEB3_PATH,
   ACCOUNT_PATH,
@@ -16,5 +18,6 @@ export default {
   PROJECT_PATH,
   EVENT_SUMMARY_PATH,
   READ_MODEL_PATH,
-  PROJECTION_PATH
+  PROJECTION_PATH,
+  TOKENS_PATH
 }
