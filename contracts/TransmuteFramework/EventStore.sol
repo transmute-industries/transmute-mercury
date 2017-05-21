@@ -99,6 +99,17 @@ contract EventStore is Killable {
       throw;
     authorizedAddressesMapping[_requestor] = false;
     // EMIT an ES Event here
+    // uint eventIndex = solidityEventCount;
+
+    // writeSolidityEvent('EVENT_STORE_CREATED', 1, '0x0');
+    // writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
+
+    // eventIndex = solidityEventCount;
+
+    // writeSolidityEvent('EVENT_STORE_AUDIT_LOG', 2, '0x1');
+    // writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
+    // writeSolidityEventProperty(eventIndex, 1, 'ContractOwnerAddress', 'Address', address(msg.sender), 0, '');
+
   }
 
   function isAddressAuthorized(address _address) public constant
