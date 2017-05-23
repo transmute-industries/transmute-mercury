@@ -3,6 +3,11 @@ var Web3 = require('web3')
 var MercuryEventStoreFactory = artifacts.require('./MercuryEventStoreFactory.sol')
 var MercuryEventStore = artifacts.require('./MercuryEventStore.sol')
 
+
+// Once https://github.com/transmute-industries/transmute-framework/issues/27 is resolved
+// Use var TransmuteFramework = require('transmute-framework')
+// don't use helpers...
+
 var {
     transactionToEventCollection,
 } = require('./helpers')

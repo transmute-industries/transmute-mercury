@@ -22,6 +22,7 @@ export const getMercuryEventStoreAddresses = (fromAddress) => dispatch => {
 
 export const createMercuryEventStore = (bindingModel) => dispatch => {
   Middleware.createMercuryEventStore(bindingModel, (address) => {
+    console.log('address is undefined here: ', address)
     dispatch({
       type: Constants.MERCURY_EVENT_STORE_CREATED,
       payload: address

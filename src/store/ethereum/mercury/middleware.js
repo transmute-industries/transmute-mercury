@@ -19,8 +19,8 @@ import {
 } from './MercuryEventStore/reducer'
 
 import { 
-  mercuryEventStoreUserReadModelInitialState, 
-  mercuryEventStoreUserReadModelReducer 
+  initialState as mesUserReadModelInitialState, 
+  reducer as mesUserReadModelReducer 
 } from './MercuryEventStoreUser/reducer'
 
 
@@ -52,6 +52,7 @@ export const createMercuryEventStore = async (bindingModel, _callback) => {
 
   let events = TransmuteFramework.Transactions.transactionToEventCollection(tx)
   let createdEvent = events[0]
+  console.log('find the new contract address here somewhere...', events)
   _callback(createdEvent.ContractAddress)
 }
 
@@ -61,27 +62,26 @@ export const createMercuryEventStore = async (bindingModel, _callback) => {
 
 export const getEventStoreReadModel = async (bindingModel, _callback) =>{
   let { contractAddress } = bindingModel
+  console.log('expect valid address here: ', contractAddress, bindingModel)
+  // possible latency issue...
   let eventStore = await mercuryEventStoreContract.at(contractAddress)
   let readModel = mercuryEventStoreReadModelInitialState
   readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
   readModel.ContractAddress = contractAddress
   let reducer = mercuryEventStoreReadModelReducer
   let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
-  // console.log('updatedReadModel: ', updatedReadModel)
   _callback(updatedReadModel)
 }
 
-
-// START WRITING TESTS BEFORE DOING THIS STUFF...
 export const createEventStoreUser = async(bindingModel, _callback) => {
-  let { contractAddress, event } = bindingModel
-  console.log('about to write an event: ', bindingModel)
+  let { contractAddress, fromAddress,  event } = bindingModel
   let eventStore = await mercuryEventStoreContract.at(contractAddress)
-  let events = await TransmuteFramework.EventStore.writeEvent(eventStore, event)
-  console.log('events: ', events)
-  // let readModel = mercuryEventStoreUserReadModelInitialState
-  // let reducer = mercuryEventStoreUserReadModelReducer
-  // let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
-  // _callback(updatedReadModel)
+  let events = await TransmuteFramework.EventStore.writeEvent(eventStore, event, fromAddress)
+  let readModel = mesUserReadModelInitialState
+  readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
+  readModel.ContractAddress = contractAddress
+  let reducer = mesUserReadModelReducer
+  let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
+  _callback(updatedReadModel)
 }
 

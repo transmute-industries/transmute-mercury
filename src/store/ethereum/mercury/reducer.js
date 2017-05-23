@@ -18,6 +18,7 @@ const handlers = {
     if (action.payload === '0x0000000000000000000000000000000000000000'){
       return state
     }
+    console.log('what is action here...', action)
     store.dispatch(MercuryActions.getEventStoreReadModel({
       contractAddress: action.payload,
       fromAddress: localStorage.getItem('defaultAddress')
@@ -46,6 +47,7 @@ const handlers = {
 
   [Constants.MERCURY_EVENT_STORE_CREATED]: (state, action) => {
 
+    console.log('what is action here...', action)
     store.dispatch(MercuryActions.getEventStoreReadModel({
       contractAddress: action.payload,
       fromAddress: localStorage.getItem('defaultAddress')
