@@ -2,7 +2,7 @@ import { Constants } from './constants'
 import {
   getAccounts,
   sendTransaction
-} from 'middleware/ethereum/web3'
+} from './middleware'
 
 import { forEach } from 'lodash'
 

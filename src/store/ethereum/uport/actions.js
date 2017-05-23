@@ -1,6 +1,6 @@
 import { Constants } from './constants'
 
-import { requestCredentials } from 'middleware/ethereum/uport'
+import { requestCredentials } from './middleware'
 
 export const loginUser = () => dispatch => {
   requestCredentials((profile) => {

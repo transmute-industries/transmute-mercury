@@ -42,14 +42,17 @@ const transmuteDeployer = function(deployer) {
 }
 // END 🐩 Transmute Framework 
 
-var ConvertLib = artifacts.require("./ConvertLib.sol");
-var MetaCoin = artifacts.require("./MetaCoin.sol");
+var MercuryEventStore = artifacts.require('./MercuryEventStore.sol')
+var MercuryEventStoreFactory = artifacts.require('./MercuryEventStoreFactory.sol')
+
 
 module.exports = function(deployer) {
 	// Patched by Transmute Framework
 	transmuteDeployer(deployer)
 
-  deployer.deploy(ConvertLib);
-  deployer.link(ConvertLib, MetaCoin);
-  deployer.deploy(MetaCoin);
+  deployer.link(AddressSetLib, MercuryEventStore)
+  deployer.deploy(MercuryEventStore);
+   deployer.link(AddressSetLib, MercuryEventStoreFactory)
+  deployer.link(MercuryEventStore, MercuryEventStoreFactory);
+  deployer.deploy(MercuryEventStoreFactory);
 };
