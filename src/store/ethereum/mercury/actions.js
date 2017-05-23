@@ -32,11 +32,10 @@ export const createMercuryEventStore = (bindingModel) => dispatch => {
 
 export const getEventStoreReadModel = (bindingModel) => dispatch => {
   Middleware.getEventStoreReadModel(bindingModel, (readModel) => {
-    console.warn('dispatch a read model here...', readModel)
-    // dispatch({
-    //   type: Constants.MERCURY_EVENT_STORE_CREATED,
-    //   payload: address
-    // })
+    dispatch({
+      type: Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED,
+      payload: readModel
+    })
   })
 }
 

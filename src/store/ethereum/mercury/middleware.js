@@ -47,40 +47,20 @@ export const createMercuryEventStore = async (bindingModel, _callback) => {
   _callback(createdEvent.ContractAddress)
 }
 
+// move this to another function... for later..
+// let events = await TransmuteFramework.EventStore.readEvents(eventStore, 0)
+// console.log('all-events: ', events)
+
 export const getEventStoreReadModel = async (bindingModel, _callback) =>{
-
   let { fromAddress, contractAddress } = bindingModel
-
-  console.log('TransmuteFramework: ', TransmuteFramework)
-
-  console.log('user the framework and these: ', fromAddress, contractAddress)
-
   let eventStore = await mercuryEventStoreContract.at(contractAddress)
-
   let readModel = mercuryEventStoreReadModelInitialState
-
+  readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
   readModel.ContractAddress = contractAddress
-
   let reducer = mercuryEventStoreReadModelReducer
-
-  let events = await TransmuteFramework.EventStore.readEvents(eventStore, 0)
-
-  console.log('why: ', events)
-
-  // let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
-
-  console.log('updatedReadModel: ', updatedReadModel)
-
-  // let factory = await mercuryEventStoreFactory.deployed()
-  // let tx = await factory.createMercuryEventStore(name, {
-  //     from: fromAddress,
-  //     gas: 2000000,
-  // })
-
-  // let events = TransmuteFramework.Transactions.transactionToEventCollection(tx)
-  // let createdEvent = events[0]
-  // _callback(createdEvent.ContractAddress)
-
+  let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
+  // console.log('updatedReadModel: ', updatedReadModel)
+  _callback(updatedReadModel)
 }
 
 

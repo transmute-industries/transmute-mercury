@@ -30,7 +30,7 @@ export default (initialState = {}, history) => {
     // This is where you add other middleware like redux-observable
 
     // Note: logger must be the last middleware in chain, otherwise it will log thunk and promise, not actual actions
-    // logger
+    logger
   ]
 
   // ======================================================

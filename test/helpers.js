@@ -78,7 +78,7 @@ const transactionEventsToEventObject = (events) => {
         let propIndex = 0;
         while (propIndex < eventObj.PropertyCount) {
             let eventProp = _.find(events, (evt) => {
-                return evt.EventPropertyIndex === propIndex
+                return evt.EventPropertyIndex === propIndex && evt.EventIndex === eventObj.Id
             })
             let eventPropObj = solidityEventPropertyToObject(eventProp)
             _.extend(eventObj, eventPropObj)

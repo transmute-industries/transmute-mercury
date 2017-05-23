@@ -14,7 +14,9 @@ contract MercuryEventStoreFactory is EventStore {
   function() payable {}
 
   // Constructor
-  function MercuryEventStoreFactory() payable {}
+  function MercuryEventStoreFactory() payable {
+    writeSolidityEvent('BEGIN', 1, 'NO_INTEGRITY_HASH');
+  }
 
   // Modifiers
   modifier checkExistence(address _MercuryEventStoreAddress) {
@@ -57,7 +59,7 @@ contract MercuryEventStoreFactory is EventStore {
     // // Emit Events
     uint eventIndex = solidityEventCount;
 
-    writeSolidityEvent('EVENT_STORE_CREATED', 1, '0x0');
+    writeSolidityEvent('EVENT_STORE_CREATED', 1, 'NO_INTEGRITY_HASH');
     writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newMercuryEventStore), 0, '');
 
     return address(_newMercuryEventStore);

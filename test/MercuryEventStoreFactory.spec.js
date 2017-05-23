@@ -34,7 +34,7 @@ contract('MercuryEventStoreFactory', (accounts) => {
                 gas: 2000000,
             })
             let events = transactionToEventCollection(tx)
-            console.log(events)
+            // console.log(events)
             let createdEvent =  _.find(events, (evt) =>{
                 return evt.Type === 'EVENT_STORE_CREATED'
             })
@@ -52,7 +52,9 @@ contract('MercuryEventStoreFactory', (accounts) => {
                 from: factoryCreatorAddress
             })
 
-            console.log(confirmName)
+             let eventCount =  (await eventStore.solidityEventCount()).toNumber()
+             assert(eventCount === 1)
+            // console.log(eventCount)
             // let events = transactionToEventCollection(tx)
             // assert(createdEvent.Type === 'EVENT_STORE_CREATED')
         })

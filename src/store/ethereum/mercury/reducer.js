@@ -10,7 +10,8 @@ export const initialState = {
   demo: {
     step: 0,
   },
-  addresses: []
+  addresses: [],
+  ReadModels: {}
 }
 
 const handlers = {
@@ -19,10 +20,12 @@ const handlers = {
     if (action.payload === '0x0000000000000000000000000000000000000000'){
       return state
     }
+
     store.dispatch(MercuryActions.getEventStoreReadModel({
       contractAddress: action.payload,
       fromAddress: localStorage.getItem('defaultAddress')
     }))
+
     return Object.assign({}, state, {
       demo: {
         step: 1
@@ -35,6 +38,16 @@ const handlers = {
       addresses: action.payload
     })
   },
+
+  [Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED]: (state, action) => {
+    return Object.assign({}, state, {
+      ReadModels: {
+        ...state.ReadModels,
+        [action.payload.ReadModelStoreKey]: action.payload
+      }
+    })
+  },
+
   [Constants.MERCURY_EVENT_STORE_CREATED]: (state, action) => {
     return Object.assign({}, state, {
       demo: {
