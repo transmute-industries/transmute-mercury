@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import { submit } from 'redux-form'
 import { CREATE_USER_FORM_NAME } from 'constants/formNames'
 
-// import { updateDebugSettings } from 'store/ethereum/web3'
+import Mercury from 'store/ethereum/mercury'
 
 import CreateUserForm from './CreateUserForm'
-
+  import moment from 'moment'
 @connect(
   // Map redux state to props
   ({ web3 }) => ({
@@ -16,8 +16,17 @@ import CreateUserForm from './CreateUserForm'
     // action for submitting redux-form
     submitForm: () => (dispatch) => dispatch(submit(CREATE_USER_FORM_NAME)),
     onSubmit: (formModel) => (dispatch) => {
-      console.log('write event to event store here', formModel)
-      // dispatch(updateDebugSettings(formModel))
+      let bindingModel = {
+        contractAddress: formModel.contractAddress,
+        fromAddress:  formModel.fromAddress,
+        event:{
+          Type: 'MERCURY_EVENT_STORE_USER_CREATED',
+          Name: formModel.name,
+          BirthDate:  moment(formModel.birthDate).format('YYYY-MM-DD'),
+          Role: formModel.role
+        }
+      }
+      dispatch(Mercury.createEventStoreUser(bindingModel))
     }
   }
 )

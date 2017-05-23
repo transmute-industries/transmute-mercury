@@ -13,8 +13,16 @@ mercuryEventStoreFactory.setProvider(web3.currentProvider)
 
 import TransmuteFramework from 'transmute-framework'
 
+import { 
+  mercuryEventStoreReadModelInitialState, 
+  mercuryEventStoreReadModelReducer 
+} from './MercuryEventStore/reducer'
 
-import { mercuryEventStoreReadModelInitialState, mercuryEventStoreReadModelReducer } from './MercuryEventStore/reducer'
+import { 
+  mercuryEventStoreUserReadModelInitialState, 
+  mercuryEventStoreUserReadModelReducer 
+} from './MercuryEventStoreUser/reducer'
+
 
 export const getMercuryEventStoreByCreator = async (fromAddress, _callback) => {
   let factory = await mercuryEventStoreFactory.deployed()
@@ -52,7 +60,7 @@ export const createMercuryEventStore = async (bindingModel, _callback) => {
 // console.log('all-events: ', events)
 
 export const getEventStoreReadModel = async (bindingModel, _callback) =>{
-  let { fromAddress, contractAddress } = bindingModel
+  let { contractAddress } = bindingModel
   let eventStore = await mercuryEventStoreContract.at(contractAddress)
   let readModel = mercuryEventStoreReadModelInitialState
   readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
@@ -63,4 +71,17 @@ export const getEventStoreReadModel = async (bindingModel, _callback) =>{
   _callback(updatedReadModel)
 }
 
+
+// START WRITING TESTS BEFORE DOING THIS STUFF...
+export const createEventStoreUser = async(bindingModel, _callback) => {
+  let { contractAddress, event } = bindingModel
+  console.log('about to write an event: ', bindingModel)
+  let eventStore = await mercuryEventStoreContract.at(contractAddress)
+  let events = await TransmuteFramework.EventStore.writeEvent(eventStore, event)
+  console.log('events: ', events)
+  // let readModel = mercuryEventStoreUserReadModelInitialState
+  // let reducer = mercuryEventStoreUserReadModelReducer
+  // let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
+  // _callback(updatedReadModel)
+}
 

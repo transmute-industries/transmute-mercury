@@ -5,7 +5,6 @@ import { store } from 'app'
 
 import { actions as MercuryActions } from 'store/ethereum/mercury'
 
-
 export const initialState = {
   demo: {
     step: 0,
@@ -16,16 +15,13 @@ export const initialState = {
 
 const handlers = {
   [Constants.MERCURY_EVENT_STORE_ADDRESS_RECEIVED]: (state, action) => {
-
     if (action.payload === '0x0000000000000000000000000000000000000000'){
       return state
     }
-
     store.dispatch(MercuryActions.getEventStoreReadModel({
       contractAddress: action.payload,
       fromAddress: localStorage.getItem('defaultAddress')
     }))
-
     return Object.assign({}, state, {
       demo: {
         step: 1
@@ -54,7 +50,7 @@ const handlers = {
       contractAddress: action.payload,
       fromAddress: localStorage.getItem('defaultAddress')
     }))
-    
+
     return Object.assign({}, state, {
       demo: {
         step: 1

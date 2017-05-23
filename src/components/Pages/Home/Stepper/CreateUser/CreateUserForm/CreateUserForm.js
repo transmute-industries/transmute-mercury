@@ -101,10 +101,19 @@ class Form extends Component {
 }
 
 Form = reduxForm({
-  form: CREATE_USER_FORM_NAME,
-  initialValues: {
-    name: 'USER_' + Math.random(),
-  }
+  form: CREATE_USER_FORM_NAME
 })(Form)
+
+Form = connect(
+  state => ({
+    initialValues: {
+      name: 'USER_' + Math.random(),
+      role: 'Developer',
+      contractAddress: state.mercury.currentMercuryEventStoreAddress, 
+      fromAddress: state.web3.defaultAddress 
+    } 
+  }),
+  // { load: loadAccount }           
+)(Form)
 
 export default Form

@@ -39,6 +39,15 @@ export const getEventStoreReadModel = (bindingModel) => dispatch => {
   })
 }
 
+export const createEventStoreUser = (bindingModel) => dispatch => {
+  Middleware.createEventStoreUser(bindingModel, (readModel) => {
+    dispatch({
+      type: Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED,
+      payload: readModel
+    })
+  })
+}
+
 
 
 
