@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { submit } from 'redux-form'
 import { CREATE_EVENT_STORE_FORM_NAME } from 'constants/formNames'
 
-// import { updateDebugSettings } from 'store/ethereum/web3'
+import Mercury from 'store/ethereum/mercury'
 
 import CreateEventStoreForm from './CreateEventStoreForm'
 
@@ -15,9 +15,9 @@ import CreateEventStoreForm from './CreateEventStoreForm'
   {
     // action for submitting redux-form
     submitForm: () => (dispatch) => dispatch(submit(CREATE_EVENT_STORE_FORM_NAME)),
-    onSubmit: (formModel) => (dispatch) => {
-      console.log('write event to event store here')
-      // dispatch(updateDebugSettings(formModel))
+    onSubmit: (bindingModel) => (dispatch) => {
+      // console.log('bindingModel: ', bindingModel)
+      dispatch(Mercury.createMercuryEventStore(bindingModel))
     }
   }
 )

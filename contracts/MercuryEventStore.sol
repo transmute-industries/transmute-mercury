@@ -11,5 +11,11 @@ contract MercuryEventStore is EventStore {
     function () payable {}
     function MercuryEventStore(string _name) payable {
         name = _name;
+        
+        uint eventIndex = solidityEventCount;
+
+        writeSolidityEvent('EVENT_STORE_CREATED', 1, '0x0');
+        writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(tx.origin), 0, '');
+
     }
 }

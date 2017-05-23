@@ -54,17 +54,11 @@ contract MercuryEventStoreFactory is EventStore {
     MercuryEventStoreAddresses.add(address(_newMercuryEventStore));
     creatorMercuryEventStoreMapping[msg.sender] = address(_newMercuryEventStore);
 
-    // Emit Events
+    // // Emit Events
     uint eventIndex = solidityEventCount;
 
     writeSolidityEvent('EVENT_STORE_CREATED', 1, '0x0');
     writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newMercuryEventStore), 0, '');
-
-    eventIndex = solidityEventCount;
-
-    writeSolidityEvent('EVENT_STORE_AUDIT_LOG', 2, '0x1');
-    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newMercuryEventStore), 0, '');
-    writeSolidityEventProperty(eventIndex, 1, 'ContractOwnerAddress', 'Address', address(msg.sender), 0, '');
 
     return address(_newMercuryEventStore);
 	}

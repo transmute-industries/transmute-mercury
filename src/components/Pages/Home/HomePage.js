@@ -23,7 +23,7 @@ export default class HomePage extends Component {
         return (
           <div style={{ textAlign: 'center' }}>
             <h1>Mercury</h1>
-            <h3>Blockchain Event Sourcing </h3>
+            <h3> Event Sourcing Blockchain</h3>
             {/*<h4>{web3.defaultAddress}</h4>*/}
           </div>
         )

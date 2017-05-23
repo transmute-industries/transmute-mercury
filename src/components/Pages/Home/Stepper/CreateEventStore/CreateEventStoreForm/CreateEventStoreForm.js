@@ -81,11 +81,20 @@ class Form extends Component {
   }
 }
 
+
+
 Form = reduxForm({
-  form: CREATE_EVENT_STORE_FORM_NAME,
-  initialValues: {
-    name: 'ES_' + Math.random(),
-  }
+  form: CREATE_EVENT_STORE_FORM_NAME
 })(Form)
+
+Form = connect(
+  state => ({
+    initialValues: {
+      name: 'mes-apollo-v' + Math.random().toString().substring(0, 5),
+      fromAddress: state.web3.defaultAddress 
+    } 
+  }),
+  // { load: loadAccount }           
+)(Form)
 
 export default Form

@@ -1,16 +1,5 @@
-import {
-  getMercuryEventStoreAddresses,
-  createMercuryEventStoreUser,
-} from './actions'
+import * as actions from './actions'
+import * as reducer from './reducer'
 
-import {
-  mercuryReducer,
-  initialState
-} from './reducer'
-
-export {
-  getMercuryEventStoreAddresses,
-  createMercuryEventStoreUser,
-  mercuryReducer,
-  initialState
-}
+export { actions, reducer }
+export default { ...actions, ...reducer }

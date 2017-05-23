@@ -1,18 +1,46 @@
 import { Constants } from './constants'
 
+
+import { store } from 'app'
+
+import { actions as MercuryActions } from 'store/ethereum/mercury'
+
+
 export const initialState = {
+  demo: {
+    step: 0,
+  },
   addresses: []
 }
 
 const handlers = {
+  [Constants.MERCURY_EVENT_STORE_ADDRESS_RECEIVED]: (state, action) => {
+
+    if (action.payload === '0x0000000000000000000000000000000000000000'){
+      return state
+    }
+    store.dispatch(MercuryActions.getEventStoreReadModel({
+      contractAddress: action.payload,
+      fromAddress: localStorage.getItem('defaultAddress')
+    }))
+    return Object.assign({}, state, {
+      demo: {
+        step: 1
+      },
+      currentMercuryEventStoreAddress: action.payload
+    })
+  },
   [Constants.MERCURY_EVENT_STORE_ADDRESSES_RECEIVED]: (state, action) => {
     return Object.assign({}, state, {
       addresses: action.payload
     })
   },
-  [Constants.MERCURY_EVENT_STORE_USER_CREATED]: (state, action) => {
+  [Constants.MERCURY_EVENT_STORE_CREATED]: (state, action) => {
     return Object.assign({}, state, {
-      transfers: state.transfers.concat(action.payload)
+      demo: {
+        step: 1
+      },
+      currentMercuryEventStoreAddress: action.payload
     })
   },
   [Constants.WEB3_SETTINGS_UPDATED]: (state, action) => {

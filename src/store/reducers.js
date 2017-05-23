@@ -6,13 +6,13 @@ import { reducer as form } from 'redux-form'
 
 import { web3Reducer as web3 } from './ethereum/web3'
 import { uportReducer as uport } from './ethereum/uport'
-import { mercuryReducer as mercury } from './ethereum/mercury'
+import { reducer } from './ethereum/mercury'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
     web3,
     uport,
-    mercury,
+    mercury: reducer.mercuryReducer,
     firebase,
     form,
     routing,

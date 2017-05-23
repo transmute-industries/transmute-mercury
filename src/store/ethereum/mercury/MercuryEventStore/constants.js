@@ -1,0 +1,5 @@
+export const MERCURY_EVENT_STORE_CREATED = 'MERCURY_EVENT_STORE_CREATED'
+
+export const Constants = {
+  MERCURY_EVENT_STORE_CREATED
+}

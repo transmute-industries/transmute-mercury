@@ -16,7 +16,6 @@ injectTapEventPlugin()
 
 import { getWeb3Accounts } from './store/ethereum/web3'
 
-import { getMercuryEventStoreAddresses } from './store/ethereum/mercury'
 
 import routes from './routes'
 import createStore from './store/createStore'
@@ -28,8 +27,6 @@ export const store = createStore(initialState)
 const history = syncHistoryWithStore(browserHistory, store)
 
 store.dispatch(getWeb3Accounts())
-
-store.dispatch(getMercuryEventStoreAddresses())
 
 import TransactionSnackbarContainer from 'components/common/TransactionSnackbar'
 

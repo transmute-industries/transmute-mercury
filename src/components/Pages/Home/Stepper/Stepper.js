@@ -14,11 +14,27 @@ import CreateEncounter from './CreateEncounter'
 import LinkEncounter from './LinkEncounter'
 import AuthorizeEncounter from './AuthorizeEncounter'
 
-class VerticalLinearStepper extends React.Component {
+
+import { connect } from 'react-redux'
+
+@connect(
+  ({ mercury }) => ({
+    mercury: mercury
+  })
+)
+export default class VerticalLinearStepper extends React.Component {
 
   state = {
     finished: false,
     stepIndex: 0,
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (nextProps.mercury.demo.step){
+      this.setState({
+        stepIndex: nextProps.mercury.demo.step
+      })
+    }
   }
 
   handleNext = () => {
@@ -120,5 +136,3 @@ class VerticalLinearStepper extends React.Component {
     )
   }
 }
-
-export default VerticalLinearStepper
