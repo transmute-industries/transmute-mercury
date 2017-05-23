@@ -13,12 +13,14 @@ const handlers = {
   [Constants.MERCURY_EVENT_STORE_CREATED]: (state, transmuteEvent) => {
     return Object.assign({}, state, {
       Name: transmuteEvent.Name,
+      Creator: transmuteEvent.Creator,
       LastEvent: transmuteEvent.Id
     })
   }, 
 }
 
 export const mercuryEventStoreReadModelReducer = (state = mercuryEventStoreReadModelInitialState, transmuteEvent) => {
+  // console.log('transmuteEvent: ', transmuteEvent)
   if (handlers[transmuteEvent.Type]) {
     return handlers[transmuteEvent.Type](state, transmuteEvent)
   }

@@ -12,7 +12,8 @@ contract MercuryEventStore is EventStore {
     function MercuryEventStore(string _name) payable {
         name = _name;
         uint eventIndex = solidityEventCount;
-        writeSolidityEvent('MERCURY_EVENT_STORE_CREATED', 1, 'NO_INTEGRITY_HASH');
+        writeSolidityEvent('MERCURY_EVENT_STORE_CREATED', 2, 'NO_INTEGRITY_HASH');
         writeSolidityEventProperty(eventIndex, 0, 'Name', 'String', address(tx.origin), 0, _name);
+        writeSolidityEventProperty(eventIndex, 1, 'Creator', 'Address', address(tx.origin), 0, '');
     }
 }

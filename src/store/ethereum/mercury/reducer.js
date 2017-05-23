@@ -49,6 +49,12 @@ const handlers = {
   },
 
   [Constants.MERCURY_EVENT_STORE_CREATED]: (state, action) => {
+
+    store.dispatch(MercuryActions.getEventStoreReadModel({
+      contractAddress: action.payload,
+      fromAddress: localStorage.getItem('defaultAddress')
+    }))
+    
     return Object.assign({}, state, {
       demo: {
         step: 1
