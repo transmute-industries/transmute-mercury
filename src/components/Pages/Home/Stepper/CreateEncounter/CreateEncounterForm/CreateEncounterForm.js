@@ -119,10 +119,33 @@ class Form extends Component {
 }
 
 Form = reduxForm({
-  form: CREATE_ENCOUNTER_FORM_NAME,
-  initialValues: {
-    name: 'ENCOUNTER_' + Math.random(),
-  }
+  form: CREATE_ENCOUNTER_FORM_NAME
 })(Form)
+
+const getUser = (ReadModels) =>{
+  let user
+  Object.keys(ReadModels)
+  .forEach((key) =>{
+    let value = ReadModels[key]
+
+    if (value.ReadModelType === 'MercuryEventStoreUser'){
+      user = value
+    }
+  })
+
+  return user
+}
+
+Form = connect(
+  state => ({
+    initialValues: {
+      name: 'ENCOUNTER_' + Math.random().toString().substring(0, 6),
+      notes: getUser(state.mercury.ReadModels).Name + ' was born ' + getUser(state.mercury.ReadModels).BirthDate,
+      contractAddress: state.mercury.currentMercuryEventStoreAddress, 
+      fromAddress: state.web3.defaultAddress 
+    } 
+  }),
+  // { load: loadAccount }           
+)(Form)
 
 export default Form

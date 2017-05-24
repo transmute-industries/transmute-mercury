@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 import { submit } from 'redux-form'
 import { CREATE_USER_FORM_NAME } from 'constants/formNames'
 
-import Mercury from 'store/ethereum/mercury'
 
 import CreateUserForm from './CreateUserForm'
-  import moment from 'moment'
+
+import Mercury from 'store/ethereum/mercury'
+import moment from 'moment'
+
 @connect(
   // Map redux state to props
   ({ web3 }) => ({

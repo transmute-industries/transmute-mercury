@@ -30,6 +30,10 @@ const handlers = {
     })
   },
   [Constants.MERCURY_EVENT_STORE_ADDRESSES_RECEIVED]: (state, action) => {
+
+   
+    
+
     return Object.assign({}, state, {
       addresses: action.payload
     })
@@ -37,9 +41,25 @@ const handlers = {
 
   [Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED]: (state, action) => {
     let step = 1
-    if (action.payload.ReadModelType === 'MercuryEventStoreUser'){
-      step = 2
+
+    if (action.payload.ReadModelType === 'MercuryEventStore'){
+      store.dispatch(MercuryActions.getEventStoreUserReadModel({
+          contractAddress: action.payload.ContractAddress,
+          fromAddress: localStorage.getItem('defaultAddress')
+      }))
     }
+    if (action.payload.ReadModelType === 'MercuryEventStoreUser'){
+      step = 2 
+      store.dispatch(MercuryActions.getEventStoreUserEncounterReadModel({
+          contractAddress: action.payload.ContractAddress,
+          fromAddress: localStorage.getItem('defaultAddress')
+      }))
+    }
+
+    if (action.payload.ReadModelType === 'MercuryEventStoreUserEncounter'){
+      step = 3
+    }
+
     return Object.assign({}, state, {
       demo: {
         step: step

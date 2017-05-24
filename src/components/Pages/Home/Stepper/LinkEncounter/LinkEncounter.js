@@ -7,6 +7,10 @@ import { LINK_ENCOUNTER_FORM_NAME } from 'constants/formNames'
 
 import LinkEncounterForm from './LinkEncounterForm'
 
+
+import Mercury from 'store/ethereum/mercury'
+import moment from 'moment'
+
 @connect(
   // Map redux state to props
   ({ web3 }) => ({
@@ -16,8 +20,19 @@ import LinkEncounterForm from './LinkEncounterForm'
     // action for submitting redux-form
     submitForm: () => (dispatch) => dispatch(submit(LINK_ENCOUNTER_FORM_NAME)),
     onSubmit: (formModel) => (dispatch) => {
-      console.log('write link event to store here...', formModel)
-      // dispatch(updateDebugSettings(formModel))
+      let bindingModel = {
+        contractAddress: formModel.contractAddress,
+        fromAddress:  formModel.fromAddress,
+        event:{
+          Type: 'MERCURY_EVENT_STORE_USER_ENCOUNTER_LINKED',
+          Name: formModel.name,
+          ReadEvents: formModel.readEvents.toString(),
+          WriteEvents: formModel.writeEvents.toString(),
+          Expires:  moment(formModel.expires).toISOString(),
+        }
+      }
+      console.log('trying to create an event..', bindingModel)
+      dispatch(Mercury.createEventStoreUserEncounterLinkReadModel(bindingModel))
     }
   }
 )

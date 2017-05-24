@@ -7,6 +7,10 @@ import { CREATE_ENCOUNTER_FORM_NAME } from 'constants/formNames'
 
 import CreateEncounterForm from './CreateEncounterForm'
 
+import Mercury from 'store/ethereum/mercury'
+
+import moment from 'moment'
+
 @connect(
   // Map redux state to props
   ({ web3 }) => ({
@@ -16,8 +20,18 @@ import CreateEncounterForm from './CreateEncounterForm'
     // action for submitting redux-form
     submitForm: () => (dispatch) => dispatch(submit(CREATE_ENCOUNTER_FORM_NAME)),
     onSubmit: (formModel) => (dispatch) => {
-      console.log('write encounter event here..', formModel)
-      // dispatch(updateDebugSettings(formModel))
+     let bindingModel = {
+        contractAddress: formModel.contractAddress,
+        fromAddress:  formModel.fromAddress,
+        event:{
+          Type: 'MERCURY_EVENT_STORE_USER_ENCOUNTER',
+          Name: formModel.name,
+          LastMeal:  moment(formModel.lastMeal).toISOString(),
+          Notes: formModel.notes,
+          Referral: formModel.referral
+        }
+      }
+      dispatch(Mercury.createEventStoreUserEncounterReadModel(bindingModel))
     }
   }
 )

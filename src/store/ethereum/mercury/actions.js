@@ -56,5 +56,51 @@ export const getEventStoreUserReadModel = (bindingModel) => dispatch => {
 }
 
 
+export const createEventStoreUserEncounterReadModel = (bindingModel) => dispatch => {
+  Middleware.createEventStoreUserEncounterReadModel(bindingModel, (readModel) => {
+    dispatch({
+      type: Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED,
+      payload: readModel
+    })
+  })
+}
+
+export const getEventStoreUserEncounterReadModel = (bindingModel) => dispatch => {
+  Middleware.getEventStoreUserEncounterReadModel(bindingModel, (readModel) => {
+    dispatch({
+      type: Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED,
+      payload: readModel
+    })
+  })
+}
+
+
+
+export const createEventStoreUserEncounterLinkReadModel = (bindingModel) => dispatch => {
+  Middleware.createEventStoreUserEncounterLinkReadModel(bindingModel, (readModel) => {
+    dispatch({
+      type: Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED,
+      payload: readModel
+    })
+  })
+}
+
+
+
+export const getEventStoreUserEncounterLinkReadModel = (bindingModel) => dispatch => {
+  Middleware.getEventStoreUserEncounterLinkReadModel(bindingModel, (readModel) => {
+    dispatch({
+      type: Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED,
+      payload: readModel
+    })
+  })
+}
+
+
+
+
+
+
+
 
 
