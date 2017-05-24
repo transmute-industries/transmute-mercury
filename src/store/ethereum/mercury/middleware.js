@@ -49,10 +49,11 @@ export const createMercuryEventStore = async (bindingModel, _callback) => {
       from: fromAddress,
       gas: 2000000,
   })
-
+  console.warn(`transactionToEventCollection has a known issue handling multiple multi property events: 
+  https://github.com/transmute-industries/transmute-framework/issues/27`)
   let events = TransmuteFramework.Transactions.transactionToEventCollection(tx)
-  let createdEvent = events[0]
-  console.log('find the new contract address here somewhere...', events)
+  let createdEvent = events[1]
+  // console.log('find the new contract address here somewhere...', events)
   _callback(createdEvent.ContractAddress)
 }
 
@@ -62,7 +63,7 @@ export const createMercuryEventStore = async (bindingModel, _callback) => {
 
 export const getEventStoreReadModel = async (bindingModel, _callback) =>{
   let { contractAddress } = bindingModel
-  console.log('expect valid address here: ', contractAddress, bindingModel)
+  // console.log('expect valid address here: ', contractAddress, bindingModel)
   // possible latency issue...
   let eventStore = await mercuryEventStoreContract.at(contractAddress)
   let readModel = mercuryEventStoreReadModelInitialState
