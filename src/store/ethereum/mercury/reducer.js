@@ -18,7 +18,6 @@ const handlers = {
     if (action.payload === '0x0000000000000000000000000000000000000000'){
       return state
     }
-    console.log('what is action here...', action)
     store.dispatch(MercuryActions.getEventStoreReadModel({
       contractAddress: action.payload,
       fromAddress: localStorage.getItem('defaultAddress')
@@ -37,7 +36,14 @@ const handlers = {
   },
 
   [Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED]: (state, action) => {
+    let step = 1
+    if (action.payload.ReadModelType === 'MercuryEventStoreUser'){
+      step = 2
+    }
     return Object.assign({}, state, {
+      demo: {
+        step: step
+      },
       ReadModels: {
         ...state.ReadModels,
         [action.payload.ReadModelStoreKey]: action.payload
@@ -46,13 +52,10 @@ const handlers = {
   },
 
   [Constants.MERCURY_EVENT_STORE_CREATED]: (state, action) => {
-
-    console.log('what is action here...', action)
     store.dispatch(MercuryActions.getEventStoreReadModel({
       contractAddress: action.payload,
       fromAddress: localStorage.getItem('defaultAddress')
     }))
-
     return Object.assign({}, state, {
       demo: {
         step: 1

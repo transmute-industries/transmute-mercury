@@ -37,8 +37,6 @@ export const getMercuryEventStoreAddresses = async (fromAddress, _callback) => {
   let mercuryEventStoreContractAddresses = await factory.getMercuryEventStores({
     from: fromAddress
   })
-  //  console.log('TransmuteFramework: ', TransmuteFramework)
-  // console.log('mercuryEventStoreContractAddresses: ', mercuryEventStoreContractAddresses)
   _callback(mercuryEventStoreContractAddresses)
 }
 
@@ -63,8 +61,6 @@ export const createMercuryEventStore = async (bindingModel, _callback) => {
 
 export const getEventStoreReadModel = async (bindingModel, _callback) =>{
   let { contractAddress } = bindingModel
-  // console.log('expect valid address here: ', contractAddress, bindingModel)
-  // possible latency issue...
   let eventStore = await mercuryEventStoreContract.at(contractAddress)
   let readModel = mercuryEventStoreReadModelInitialState
   readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
@@ -74,10 +70,21 @@ export const getEventStoreReadModel = async (bindingModel, _callback) =>{
   _callback(updatedReadModel)
 }
 
-export const createEventStoreUser = async(bindingModel, _callback) => {
+export const createEventStoreUserReadModel = async(bindingModel, _callback) => {
   let { contractAddress, fromAddress,  event } = bindingModel
   let eventStore = await mercuryEventStoreContract.at(contractAddress)
   let events = await TransmuteFramework.EventStore.writeEvent(eventStore, event, fromAddress)
+  let readModel = mesUserReadModelInitialState
+  readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
+  readModel.ContractAddress = contractAddress
+  let reducer = mesUserReadModelReducer
+  let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
+  _callback(updatedReadModel)
+}
+
+export const getEventStoreUserReadModel = async (bindingModel, _callback) =>{
+  let { contractAddress } = bindingModel
+  let eventStore = await mercuryEventStoreContract.at(contractAddress)
   let readModel = mesUserReadModelInitialState
   readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
   readModel.ContractAddress = contractAddress

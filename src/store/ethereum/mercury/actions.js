@@ -22,15 +22,12 @@ export const getMercuryEventStoreAddresses = (fromAddress) => dispatch => {
 
 export const createMercuryEventStore = (bindingModel) => dispatch => {
   Middleware.createMercuryEventStore(bindingModel, (address) => {
-    console.log('address is undefined here: ', address)
     dispatch({
       type: Constants.MERCURY_EVENT_STORE_CREATED,
       payload: address
     })
   })
 }
-
-
 export const getEventStoreReadModel = (bindingModel) => dispatch => {
   Middleware.getEventStoreReadModel(bindingModel, (readModel) => {
     dispatch({
@@ -40,8 +37,17 @@ export const getEventStoreReadModel = (bindingModel) => dispatch => {
   })
 }
 
-export const createEventStoreUser = (bindingModel) => dispatch => {
-  Middleware.createEventStoreUser(bindingModel, (readModel) => {
+export const createEventStoreUserReadModel = (bindingModel) => dispatch => {
+  Middleware.createEventStoreUserReadModel(bindingModel, (readModel) => {
+    dispatch({
+      type: Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED,
+      payload: readModel
+    })
+  })
+}
+
+export const getEventStoreUserReadModel = (bindingModel) => dispatch => {
+  Middleware.getEventStoreUserReadModel(bindingModel, (readModel) => {
     dispatch({
       type: Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED,
       payload: readModel

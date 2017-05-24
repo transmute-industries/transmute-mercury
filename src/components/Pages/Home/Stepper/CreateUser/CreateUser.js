@@ -26,7 +26,7 @@ import CreateUserForm from './CreateUserForm'
           Role: formModel.role
         }
       }
-      dispatch(Mercury.createEventStoreUser(bindingModel))
+      dispatch(Mercury.createEventStoreUserReadModel(bindingModel))
     }
   }
 )
