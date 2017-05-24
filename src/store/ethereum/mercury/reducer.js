@@ -30,10 +30,6 @@ const handlers = {
     })
   },
   [Constants.MERCURY_EVENT_STORE_ADDRESSES_RECEIVED]: (state, action) => {
-
-   
-    
-
     return Object.assign({}, state, {
       addresses: action.payload
     })
