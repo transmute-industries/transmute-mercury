@@ -25,7 +25,7 @@ const handlers = {
       localStorage.setItem('defaultAddress', defaultAddress)
     }
     
-    store.dispatch(MercuryActions.getMercuryEventStoreAddresses(defaultAddress))
+    // store.dispatch(MercuryActions.getMercuryEventStoreAddresses(defaultAddress))
     store.dispatch(MercuryActions.getMercuryEventStoreByCreator(defaultAddress))
     
     return Object.assign({}, state, {

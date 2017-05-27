@@ -17,18 +17,18 @@ export default class TransactionSnackbar extends React.Component {
     })
   }
 
-  componentDidUpdate (prevProps, prevState) {
-    var lastTx = this.props.web3.defaultAddress
-    if (lastTx) {
-      var msg = lastTx
-      if (prevState.message !== msg) {
-        this.setState({
-          message: msg,
-          open: true
-        })
-      }
-    }
-  }
+  // componentDidUpdate (prevProps, prevState) {
+  //   var lastTx = this.props.web3.defaultAddress
+  //   if (lastTx) {
+  //     var msg = lastTx
+  //     if (prevState.message !== msg) {
+  //       this.setState({
+  //         message: msg,
+  //         open: true
+  //       })
+  //     }
+  //   }
+  // }
 
   render () {
     return (

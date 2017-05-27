@@ -87,6 +87,12 @@ export default class Navbar extends Component {
 
     const mainMenu = (
       <div className={classes.menu}>
+          <Link to={WEB3_PATH}>
+          <FlatButton
+            label='Web3'
+            style={buttonStyle}
+          />
+        </Link>
          <Link to={LOGIN_PATH}>
           <FlatButton
             label='Login'
