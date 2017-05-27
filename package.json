@@ -91,7 +91,7 @@
     "redux-form-material-ui": "^4.2.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
-    "transmute-framework": "^0.1.21",
+    "transmute-framework": "^0.1.25",
     "truffle-contract": "^2.0.0",
     "uport-connect": "^0.5.6"
   },
