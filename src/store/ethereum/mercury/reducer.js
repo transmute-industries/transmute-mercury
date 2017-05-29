@@ -1,92 +1,68 @@
-import { Constants } from './constants'
-
+import Constants from './mock/healthcare/constants'
 
 import { store } from 'app'
 
 import { actions as MercuryActions } from 'store/ethereum/mercury'
 
+import events from './mock/healthcare/events'
+
+import { reducer } from './mock/healthcare/reducer'
+
 export const initialState = {
-  demo: {
-    step: 0,
-  },
-  addresses: [],
-  ReadModels: {}
+  events: events,
+  step: 0
 }
 
 const handlers = {
-  [Constants.MERCURY_EVENT_STORE_ADDRESS_RECEIVED]: (state, action) => {
+  [Constants.EVENT_STORE_ADDRESS_RECEIVED]: (state, action) => {
+    
     if (action.payload === '0x0000000000000000000000000000000000000000'){
       return state
     }
-    store.dispatch(MercuryActions.getEventStoreReadModel({
+
+    store.dispatch(MercuryActions.rebuild({
       contractAddress: action.payload,
       fromAddress: localStorage.getItem('defaultAddress')
     }))
+    
+    let step = state.step + 1
     return Object.assign({}, state, {
-      demo: {
-        step: 1
-      },
-      currentMercuryEventStoreAddress: action.payload
-    })
-  },
-  [Constants.MERCURY_EVENT_STORE_ADDRESSES_RECEIVED]: (state, action) => {
-    return Object.assign({}, state, {
-      addresses: action.payload
+      step: step,
+      eventStoreAddress: action.payload
     })
   },
 
-  [Constants.MERCURY_EVENT_STORE_READ_MODEL_RECEIVED]: (state, action) => {
-    let step = 1
-
-    if (action.payload.ReadModelType === 'MercuryEventStore'){
-      store.dispatch(MercuryActions.getEventStoreUserReadModel({
-          contractAddress: action.payload.ContractAddress,
-          fromAddress: localStorage.getItem('defaultAddress')
-      }))
-    }
-    if (action.payload.ReadModelType === 'MercuryEventStoreUser'){
-      step = 2 
-      store.dispatch(MercuryActions.getEventStoreUserEncounterReadModel({
-          contractAddress: action.payload.ContractAddress,
-          fromAddress: localStorage.getItem('defaultAddress')
-      }))
-    }
-
-    if (action.payload.ReadModelType === 'MercuryEventStoreUserEncounter'){
-      step = 3
-    }
-
+  [Constants.EVENT_STORE_RECEIVED]: (state, action) => {
+    let step = state.step + 1
     return Object.assign({}, state, {
-      demo: {
-        step: step
-      },
-      ReadModels: {
-        ...state.ReadModels,
-        [action.payload.ReadModelStoreKey]: action.payload
-      }
+      EventStore: action.payload
     })
   },
 
-  [Constants.MERCURY_EVENT_STORE_CREATED]: (state, action) => {
-    store.dispatch(MercuryActions.getEventStoreReadModel({
-      contractAddress: action.payload,
-      fromAddress: localStorage.getItem('defaultAddress')
-    }))
+  [Constants.EVENT_STORE_UPDATED]: (state, action) => {
+    let step = state.step + 1
     return Object.assign({}, state, {
-      demo: {
-        step: 1
-      },
-      currentMercuryEventStoreAddress: action.payload
+      step: step,
+      EventStore: action.payload
     })
   },
-  [Constants.WEB3_SETTINGS_UPDATED]: (state, action) => {
-    return Object.assign({}, state, ...action.payload)
+  [Constants.DEMO_STEP]: (state, action) => {
+    return Object.assign({}, state, {
+      step: action.payload,
+    })
   }
 }
 
 export const mercuryReducer = (state = initialState, action) => {
+
+  // if (action.Type){
+  //   return reducer(state, action)
+  // }
+  
   if (handlers[action.type]) {
     return handlers[action.type](state, action)
   }
   return state
 }
+
+

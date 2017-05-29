@@ -6,12 +6,12 @@ var TransmuteFramework = require('transmute-framework').TransmuteFramework
 
 contract('MercuryEventStore', (accounts) => {
     let eventStore
-    it(' is an deployed', async () => {
-        eventStore = await  MercuryEventStore.deployed()
+    it(' is deployed', async () => {
+        eventStore = await MercuryEventStore.deployed()
     })
 
     it(' TransmuteFramework ', async () => {
-       
+
         let events = await TransmuteFramework.EventStore.writeEvent(eventStore, {
             Type: 'TEST_EVENT',
             CustomValue: 4

@@ -13,6 +13,8 @@ const logger = createLogger({
   // collapsed: (getState, action, logEntry) => {
   //   console.log('what is log?', logEntry)
   // }
+
+  predicate: (getState, action) => action.type && action.type.indexOf('@@') === -1
 })
 
 export default (initialState = {}, history) => {

@@ -26,7 +26,7 @@ contract('MercuryEventStoreFactory', (accounts) => {
 
     describe('.createEventStore', () => {
         it('returns an address', async () => {
-            let newESAddress = await factory.createMercuryEventStore.call(mercuryStoreName, {
+            let newESAddress = await factory.createMercuryEventStore.call({
                 from: factoryCreatorAddress
             })
             let isNewESAddressValid = web3.isAddress(newESAddress)
@@ -34,45 +34,28 @@ contract('MercuryEventStoreFactory', (accounts) => {
         })
 
         it('creates an event store contract', async () => {
-            let tx = await factory.createMercuryEventStore(mercuryStoreName, {
+            let tx = await factory.createMercuryEventStore({
                 from: factoryCreatorAddress,
                 gas: 2000000,
             })
             let events = transactionToEventCollection(tx)
-            // console.log(events)
+
             let createdEvent =  _.find(events, (evt) =>{
-                return evt.Type === 'EVENT_STORE_CREATED'
+                return evt.Type === 'FACTORY_EVENT_STORE_CREATED'
             })
             eventStoreContractAddress = createdEvent.ContractAddress
-            assert(createdEvent.Type === 'EVENT_STORE_CREATED')
-        }) 
+            assert(createdEvent.Type === 'FACTORY_EVENT_STORE_CREATED')
+        })
     })
 
     describe('.getMercuryEventStores', () => {
-
-        it('event store has at least 1 event', async () => {
-            let eventStore = await MercuryEventStore.at(eventStoreContractAddress) 
-            
-            let confirmName =  await eventStore.name({
-                from: factoryCreatorAddress
-            })
-
-             let eventCount =  (await eventStore.solidityEventCount()).toNumber()
-             assert(eventCount === 1)
-            // console.log(eventCount)
-            // let events = transactionToEventCollection(tx)
-            // assert(createdEvent.Type === 'EVENT_STORE_CREATED')
-        })
-
         it('returns an array of mercury event store contract addresses', async () => {
             let mercuryEventStoreContractAddresses = await factory.getMercuryEventStores({
                 from: factoryCreatorAddress
             })
-            // console.log('mercuryEventStoreContractAddresses: ', mercuryEventStoreContractAddresses)
             mercuryEventStoreContractAddresses.forEach((address) =>{
-                assert(web3.isAddress(address))
+                assert(web3.isAddress(address) === true)
             })
         })
     })
 })
-

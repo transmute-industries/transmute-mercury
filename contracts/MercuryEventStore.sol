@@ -2,18 +2,9 @@ pragma solidity ^0.4.8;
 import './TransmuteFramework/zeppelin/lifecycle/Killable.sol';
 import "./TransmuteFramework/EventStore.sol";
 import "./TransmuteFramework/SetLib/AddressSet/AddressSetLib.sol";
+import "./TransmuteFramework/Utils/StringUtils.sol";
 
 contract MercuryEventStore is EventStore {
-    using AddressSetLib for AddressSetLib.AddressSet;
-
-    string public name;
-
     function () payable {}
-    function MercuryEventStore(string _name) payable {
-        name = _name;
-        uint eventIndex = solidityEventCount;
-        writeSolidityEvent('MERCURY_EVENT_STORE_CREATED', 2, 'NO_INTEGRITY_HASH');
-        writeSolidityEventProperty(eventIndex, 0, 'Name', 'String', address(tx.origin), 0, _name);
-        writeSolidityEventProperty(eventIndex, 1, 'Creator', 'Address', address(tx.origin), 0, '');
-    }
+    function MercuryEventStore() payable {}
 }

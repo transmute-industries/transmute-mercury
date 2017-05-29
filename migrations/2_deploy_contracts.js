@@ -1,6 +1,8 @@
-// BEGIN 🦄 Transmute Framework 
+// BEGIN 🦄 Transmute Framework
 var Ownable = artifacts.require('./TransmuteFramework/zeppelin/ownership/Ownable.sol')
 var Killable = artifacts.require('./TransmuteFramework/zeppelin/lifecycle/Killable.sol')
+
+var StringUtils = artifacts.require("./TransmuteFramework/Utils/StringUtils.sol")
 
 var AddressSetLib = artifacts.require("./TransmuteFramework/SetLib/AddressSet/AddressSetLib.sol")
 var AddressSetSpec = artifacts.require("./TransmuteFramework/SetLib/AddressSet/AddressSetSpec.sol")
@@ -14,8 +16,13 @@ var UIntSetSpec = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSet
 var EventStore = artifacts.require('./TransmuteFramework/EventStore.sol')
 var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStoreFactory.sol')
 
+var MercuryEventStore = artifacts.require('./TransmuteFramework/MercuryEventStore.sol')
+var MercuryEventStoreFactory = artifacts.require('./TransmuteFramework/MercuryEventStoreFactory.sol')
 
-const transmuteDeployer = function(deployer) {
+
+module.exports = function(deployer) {
+  deployer.deploy(StringUtils)
+
   deployer.deploy(Ownable)
   deployer.link(Ownable, Killable)
   deployer.deploy(Killable)
@@ -32,27 +39,23 @@ const transmuteDeployer = function(deployer) {
   deployer.link(UIntSetLib, UIntSetSpec)
   deployer.deploy(UIntSetSpec)
 
+  deployer.link(StringUtils, EventStore)
   deployer.link(AddressSetLib, EventStore)
   deployer.link(Killable, EventStore)
   deployer.deploy(EventStore)
 
+  deployer.link(StringUtils, EventStoreFactory)
   deployer.link(AddressSetLib, EventStoreFactory)
   deployer.link(EventStore, EventStoreFactory)
   deployer.deploy(EventStoreFactory)
-}
-// END 🐩 Transmute Framework 
 
-var MercuryEventStore = artifacts.require('./MercuryEventStore.sol')
-var MercuryEventStoreFactory = artifacts.require('./MercuryEventStoreFactory.sol')
-
-
-module.exports = function(deployer) {
-	// Patched by Transmute Framework
-	transmuteDeployer(deployer)
-
+  deployer.link(StringUtils, MercuryEventStore)
   deployer.link(AddressSetLib, MercuryEventStore)
-  deployer.deploy(MercuryEventStore);
-   deployer.link(AddressSetLib, MercuryEventStoreFactory)
-  deployer.link(MercuryEventStore, MercuryEventStoreFactory);
-  deployer.deploy(MercuryEventStoreFactory);
-};
+  deployer.link(Killable, MercuryEventStore)
+  deployer.deploy(MercuryEventStore)
+
+  deployer.link(StringUtils, MercuryEventStoreFactory)
+  deployer.link(AddressSetLib, MercuryEventStoreFactory)
+  deployer.link(MercuryEventStore, MercuryEventStoreFactory)
+  deployer.deploy(MercuryEventStoreFactory)
+}
