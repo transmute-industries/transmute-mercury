@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import HeroRow from 'components/common/HeroRow'
 import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Stepper'
+import TransmuteTerminal from './TransmuteTerminal'
+
 @connect(
   ({ web3 }) => ({
     web3: web3
@@ -38,7 +40,8 @@ export default class HomePage extends Component {
         <HeroRow renderParticles>
           <HeroContent />
         </HeroRow>
-        <Stepper />
+        {/*<Stepper />*/}
+        <TransmuteTerminal />
       </div>
     )
   }

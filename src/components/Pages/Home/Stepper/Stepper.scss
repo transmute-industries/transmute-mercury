@@ -1,0 +1,14 @@
+.StepperActions{
+    margin-top: 64px;
+    margin-bottom: 32px;
+    float: right;
+    padding-right: 16px;
+}
+
+// fix react bash defect
+ #mount{
+    [data-reactroot]{
+        height: auto !important; 
+    }
+}
+

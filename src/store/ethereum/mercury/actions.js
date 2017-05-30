@@ -18,10 +18,10 @@ export const getMercuryEventStoreAddresses = (fromAddress) => dispatch => {
   })
 }
     
-export const getMercuryEventStoreByCreator = (fromAddress) => dispatch => {
-  Middleware.getMercuryEventStoreByCreator(fromAddress, (address) => {
+export const getMercuryEventStoresByCreator = (fromAddress) => dispatch => {
+  Middleware.getMercuryEventStoresByCreator(fromAddress, (address) => {
     dispatch({
-      type: Constants.EVENT_STORE_ADDRESS_RECEIVED,
+      type: Constants.EVENT_STORE_ADDRESSES_RECEIVED,
       payload: address
     })
   })
@@ -31,7 +31,7 @@ export const getMercuryEventStoreByCreator = (fromAddress) => dispatch => {
 export const createMercuryEventStore = (bindingModel) => dispatch => {
   Middleware.createMercuryEventStore(bindingModel, (address) => {
     dispatch({
-      type: Constants.EVENT_STORE_ADDRESS_RECEIVED,
+      type: Constants.EVENT_STORE_ADDRESSES_RECEIVED,
       payload: address
     })
   })

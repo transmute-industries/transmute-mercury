@@ -26,7 +26,7 @@ const handlers = {
     }
     
     // store.dispatch(MercuryActions.getMercuryEventStoreAddresses(defaultAddress))
-    store.dispatch(MercuryActions.getMercuryEventStoreByCreator(defaultAddress))
+    store.dispatch(MercuryActions.getMercuryEventStoresByCreator(defaultAddress))
     
     return Object.assign({}, state, {
       addresses: action.payload,

@@ -7,17 +7,18 @@ import {
 } from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
-
-
 import CreateEventStore from './CreateEventStore'
 import CreateEvent from './CreateEvent'
-
 import { connect } from 'react-redux'
-
-
 import Mercury from 'store/ethereum/mercury'
 
 import moment from 'moment'
+import classes from './Stepper.scss'
+
+// npm install --save react-bash (add to demo)
+// https://github.com/zackargyle/react-bash
+
+
 
 
 @connect(
@@ -26,142 +27,113 @@ import moment from 'moment'
     mercury: mercury
   }),
   {
-      saveEvent: (contractAddress, fromAddress, event) => (dispatch) => {
-       let bindingModel = {
+    saveEvent: (contractAddress, fromAddress, event) => (dispatch) => {
+      let bindingModel = {
         contractAddress: contractAddress,
-        fromAddress:  fromAddress,
+        fromAddress: fromAddress,
         event: event
       }
       dispatch(Mercury.saveEvent(bindingModel))
     },
-    setStep: (step)  => (dispatch) => {
+    setStep: (step) => (dispatch) => {
       dispatch(Mercury.setStep(step))
     }
   }
 )
 export default class VerticalLinearStepper extends React.Component {
 
-  state = {
-    data: [],
-    finished: false,
-    stepIndex: 0,
-  }
-
-  componentWillReceiveProps(nextProps){
-    if (nextProps.mercury.step){
-      this.setState({
-        stepIndex: nextProps.mercury.step
-      })
-    }
+  saveEvent = () => {
+    const { saveEvent, mercury, web3 } = this.props
+    saveEvent(mercury.EventStore.ContractAddress, web3.defaultAddress, mercury.events[mercury.step])
   }
 
   handleNext = () => {
-    const {stepIndex} = this.state
-    this.props.setStep(stepIndex + 1)
-    this.setState({
-      stepIndex: stepIndex + 1,
-      finished: this.props.mercury.step === 5,
-    })
-  }
-
-  saveEvent = () => {
-     const { saveEvent, mercury, web3} = this.props
-     saveEvent(mercury.EventStore.ContractAddress, web3.defaultAddress, mercury.events[mercury.step])
-  }
-
-  handlePrev = () => {
-    const {stepIndex} = this.state
-    if (stepIndex > 0) {
-      this.props.setStep(stepIndex - 1)
-      this.setState({stepIndex: stepIndex - 1})
-    }
-  }
-
-  renderStepActions(step) {
-    const {stepIndex} = this.state
-  
-    return (
-      <div style={{margin: '12px 0', textAlign:'right'}}>
-        {step > 0 && (
-          <FlatButton
-            label='Back'
-            disabled={stepIndex === 0}
-            disableTouchRipple={true}
-            disableFocusRipple={true}
-            onTouchTap={this.handlePrev}
-          />
-        )}
-        <FlatButton
-          label={stepIndex === 5 ? 'Finish' : 'Next'}
-          disableTouchRipple={true}
-          disableFocusRipple={true}
-          onTouchTap={this.handleNext}
-          style={{marginRight: 12}}
-        />
-
-        {
-          stepIndex !== 0 && 
-          <RaisedButton
-            label='Save Event'
-            disableTouchRipple={true}
-            disableFocusRipple={true}
-            secondary={true}
-            onTouchTap={ this.saveEvent }
-            style={{marginRight: 12}}
-            />
-        }
-         
-      </div>
+    this.props.onNextStep(
+      this.props.mercury.step + 1
     )
   }
 
+  handlePrev = () => {
+    this.props.onNextStep(
+      this.props.mercury.step - 1
+    )
+  }
+
+  handleUserLogin = () => {
+    this.props.handleUserLogin()
+  }
+
+  getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <CreateEventStore />
+      default:
+        return <CreateEvent />
+    }
+  }
+
+  resetDemo = () => {
+    this.props.onDemoReset()
+  }
+
   render() {
-    const {finished, stepIndex} = this.state
-    // const stepData = this.state.data[stepIndex]
-    const events = this.props.mercury.events
+    const { step, events } = this.props.mercury
     return (
-      <div>
-        <Stepper activeStep={stepIndex} orientation='vertical'>
-           
+      <div style={{ margin: 'auto', paddingBottom: '64px' }}>
+        <Stepper activeStep={step} orientation='horizontal'>
           {
             events.map((step, index) => {
-
-              if (index === 0){
               return (
                 <Step key={index}>
-                <StepLabel>{step.Type}</StepLabel>
-                <StepContent>
-                <CreateEventStore />
-                {this.renderStepActions(0)}
-                </StepContent>
-                </Step>
-              )
-              }
-              return (
-                <Step key={index}>
-                  <StepLabel>{step.Type}</StepLabel>
-                  <StepContent>
-                    {/*{JSON.stringify(step)}*/}
-                    <CreateEvent style={{wdith: '100%'}}/>
-                    {this.renderStepActions(index + 1)}
-                  </StepContent>
+                  <StepLabel>
+                    <span className='hidden-xs'>{step.Type}</span>
+                  </StepLabel>
                 </Step>
               )
             })
           }
         </Stepper>
-        {finished && (
-          <div style={{margin: '20px 0', textAlign: 'center'}}>
-            <RaisedButton
-            label='Reset'
-            disableTouchRipple={true}
-            disableFocusRipple={true}
-            primary={true}
-            onTouchTap={ () =>{this.setState({stepIndex: 0, finished: false})} }
-            style={{marginRight: 12}}
+
+        {this.getStepContent(step)}
+
+        {step === 4 && (
+          <div style={{ margin: '20px 0', textAlign: 'center' }}>
+            <p>
+              Click here to reset the example.
+                        </p>
+            <RaisedButton secondary={true} type='buton' label='Reset Demo'
+              onClick={(event) => {
+                event.preventDefault()
+                this.resetDemo()
+              }}
             />
           </div>
         )}
+
+        <div className={classes.StepperActions}>
+          {
+            step !== 0 &&
+            <div>
+              <FlatButton primary={true} type='buton' label='Reset Demo' onClick={this.resetDemo} />
+              <FlatButton
+                label='Back'
+                disabled={step === 0}
+                onTouchTap={this.handlePrev}
+                style={{ marginRight: 12 }}
+              />
+              <RaisedButton
+                label='Save Event'
+                disableTouchRipple={true}
+                disableFocusRipple={true}
+                secondary={true}
+                onTouchTap={this.saveEvent}
+                style={{ marginRight: 12 }}
+              />
+            </div>
+          }
+        </div>
+
+
       </div>
     )
   }

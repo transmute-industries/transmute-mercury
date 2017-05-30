@@ -21,12 +21,13 @@ import {
 
 import { extend, cloneDeep } from 'lodash'
 
-export const getMercuryEventStoreByCreator = async (fromAddress, _callback) => {
+export const getMercuryEventStoresByCreator = async (fromAddress, _callback) => {
   let factory = await mercuryEventStoreFactory.deployed()
-  let eventStoreAddress = await factory.getMercuryEventStoreByCreator({
+  let eventStoreAddresses = await factory.getEventStoresByCreator({
     from: fromAddress
   })
-  _callback(eventStoreAddress)
+  // console.log('from middleware: ', eventStoreAddresses)
+  _callback(eventStoreAddresses)
 }
 
 export const getMercuryEventStoreAddresses = async (fromAddress, _callback) => {

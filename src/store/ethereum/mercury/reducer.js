@@ -10,25 +10,33 @@ import { reducer } from './mock/healthcare/reducer'
 
 export const initialState = {
   events: events,
-  step: 0
+  step: 0,
+  history: [
+    {
+      value: 'welcome to transmute mercury!'
+    },
+    {
+      value: 'type help'
+    }
+  ]
 }
 
 const handlers = {
-  [Constants.EVENT_STORE_ADDRESS_RECEIVED]: (state, action) => {
+  [Constants.EVENT_STORE_ADDRESSES_RECEIVED]: (state, action) => {
     
-    if (action.payload === '0x0000000000000000000000000000000000000000'){
+    if (action.payload.length === 0){
       return state
     }
 
     store.dispatch(MercuryActions.rebuild({
-      contractAddress: action.payload,
+      contractAddress: action.payload[0],
       fromAddress: localStorage.getItem('defaultAddress')
     }))
     
     let step = state.step + 1
     return Object.assign({}, state, {
       step: step,
-      eventStoreAddress: action.payload
+      eventStoreAddress: action.payload[0]
     })
   },
 
