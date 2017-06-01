@@ -1,0 +1,7 @@
+@import 'base';
+.container {
+    background: #01579B;
+    padding: 64px;
+    color : #fff;
+    @extend .flex-column-center;
+}

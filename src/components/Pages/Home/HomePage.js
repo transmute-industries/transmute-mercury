@@ -6,6 +6,13 @@ import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Stepper'
 import TransmuteTerminal from './TransmuteTerminal'
 
+import OneLiner from './OneLiner'
+import OneTwo from './OneTwo'
+import OneTwoThree from './OneTwoThree'
+import Quotes from './Quotes'
+import Accolades from './Accolades'
+import Footer from './Footer'
+
 @connect(
   ({ web3 }) => ({
     web3: web3
@@ -36,12 +43,26 @@ export default class HomePage extends Component {
       }
     }
     return (
-      <div style={{ paddingBottom: '20px' }}>
+      <div>
         <HeroRow renderParticles>
           <HeroContent />
         </HeroRow>
         {/*<Stepper />*/}
+        
+        <OneLiner />
+       
+        <OneTwoThree />
+
         <TransmuteTerminal />
+
+        <OneTwo />
+
+        <Quotes/>
+
+        <Accolades/>
+
+        <Footer />
+       
       </div>
     )
   }
