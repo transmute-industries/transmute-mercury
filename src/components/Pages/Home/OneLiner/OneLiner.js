@@ -18,7 +18,7 @@ export default class OneTwoThree extends React.Component {
         return (
             <Grid fluid >
                 <Row style={{ textAlign: 'center', padding: '16px' }} className={classes.container}>
-                    <h1>Transmute Redux Ethereum</h1>
+                    <h1>Redux Tools for Smart Contract Developers </h1>
                 </Row>
             </Grid>
         )

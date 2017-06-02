@@ -5,7 +5,6 @@ import { Grid, Row, Col } from 'react-flexbox-grid'
 import FlatButton from 'material-ui/FlatButton'
 import classes from './Footer.scss'
 
-
 @connect(
     ({ web3 }) => ({
         web3: web3
@@ -17,28 +16,43 @@ export default class Footer extends React.Component {
             <div>
             <Grid fluid className={classes.container}>
                <Row>
-                    <Col style={{ width: '30%', margin: 'auto', height: '128px'}}>
+                    <Col xs={12} sm={4} >
                         <h2>Contact</h2>
-                        <p>What problem you have? it real?</p>
+                        <ul>
+                            <li>
+                                <a href='mailto:hello@transmute.industries'>hello@transmute.industries</a>
+                            </li>
+                        </ul>
                     </Col>
-                    <Col style={{ width: '30%', margin: 'auto', height: '128px' }}>
+                    <Col xs={12} sm={4}>
                         <h2>Links</h2>
-                        <p>Easy, why even think about it.</p>
-                        <FlatButton label='Transmute Framework' primary={true}/>
-                        <FlatButton label='TestNet Faucet' primary={true}/>
-                        <FlatButton label='Transmute News' primary={true}/>
+                        <ul>
+                            <li>
+                                <a href='https://framework.transmute.industries/'>Framework</a>
+                            </li>
+                            <li>
+                                <a href='https://faucet.transmute.industries/'>Faucet</a>
+                            </li>
+                            <li>
+                                <a href='http://news.transmute.industries/'>News</a>
+                            </li>
+                        </ul>
                     </Col>
-                     <Col style={{ width: '30%', margin: 'auto', height: '128px' }}>
+                     <Col xs={12} sm={4}>
                         <h2>Social</h2>
-                        <p>Easy, why even think about it.</p>
-                         <FlatButton label='Github' primary={true}/>
-                         <FlatButton label='Twitter' primary={true} />
-                         <FlatButton label='Slack' primary={true}/>
+                        <ul>
+                            <li>
+                                <a href='https://github.com/transmute-industries'>Github</a>
+                            </li>
+                            <li>
+                                <a href='https://austin-ethereum.slack.com'>Slack</a>
+                            </li>
+                        </ul>
                     </Col>
                 </Row>
             </Grid>
             <div className={classes.lastLine}>
-                Copyright 2017 Transmute Industries
+                Transmute Industries
             </div>
         </div>
         )

@@ -20,12 +20,12 @@ export default class HomePage extends Component {
     return (
       <div>
         <Splash />
-        {/*<Demo/>*/}
         <OneLiner />
         <OneTwoThree />
-        <OneTwo />
+        <Demo/>
+        {/*<OneTwo />
         <Quotes/>
-        <Accolades/>
+        <Accolades/>*/}
         <Footer />
       </div>
     )

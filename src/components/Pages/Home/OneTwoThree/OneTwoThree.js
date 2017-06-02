@@ -16,65 +16,20 @@ import classes from './OneTwoThree.scss'
 export default class OneTwoThree extends React.Component {
     render() {
         return (
-            <Grid fluid >
-                <Row >
-                    <Card style={{ width: '30%', margin: 'auto'}}>
-               
-                        <CardMedia
-                            overlay={<CardTitle title='Overlay title' subtitle='Overlay subtitle' />}
-                        >
-                            <img src='https://source.unsplash.com/random/1280x1024' />
-                        </CardMedia>
-                     
-                        <CardText>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-    </CardText>
-                        <CardActions>
-                            <FlatButton label='Action1' />
-                            <FlatButton label='Action2' />
-                        </CardActions>
-                    </Card>
-                    <Card style={{ width: '30%', margin: 'auto' }}>
-              
-                        <CardMedia
-                            overlay={<CardTitle title='Overlay title' subtitle='Overlay subtitle' />}
-                        >
-                            <img src='https://source.unsplash.com/random/1280x1024' />
-                        </CardMedia>
-                     
-                        <CardText>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-    </CardText>
-                        <CardActions>
-                            <FlatButton label='Action1' />
-                            <FlatButton label='Action2' />
-                        </CardActions>
-                    </Card>
-
-                    <Card style={{ width: '30%', margin: 'auto' }}>
-                        <CardMedia
-                            overlay={<CardTitle title='Overlay title' subtitle='Overlay subtitle' />}
-                        >
-                            <img src='https://source.unsplash.com/random/1280x1024' />
-                        </CardMedia>
-                     
-                        <CardText>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-    </CardText>
-                        <CardActions>
-                            <FlatButton label='Action1' />
-                            <FlatButton label='Action2' />
-                        </CardActions>
-                    </Card>
+            <Grid fluid className={classes.container}>
+                <Row>
+                    <Col xs={12} sm={4}>
+                        <h2 >Event Store</h2>
+                        <p>Read and write flux standard actions, use familar tools like the redux time traveling debugger.</p>
+                    </Col>
+                    <Col xs={12} sm={4}>
+                        <h2>Middleware</h2>
+                        <p>An async interface for reading and writing to blockchains and distributed storage.</p>
+                    </Col>
+                     <Col xs={12} sm={4}>
+                        <h2 >Event Types</h2>
+                        <p>TypeScript module providing type conversion for on and offchain events.</p>
+                    </Col>
                 </Row>
             </Grid>
         )

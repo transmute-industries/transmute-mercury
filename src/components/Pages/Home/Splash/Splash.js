@@ -26,17 +26,12 @@ export default class Splash extends React.Component {
                     <div style={{textAlign: 'center'}}>
                         <h1>Transmute Framework</h1>
                         <h3>Smart Contracts Simplified</h3>
-                        {/*<RaisedButton
-                        label='Demo'
-                        primary={true}
-                        href='#demo'
-                        />
-                        &nbsp;&nbsp;&nbsp;*/}
                         <RaisedButton
                         label='Docs'
-                        secondary={true}
+                        primary={true}
                         href='https://framework.transmute.industries'
                         />
+                        <TransmuteTerminal/>
                     </div>
                 </HeroRow>
             </div>

@@ -35,7 +35,7 @@ class Form extends Component {
     this.refs.name // the Field
       .getRenderedComponent() // on Field, returns ReduxFormMaterialUITextField
       .getRenderedComponent() // on ReduxFormMaterialUITextField, returns TextField
-      .focus() // on TextField
+      // .focus() // on TextField
   }
 
   render() {
@@ -61,15 +61,15 @@ class Form extends Component {
         </Row>
          </Grid>
       <CardActions className={classes.actions}>
-         <RaisedButton
+         {/*<RaisedButton
             type='button'
             disabled={pristine || submitting}
             onClick={reset}
             label='Clear'
-          />
+          />*/}
         <RaisedButton
           style={{ marginRight: 'none' }}
-          label='Save Changes'
+          label='Create Store'
           primary
           type='submit'
           disabled={submitting}

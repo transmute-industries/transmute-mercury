@@ -16,11 +16,13 @@ import Stepper from './Stepper'
 export default class Demo extends React.Component {
     render() {
         return (
-            <Grid fluid >
-                <Row>
-                    <Stepper />
-                </Row>
-            </Grid>
+            <div>
+                <div style={{ marginTop: '64px', marginBottom: '64px'}}>
+                {/*<h3> Live Demo </h3>*/}
+                {/*<p>Please install <a href='https://metamask.io/'>MetaMask</a></p>*/}
+                <Stepper />
+                </div>
+             </div>
         )
     }
 }

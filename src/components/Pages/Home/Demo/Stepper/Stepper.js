@@ -76,14 +76,14 @@ export default class VerticalLinearStepper extends React.Component {
   render() {
     const { step, events } = this.props.mercury
     return (
-      <div style={{ margin: 'auto', paddingBottom: '64px' }}>
+      <div>
         <Stepper activeStep={step} orientation='horizontal'>
           {
             events.map((step, index) => {
               return (
                 <Step key={index}>
                   <StepLabel>
-                    <span className='hidden-xs'>{step.Type}</span>
+                    <span className='hidden-xs hidden-sm'>{step.Type}</span>
                   </StepLabel>
                 </Step>
               )
@@ -129,8 +129,6 @@ export default class VerticalLinearStepper extends React.Component {
             </div>
           }
         </div>
-
-
       </div>
     )
   }
