@@ -1,4 +1,6 @@
 @import 'base';
 .container {
     @extend .flex-column-center;
+    background-color: #212121;
+    color: #fff;
 }

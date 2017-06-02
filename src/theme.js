@@ -1,6 +1,7 @@
 import {
-  cyan500,
+  cyan600,
   cyan700,
+  cyan800,
   deepOrange500,
   deepOrangeA100,
   lightBlue500,
@@ -18,9 +19,9 @@ export default {
   zIndex: zIndex,
   fontFamily: 'Roboto, sans-serif',
   palette: {
-    primary1Color: cyan500,
+    primary1Color: cyan600,
     primary2Color: cyan700,
-    primary3Color: cyan500,
+    primary3Color: cyan800,
     accent1Color: deepOrange500,
     accent2Color: deepOrangeA100,
     accent3Color: deepOrange500,

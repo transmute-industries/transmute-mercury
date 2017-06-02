@@ -22,7 +22,7 @@ export default class HomePage extends Component {
         <Splash />
         <OneLiner />
         <OneTwoThree />
-        <Demo/>
+        {/*<Demo/>*/}
         {/*<OneTwo />
         <Quotes/>
         <Accolades/>*/}

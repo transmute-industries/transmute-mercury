@@ -16,9 +16,9 @@ import classes from './OneLiner.scss'
 export default class OneTwoThree extends React.Component {
     render() {
         return (
-            <Grid fluid >
-                <Row style={{ textAlign: 'center', padding: '16px' }} className={classes.container}>
-                    <h1>Redux Tools for Smart Contract Developers </h1>
+            <Grid fluid className={classes.container} >
+                <Row style={{ textAlign: 'center', padding: '16px' }} >
+                    <h1>Redux for Smart Contracts </h1>
                 </Row>
             </Grid>
         )

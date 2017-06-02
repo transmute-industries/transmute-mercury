@@ -5,7 +5,6 @@ import Mercury from 'store/ethereum/mercury'
 
 import Terminal from 'react-bash'
 
-
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -26,7 +25,7 @@ const styles = {
   overflow: 'hidden',
   textAlign: 'left',
   prefix: {
-    color: '#29B6F6',
+    color: '#00E5FF',
     paddingRight: '4px'
   },
   // body: {
