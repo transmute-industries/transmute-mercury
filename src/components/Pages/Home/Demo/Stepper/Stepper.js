@@ -18,9 +18,6 @@ import classes from './Stepper.scss'
 // npm install --save react-bash (add to demo)
 // https://github.com/zackargyle/react-bash
 
-
-
-
 @connect(
   ({ mercury, web3 }) => ({
     web3: web3,
