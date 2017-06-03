@@ -1,10 +1,9 @@
 pragma solidity ^0.4.8;
-import "./MercuryEventStore.sol";
-import "./TransmuteFramework/EventStore.sol";
-import "./TransmuteFramework/SetLib/AddressSet/AddressSetLib.sol";
-import "./TransmuteFramework/Utils/StringUtils.sol";
+import "./EventStore.sol";
+import "./SetLib/AddressSet/AddressSetLib.sol";
+import "./Utils/StringUtils.sol";
 
-contract MercuryEventStoreFactory is EventStore {
+contract EventStoreFactory is EventStore {
   using AddressSetLib for AddressSetLib.AddressSet;
   mapping (address => AddressSetLib.AddressSet) creatorEventStoreMapping;
   AddressSetLib.AddressSet EventStoreAddresses;
@@ -13,10 +12,8 @@ contract MercuryEventStoreFactory is EventStore {
   function() payable {}
 
   // Constructor
-  function MercuryEventStoreFactory() payable {
-    uint eventIndex = solidityEventCount;
-    writeSolidityEvent('FACTORY_CREATED', 1, '');
-    writeSolidityEventProperty(eventIndex, 0, 'ContractOwnerAddress', 'Address', msg.sender, 0, '');
+  function EventStoreFactory() payable {
+    writeEvent('FACTORY_CREATED', 'v0', 'Address', tx.origin, 0, '', 0);
   }
 
   // Modifiers
@@ -33,29 +30,25 @@ contract MercuryEventStoreFactory is EventStore {
     return creatorEventStoreMapping[msg.sender].values;
   }
 
-  function getMercuryEventStores() constant
+  function getEventStores() constant
     returns (address[])
   {
     return EventStoreAddresses.values;
   }
 
   // Interface
-	function createMercuryEventStore() payable
+	function createEventStore() payable
     returns (address)
   {
     // Interact With Other Contracts
-		MercuryEventStore _newEventStore = new MercuryEventStore();
+		EventStore _newEventStore = new EventStore();
 
     // Update State Dependent On Other Contracts
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
     uint eventIndex = solidityEventCount;
-
-    writeSolidityEvent('FACTORY_EVENT_STORE_CREATED', 2, '');
-    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
-    writeSolidityEventProperty(eventIndex, 1, 'ContractOwnerAddress', 'Address', msg.sender, 0, '');
-
+    writeEvent('FACTORY_EVENT_STORE_CREATED', 'v0', 'Address', address(_newEventStore), 0, '', 0);
     return address(_newEventStore);
 	}
 
@@ -70,12 +63,11 @@ contract MercuryEventStoreFactory is EventStore {
     EventStoreAddresses.remove(_address);
 
     // Interact With Other Contracts
-    MercuryEventStore _eventStore = MercuryEventStore(_address);
+    EventStore _eventStore = EventStore(_address);
     _eventStore.kill();
 
     uint eventIndex = solidityEventCount;
 
-    writeSolidityEvent('FACTORY_EVENT_STORE_DESTROYED', 1, StringUtils.uintToBytes(eventIndex));
-    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', _address, 0, '');
+    writeEvent('FACTORY_EVENT_STORE_DESTROYED', 'v0', 'Address', address(_address), 0, '', 0);
   }
 }

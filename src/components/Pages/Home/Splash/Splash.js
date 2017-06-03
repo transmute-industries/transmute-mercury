@@ -31,7 +31,7 @@ export default class Splash extends React.Component {
                         primary={true}
                         href='https://framework.transmute.industries'
                         />
-                        {/*<TransmuteTerminal/>*/}
+                        <TransmuteTerminal/>
                     </div>
                 </HeroRow>
             </div>

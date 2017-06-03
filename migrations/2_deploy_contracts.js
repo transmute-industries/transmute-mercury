@@ -1,4 +1,4 @@
-// BEGIN 🦄 Transmute Framework
+// BEGIN 🦄 Transmute Framework 
 var Ownable = artifacts.require('./TransmuteFramework/zeppelin/ownership/Ownable.sol')
 var Killable = artifacts.require('./TransmuteFramework/zeppelin/lifecycle/Killable.sol')
 
@@ -16,11 +16,8 @@ var UIntSetSpec = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSet
 var EventStore = artifacts.require('./TransmuteFramework/EventStore.sol')
 var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStoreFactory.sol')
 
-var MercuryEventStore = artifacts.require('./TransmuteFramework/MercuryEventStore.sol')
-var MercuryEventStoreFactory = artifacts.require('./TransmuteFramework/MercuryEventStoreFactory.sol')
 
-
-module.exports = function(deployer) {
+const transmuteDeployer = function(deployer) {
   deployer.deploy(StringUtils)
 
   deployer.deploy(Ownable)
@@ -48,14 +45,15 @@ module.exports = function(deployer) {
   deployer.link(AddressSetLib, EventStoreFactory)
   deployer.link(EventStore, EventStoreFactory)
   deployer.deploy(EventStoreFactory)
-
-  deployer.link(StringUtils, MercuryEventStore)
-  deployer.link(AddressSetLib, MercuryEventStore)
-  deployer.link(Killable, MercuryEventStore)
-  deployer.deploy(MercuryEventStore)
-
-  deployer.link(StringUtils, MercuryEventStoreFactory)
-  deployer.link(AddressSetLib, MercuryEventStoreFactory)
-  deployer.link(MercuryEventStore, MercuryEventStoreFactory)
-  deployer.deploy(MercuryEventStoreFactory)
 }
+// END 🐩 Transmute Framework 
+
+
+module.exports = function(deployer) {
+	// Patched by Transmute Framework
+	transmuteDeployer(deployer)
+
+
+  // add your migrations here...
+
+};

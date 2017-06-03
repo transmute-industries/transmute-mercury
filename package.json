@@ -8,7 +8,7 @@
     "npm": "^3.0.0"
   },
   "scripts": {
-    "clean": "rimraf dist build",
+    "clean": "rimraf dist",
     "welcome": "echo 🤖  && say welcome to transmute mercury, an awesome react blockchain seed app",
     "transmute": "node ./node_modules/transmute-framework/build/cli/index.js",
     "compile": "better-npm-run compile",
@@ -92,7 +92,7 @@
     "redux-form-material-ui": "^4.2.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
-    "transmute-framework": "^0.1.25",
+    "transmute-framework": "^0.1.27",
     "truffle-contract": "^2.0.0",
     "uport-connect": "^0.5.6"
   },

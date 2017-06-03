@@ -13,26 +13,34 @@ export const initialState = {
   step: 0,
   history: [
     {
-      value: 'welcome to transmute mercury!'
+      value: 'welcome to the transmute framework'
     },
     {
-      value: 'type help'
+      value: 'type transmute help'
     }
-  ]
+  ],
+  defaultAddress: null,
 }
 
 const handlers = {
+
+  ['RECEIVE_WEB3_ACCOUNTS']: (state, action) => {
+    return Object.assign({}, state, {
+      defaultAddress: action.payload[0]
+    })
+  },
+
   [Constants.EVENT_STORE_ADDRESSES_RECEIVED]: (state, action) => {
-    
-    if (action.payload.length === 0){
+
+    if (action.payload.length === 0) {
       return state
     }
 
-    store.dispatch(MercuryActions.rebuild({
-      contractAddress: action.payload[0],
-      fromAddress: localStorage.getItem('defaultAddress')
-    }))
-    
+    // store.dispatch(MercuryActions.rebuild({
+    //   contractAddress: action.payload[0],
+    //   fromAddress: localStorage.getItem('defaultAddress')
+    // }))
+
     let step = state.step + 1
     return Object.assign({}, state, {
       step: step,
@@ -62,11 +70,6 @@ const handlers = {
 }
 
 export const mercuryReducer = (state = initialState, action) => {
-
-  // if (action.Type){
-  //   return reducer(state, action)
-  // }
-  
   if (handlers[action.type]) {
     return handlers[action.type](state, action)
   }
