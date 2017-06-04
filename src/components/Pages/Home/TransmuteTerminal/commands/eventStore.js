@@ -2,10 +2,12 @@
 
 export const handleEventStore = (
     command,
+    mercury,
     createEventStore
 ) => {
     let newHistory = []
-    console.log('parse command here...', command)
+    console.log('command: ', command)
+    console.log('mercury: ', mercury)
     // createEventStore({
     //     name: 'from-command-args',
     // })
@@ -24,8 +26,19 @@ export const handleEventStore = (
         })
     }
 
-
-
+    if (command.args[1] === 'show') {
+        // magically read state here...
+        let asString = JSON.stringify(mercury.EventStore,  null, "\t")
+        let asLines = asString.split('\n')
+        let asValues = asLines.map((line) =>{
+            return {
+                value: line
+            }
+        })
+        newHistory = newHistory.concat(asValues)
+        newHistory.push({
+            value: '🤖 completed...'
+        })
+    }
     return newHistory
-
 }

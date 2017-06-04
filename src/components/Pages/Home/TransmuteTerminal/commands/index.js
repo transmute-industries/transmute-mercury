@@ -5,7 +5,7 @@ import migrate from './migrate'
 
 import { handleEventStore } from './eventStore'
 
-export default (createEventStore) => {
+export default (mercury, createEventStore) => {
 
     // console.log('mercuryState: ', mercuryState)
     // console.log('createEventStore: ', createEventStore)
@@ -22,7 +22,7 @@ export default (createEventStore) => {
                     data = migrate
                 }
                 if (command.args[0] === 'eventstore') {
-                    data = handleEventStore(command, createEventStore)
+                    data = handleEventStore(command, mercury, createEventStore)
                     // console.log('data: ', data)
                 }
             }

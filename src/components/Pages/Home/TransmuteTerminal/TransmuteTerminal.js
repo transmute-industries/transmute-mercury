@@ -27,8 +27,8 @@ const history = [{ value: 'Welcome to the terminal!' }]
   }),
   {
     createEventStore: (bindingModel) => (dispatch) => {
-      console.log('Mercury: ', Mercury)
-      console.log('bindingModel: ', bindingModel)
+      // console.log('Mercury: ', Mercury)
+      // console.log('bindingModel: ', bindingModel)
       dispatch(Mercury.createEventStore(bindingModel))
     }
   }
@@ -56,7 +56,7 @@ export default class TransmuteTerminal extends React.Component {
     //   // console.log()
     // }, 1 * 1000)
 
-    let extensions = buildExtensions(createEventStore)
+    let extensions = buildExtensions(mercury, createEventStore)
     
     return (
       <div style={{ display: 'inline', paddingLeft: '16px' }}>

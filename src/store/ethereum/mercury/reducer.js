@@ -80,7 +80,6 @@ const handlers = {
 
 export const mercuryReducer = (state = initialState, action) => {
   if (handlers[action.type]) {
-    console.log('mercury: ', action)
     return handlers[action.type](state, action)
   }
   return state
