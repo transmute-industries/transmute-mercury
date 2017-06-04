@@ -19,6 +19,8 @@ import { structure } from './structures'
 import buildExtensions from './commands'
 const history = [{ value: 'Welcome to the terminal!' }]
 
+import moment from 'moment'
+
 @connect(
   // Map redux state to props
   ({ web3, mercury }) => ({
@@ -27,9 +29,10 @@ const history = [{ value: 'Welcome to the terminal!' }]
   }),
   {
     createEventStore: (bindingModel) => (dispatch) => {
-      // console.log('Mercury: ', Mercury)
-      // console.log('bindingModel: ', bindingModel)
       dispatch(Mercury.createEventStore(bindingModel))
+    },
+    writeEvent: (bindingModel) => (dispatch) => {
+      dispatch(Mercury.writeEvent(bindingModel))
     }
   }
 )
@@ -41,6 +44,26 @@ export default class TransmuteTerminal extends React.Component {
 
   handleOpen = () => {
     this.setState({ open: true })
+
+    let from = this.props.mercury.defaultAddress
+
+    let simpleEvent = JSON.stringify({
+      type: "PATIENT_REGISTERED",
+      payload: {
+          patientId: 'patient-0',
+          patientName: 'Hilary',
+          insurance: 'Medicare'
+      }
+    })
+
+    let writeESEventCommand =  `transmute eventstore write --from ${from} --event ${simpleEvent}`
+    let createESCommand = `transmute eventstore create --from ${from}`
+
+    setTimeout(() => {
+      let input = document.querySelector('.ReactBash input:enabled')
+      // input.value = createESCommand
+      input.value = writeESEventCommand
+    }, 1 * 1000)
   }
 
   handleClose = () => {
@@ -48,15 +71,14 @@ export default class TransmuteTerminal extends React.Component {
   }
 
   render() {
-    const { web3, mercury, createEventStore } = this.props
-    
-    // setTimeout(() => {
-    //   let input = document.querySelector('.ReactBash input:enabled')
-    //   input.value = `transmute eventstore create --from ${mercury.defaultAddress}`
-    //   // console.log()
-    // }, 1 * 1000)
+    const { web3, mercury, createEventStore, writeEvent } = this.props
 
-    let extensions = buildExtensions(mercury, createEventStore)
+    let actions = {
+      createEventStore,
+      writeEvent
+    }
+    
+    let extensions = buildExtensions(mercury, actions)
     
     return (
       <div style={{ display: 'inline', paddingLeft: '16px' }}>

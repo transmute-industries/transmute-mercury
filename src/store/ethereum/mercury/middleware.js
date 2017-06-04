@@ -20,7 +20,7 @@ import {
   reducer
 } from './mock/healthcare/reducer'
 
-// import { extend, cloneDeep } from 'lodash'
+import * as _ from 'lodash'
 
 export const getEventStoresByCreator = async (fromAddress, _callback) => {
     let factory = await esfContract.deployed()
@@ -62,21 +62,21 @@ export const syncEventStore = async (bindingModel, _callback) =>{
   _callback(updatedReadModel)
 }
 
+export const writeEvent = async(bindingModel, _callback) => {
+  let { contractAddress, fromAddress,  event } = bindingModel
+  event = _.cloneDeep(event)
+  let eventStore = await esContract.at(contractAddress)
+  let events = await TransmuteFramework.EventStore.writeTransmuteCommand(eventStore, fromAddress, event )
+  let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModel, reducer)
+  _callback(updatedReadModel)
+}
+
 // export const getMercuryEventStoreAddresses = async (fromAddress, _callback) => {
 //   let factory = await mercuryEventStoreFactory.deployed()
 //   let mercuryEventStoreContractAddresses = await factory.getMercuryEventStores({
 //     from: fromAddress
 //   })
 //   _callback(mercuryEventStoreContractAddresses)
-// }
-
-// export const saveEvent = async(bindingModel, _callback) => {
-//   let { contractAddress, fromAddress,  event } = bindingModel
-//   event = cloneDeep(event)
-//   let eventStore = await mercuryEventStoreContract.at(contractAddress)
-//   // let events = await TransmuteFramework.EventStore.writeEvent(eventStore, event, fromAddress)
-//   // let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, readModel, reducer)
-//   // _callback(updatedReadModel)
 // }
 
 

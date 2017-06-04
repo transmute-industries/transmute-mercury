@@ -3,14 +3,11 @@
 export const handleEventStore = (
     command,
     mercury,
-    createEventStore
+    actions
 ) => {
     let newHistory = []
     console.log('command: ', command)
     console.log('mercury: ', mercury)
-    // createEventStore({
-    //     name: 'from-command-args',
-    // })
 
     if (command.args[1] === 'create') {
         let { from } = command.args
@@ -18,12 +15,7 @@ export const handleEventStore = (
             fromAddress: from
         }
         // console.log('bindingModel: ', bindingModel)
-
-        createEventStore(bindingModel)
-
-        newHistory.push({
-            value: '🤖 eventstore created!'
-        })
+        actions.createEventStore(bindingModel)
     }
 
     if (command.args[1] === 'show') {
@@ -36,9 +28,23 @@ export const handleEventStore = (
             }
         })
         newHistory = newHistory.concat(asValues)
-        newHistory.push({
-            value: '🤖 completed...'
-        })
     }
+
+    if (command.args[1] === 'write') {
+        // magically read state here...
+        let { event, from } = command.args
+        let bindingModel = {
+            event: JSON.parse(event), 
+            // this is super unsafe... like terrible...
+            fromAddress: from,
+            contractAddress: mercury.eventStoreAddress
+
+        }
+        console.log('bindingModel: ', bindingModel)
+        actions.writeEvent(bindingModel)
+    }
+    newHistory.push({
+        value: '🤖 completed...'
+    })
     return newHistory
 }

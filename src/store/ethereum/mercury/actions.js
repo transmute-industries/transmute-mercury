@@ -45,70 +45,12 @@ export const syncEventStore = (bindingModel) => dispatch => {
   })
 }
 
-// export const saveEvent = (bindingModel) => dispatch => {
-//   Middleware.saveEvent(bindingModel, (readModel) => {
-//     dispatch({
-//       type: Constants.EVENT_STORE_UPDATED,
-//       payload: readModel
-//     })
-//   })
-// }
-
-// export const getEventStoreUserReadModel = (bindingModel) => dispatch => {
-//   Middleware.getEventStoreUserReadModel(bindingModel, (readModel) => {
-//     dispatch({
-//       type: Constants.EVENT_STORE_UPDATED,
-//       payload: readModel
-//     })
-//   })
-// }
-
-
-// export const createEventStoreUserEncounterReadModel = (bindingModel) => dispatch => {
-//   Middleware.createEventStoreUserEncounterReadModel(bindingModel, (readModel) => {
-//     dispatch({
-//       type: Constants.EVENT_STORE_UPDATED,
-//       payload: readModel
-//     })
-//   })
-// }
-
-// export const getEventStoreUserEncounterReadModel = (bindingModel) => dispatch => {
-//   Middleware.getEventStoreUserEncounterReadModel(bindingModel, (readModel) => {
-//     dispatch({
-//       type: Constants.EVENT_STORE_UPDATED,
-//       payload: readModel
-//     })
-//   })
-// }
-
-
-
-// export const createEventStoreUserEncounterLinkReadModel = (bindingModel) => dispatch => {
-//   Middleware.createEventStoreUserEncounterLinkReadModel(bindingModel, (readModel) => {
-//     dispatch({
-//       type: Constants.EVENT_STORE_UPDATED,
-//       payload: readModel
-//     })
-//   })
-// }
-
-
-
-// export const getEventStoreUserEncounterLinkReadModel = (bindingModel) => dispatch => {
-//   Middleware.getEventStoreUserEncounterLinkReadModel(bindingModel, (readModel) => {
-//     dispatch({
-//       type: Constants.EVENT_STORE_UPDATED,
-//       payload: readModel
-//     })
-//   })
-// }
-
-
-
-
-
-
-
-
+export const writeEvent = (bindingModel) => dispatch => {
+  Middleware.writeEvent(bindingModel, (readModel) => {
+    dispatch({
+      type: 'EVENT_STORE_UPDATED',
+      payload: readModel
+    })
+  })
+}
 
