@@ -5,10 +5,10 @@ import migrate from './migrate'
 
 import { handleEventStore } from './eventStore'
 
-export default (createMercuryEventStore) => {
+export default (createEventStore) => {
 
     // console.log('mercuryState: ', mercuryState)
-    // console.log('createMercuryEventStore: ', createMercuryEventStore)
+    // console.log('createEventStore: ', createEventStore)
 
     const transmute = {
         exec: ({ structure, history, cwd }, command) => {
@@ -22,7 +22,7 @@ export default (createMercuryEventStore) => {
                     data = migrate
                 }
                 if (command.args[0] === 'eventstore') {
-                    data = handleEventStore(command, createMercuryEventStore)
+                    data = handleEventStore(command, createEventStore)
                     // console.log('data: ', data)
                 }
             }

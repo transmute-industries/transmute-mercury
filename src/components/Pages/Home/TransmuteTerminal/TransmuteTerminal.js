@@ -26,9 +26,10 @@ const history = [{ value: 'Welcome to the terminal!' }]
     mercury: mercury
   }),
   {
-    createMercuryEventStore: (bindingModel) => (dispatch) => {
-      // console.log('bindingModel: ', bindingModel)
-      dispatch(Mercury.createMercuryEventStore(bindingModel))
+    createEventStore: (bindingModel) => (dispatch) => {
+      console.log('Mercury: ', Mercury)
+      console.log('bindingModel: ', bindingModel)
+      dispatch(Mercury.createEventStore(bindingModel))
     }
   }
 )
@@ -47,14 +48,15 @@ export default class TransmuteTerminal extends React.Component {
   }
 
   render() {
-    const { web3, mercury, createMercuryEventStore } = this.props
+    const { web3, mercury, createEventStore } = this.props
+    
     // setTimeout(() => {
     //   let input = document.querySelector('.ReactBash input:enabled')
-    //   input.value = `transmute eventstore create --name demo-v0 --from ${mercury.defaultAddress}`
+    //   input.value = `transmute eventstore create --from ${mercury.defaultAddress}`
     //   // console.log()
     // }, 1 * 1000)
 
-    let extensions = buildExtensions(createMercuryEventStore)
+    let extensions = buildExtensions(createEventStore)
     
     return (
       <div style={{ display: 'inline', paddingLeft: '16px' }}>

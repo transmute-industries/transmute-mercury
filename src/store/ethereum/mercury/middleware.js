@@ -13,23 +13,54 @@ esfContract.setProvider(web3.currentProvider)
 
 import TransmuteFramework from 'transmute-framework'
 
+console.log(TransmuteFramework)
 
-// import { 
-//   readModel, 
-//   reducer
-// } from './mock/healthcare/reducer'
-
+import { 
+  readModel, 
+  reducer
+} from './mock/healthcare/reducer'
 
 // import { extend, cloneDeep } from 'lodash'
 
-// export const getMercuryEventStoresByCreator = async (fromAddress, _callback) => {
-//   let factory = await mercuryEventStoreFactory.deployed()
-//   let eventStoreAddresses = await factory.getEventStoresByCreator({
-//     from: fromAddress
-//   })
-//   // console.log('from middleware: ', eventStoreAddresses)
-//   _callback(eventStoreAddresses)
-// }
+export const getEventStoresByCreator = async (fromAddress, _callback) => {
+    let factory = await esfContract.deployed()
+    let eventStoreAddresses = await factory.getEventStoresByCreator({
+        from: fromAddress
+    })
+    // console.log('from middleware: ', eventStoreAddresses)
+    _callback(eventStoreAddresses)
+}
+
+export const createEventStore = async (bindingModel, _callback) => {
+    let { fromAddress, name } = bindingModel
+    let factory = await esfContract.deployed()
+    let tx = await factory.createEventStore({
+        from: fromAddress,
+        gas: 2000000,
+    })
+    // console.log('tx: ', tx)
+    let events = await Promise.all( TransmuteFramework.EventStore.EventTypes.reconstructTransmuteEventsFromTxs([tx]) )
+    let createdEvent = events[0]
+    _callback(createdEvent.payload)
+}
+
+export const getCachedReadModel = async (contractAddress, eventStore, fromAddress, readModel, reducer) =>{
+  readModel.readModelStoreKey = `${readModel.readModelType}:${contractAddress}`
+  readModel.contractAddress = contractAddress
+  let maybeSyncReadModel = TransmuteFramework.EventStore.ReadModel.maybeSyncReadModel
+  readModel = await maybeSyncReadModel(eventStore, fromAddress, readModel, reducer)
+//   console.log('readModel: ', readModel)
+  return readModel
+}
+
+export const syncEventStore = async (bindingModel, _callback) =>{
+  let { contractAddress, fromAddress } = bindingModel
+  let eventStore = await esContract.at(contractAddress)
+//   console.log('eventStore: ', eventStore)
+  let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModel, reducer)
+//   console.log('updatedReadModel: ', updatedReadModel)
+  _callback(updatedReadModel)
+}
 
 // export const getMercuryEventStoreAddresses = async (fromAddress, _callback) => {
 //   let factory = await mercuryEventStoreFactory.deployed()
@@ -37,34 +68,6 @@ import TransmuteFramework from 'transmute-framework'
 //     from: fromAddress
 //   })
 //   _callback(mercuryEventStoreContractAddresses)
-// }
-
-// export const createMercuryEventStore = async (bindingModel, _callback) => {
-//   let {fromAddress, name} = bindingModel
-//   let factory = await mercuryEventStoreFactory.deployed()
-//   let tx = await factory.createMercuryEventStore(name, {
-//       from: fromAddress,
-//       gas: 2000000,
-//   })
-//   console.log('tx: ', tx)
-//   // console.warn(`transactionToEventCollection has a known issue handling multiple multi property events: 
-//   // https://github.com/transmute-industries/transmute-framework/issues/27`)
-//   // let events = TransmuteFramework.Transactions.transactionToEventCollection(tx)
-//   // let createdEvent = events[1]
-//   // _callback(createdEvent.ContractAddress)
-// }
-
-// export const getCachedReadModel = async (contractAddress, eventStore, readModel, reducer) =>{
-//   readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
-//   readModel.ContractAddress = contractAddress
-//   // return await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
-// }
-
-// export const rebuild = async (bindingModel, _callback) =>{
-//   let { contractAddress } = bindingModel
-//   let eventStore = await mercuryEventStoreContract.at(contractAddress)
-//   let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, readModel, reducer)
-//   _callback(updatedReadModel)
 // }
 
 // export const saveEvent = async(bindingModel, _callback) => {

@@ -2,30 +2,29 @@
 
 export const handleEventStore = (
     command,
-    createMercuryEventStore
+    createEventStore
 ) => {
     let newHistory = []
     console.log('parse command here...', command)
-    // createMercuryEventStore({
+    // createEventStore({
     //     name: 'from-command-args',
     // })
 
-    if (command.args[1] === 'create'){
-        let {name, from} = command.args
+    if (command.args[1] === 'create') {
+        let { from } = command.args
         let bindingModel = {
-            name: name,
             fromAddress: from
         }
         // console.log('bindingModel: ', bindingModel)
 
-        createMercuryEventStore(bindingModel)
+        createEventStore(bindingModel)
 
         newHistory.push({
             value: '🤖 eventstore created!'
         })
     }
 
-   
+
 
     return newHistory
 

@@ -1,76 +1,160 @@
 import moment from 'moment'
+
 export default [
     {
-        Type: "CREATE_EVENT_STORE"
+        type: "PATIENT_REGISTERED",
+        payload: {
+            patientId: 'patient-0',
+            patientName: 'Hilary',
+            insurance: 'Medicare'
+        },
+        meta: {
+            id: 0,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
+    },
+    {
+        type: "PATIENT_REGISTERED",
+        payload: {
+            patientId: 'patient-1',
+            patientName: 'Bill',
+            insurance: 'Aetna'
+        },
+        meta: {
+            id: 1,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
+    },
+    {
+        type: "PROVIDER_REGISTERED",
+        payload: {
+            providerId: 'provider-0',
+            providerName: 'Mass General'
+        },
+        meta: {
+            id: 2,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
+    },
+    {
+        type: "PROVIDER_REGISTERED",
+        payload: {
+            providerId: 'provider-1',
+            providerName: 'Phoenix General'
+        },
+        meta: {
+            id: 3,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
+    },
+    {
+        type: "INSURER_REGISTERED",
+        payload: {
+            insurerId: 'insurer-0',
+            insurerName: 'Medicare'
+        },
+        meta: {
+            id: 4,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
+    },
+    {
+        type: "INSURER_REGISTERED",
+        payload: {
+            insurerId: 'insurer-1',
+            insurerName: 'Aetna'
+        },
+        meta: {
+            id: 5,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
+    },
+    {
+        type: "PATIENT_TREATED",
+        payload: {
+            encounterId: 'encounter-0',
+            patientId: 'patient-0',
+            providerId: 'provider-0',
+            insurerId: 'insurer-0',
+            notes: 'PHI should be stored off chain!',
+            timestamp: moment().add(1, 'days').toISOString()
+        },
+        meta: {
+            id: 6,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
+    },
+    {
+        type: "CLAIM_FILED",
+        payload: {
+            patientId: 'patient-0',
+            providerId: 'provider-0',
+            insurerId: 'insurer-0',
+            encounterId: 'encounter-0',
+            amount: 100,
+            notes: 'Claim details should be stored off chain!'
+        },
+        meta: {
+            id: 7,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
+    },
+    {
+        type: "CLAIM_PAYED",
+        payload: {
+            patientId: 'patient-0',
+            providerId: 'provider-0',
+            insurerId: 'insurer-0',
+            encounterId: 'encounter-0',
+            amount: 50,
+            notes: 'Medicare does not cover everything :( at least the checkup was covered.'
+        },
+        meta: {
+            id: 8,
+            version: 'v0',
+            txOrigin: '0xe609757c1c16d839c2c50bbe5447df6166134171',
+            created: 1496024532
+        }
     },
     // {
-    //     Type: "EVENT_STORE_RECEIVED"
+    //     type: "PATIENT_INVOICED",
+    //     payload: {
+    //         patientId: 'patient-0',
+    //         providerId: 'provider-0',
+    //         insurerId: 'insurer-0',
+    //         encounterId: 'encounter-0',
+    //         invoiceId: 'athn-invoice-0',
+    //         amount: '$50',
+    //         notes: 'You owe your provider $50... this data is not stored on the chain...'
+    //     }
     // },
     // {
-    //     Type: "EVENT_STORE_CREATED"
-    // },
-    {
-        Type: "PATIENT_REGISTERED",
-        PatientId: 'athn-patient-0',
-        PatientName: 'Hilary',
-        Insurance: 'Medicare',
-    },
-    {
-        Type: "PROVIDER_REGISTERED",
-        ProviderId: 'athn-provider-0',
-        ProviderName: 'Mass General'
-    },
-    {
-        Type: "INSURER_REGISTERED",
-        InsurerId: 'athn-insurer-0',
-        InsurerName: 'Medicare'
-    },
-    {
-        Type: "PATIENT_TREATED",
-        PatientId: 'athn-patient-0',
-        ProviderId: 'athn-provider-0',
-        InsurerId: 'athn-insurer-0',
-        EncounterId: 'athn-encounter-0',
-        Notes: 'PHI should be stored off chain!',
-        Timestamp: moment().add(1, 'days').toISOString()
-    },
-    {
-        Type: "CLAIM_FILED",
-        PatientId: 'athn-patient-0',
-        ProviderId: 'athn-provider-0',
-        InsurerId: 'athn-insurer-0',
-        EncounterId: 'athn-encounter-0',
-        Amount: '$100',
-        Notes: 'Claim details should be stored off chain!'
-    },
-    // {
-    //     Type: "CLAIM_PAYED",
-    //     PatientId: 'athn-patient-0',
-    //     ProviderId: 'athn-provider-0',
-    //     InsurerId: 'athn-insurer-0',
-    //     EncounterId: 'athn-encounter-0',
-    //     Amount: '$50',
-    //     Notes: 'Medicare does not cover everything :( at least the checkup was covered.'
-    // },
-    // {
-    //     Type: "PATIENT_INVOICED",
-    //     PatientId: 'athn-patient-0',
-    //     ProviderId: 'athn-provider-0',
-    //     InsurerId: 'athn-insurer-0',
-    //     EncounterId: 'athn-encounter-0',
-    //     InvoiceId: 'athn-invoice-0',
-    //     Amount: '$50',
-    //     Notes: 'You owe your provider $50... this data is not stored on the chain...'
-    // },
-    // {
-    //     Type: "INVOICE_PAYED",
-    //     PatientId: 'athn-patient-0',
-    //     ProviderId: 'athn-provider-0',
-    //     InsurerId: 'athn-insurer-0',
-    //     EncounterId: 'athn-encounter-0',
-    //     InvoiceId: 'athn-invoice-0',
-    //     Amount: '$50',
-    //     Notes: '6 Months later you remember to pay that bill...',
-    //     Timestamp: moment().add(6, 'months').toISOString()
+    //     type: "INVOICE_PAYED",
+    //     payload: {
+    //         patientId: 'patient-0',
+    //         providerId: 'provider-0',
+    //         insurerId: 'insurer-0',
+    //         encounterId: 'encounter-0',
+    //         invoiceId: 'athn-invoice-0',
+    //         amount: '$50',
+    //         notes: '6 Months later you remember to pay that bill...',
+    //         timestamp: moment().add(6, 'months').toISOString()
+    //     }
     // }
 ]

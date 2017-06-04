@@ -25,37 +25,46 @@ export const initialState = {
 const handlers = {
 
   ['RECEIVE_WEB3_ACCOUNTS']: (state, action) => {
+
+    let defaultAddress = action.payload[0]
+
+    store.dispatch(MercuryActions.getEventStoresByCreator({
+      fromAddress: defaultAddress
+    }))
+
     return Object.assign({}, state, {
-      defaultAddress: action.payload[0]
+      defaultAddress: defaultAddress
     })
   },
 
-  [Constants.EVENT_STORE_ADDRESSES_RECEIVED]: (state, action) => {
+  ['EVENT_STORE_ADDRESSES_RECEIVED']: (state, action) => {
 
     if (action.payload.length === 0) {
       return state
     }
 
-    // store.dispatch(MercuryActions.rebuild({
-    //   contractAddress: action.payload[0],
-    //   fromAddress: localStorage.getItem('defaultAddress')
-    // }))
+    let defaultEventStoreAddress = action.payload[0]
+
+    store.dispatch(MercuryActions.syncEventStore({
+      contractAddress: defaultEventStoreAddress,
+      fromAddress: state.defaultAddress
+    }))
 
     let step = state.step + 1
     return Object.assign({}, state, {
       step: step,
-      eventStoreAddress: action.payload[0]
+      eventStoreAddress: defaultEventStoreAddress
     })
   },
 
-  [Constants.EVENT_STORE_RECEIVED]: (state, action) => {
+  ['EVENT_STORE_RECEIVED']: (state, action) => {
     let step = state.step + 1
     return Object.assign({}, state, {
       EventStore: action.payload
     })
   },
 
-  [Constants.EVENT_STORE_UPDATED]: (state, action) => {
+  ['EVENT_STORE_UPDATED']: (state, action) => {
     let step = state.step + 1
     return Object.assign({}, state, {
       step: step,
@@ -71,6 +80,7 @@ const handlers = {
 
 export const mercuryReducer = (state = initialState, action) => {
   if (handlers[action.type]) {
+    console.log('mercury: ', action)
     return handlers[action.type](state, action)
   }
   return state
