@@ -122,7 +122,6 @@ const handlers = {
 }
 
 export const reducer = (state = readModel, action) => {
-  console.log('ti: ', action)
   if (handlers[action.type]) {
     return handlers[action.type](state, action)
   }

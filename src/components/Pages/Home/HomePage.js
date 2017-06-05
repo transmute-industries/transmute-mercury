@@ -5,6 +5,7 @@ import Splash from './Splash'
 import Demo from './Demo'
 import OneLiner from './OneLiner'
 import OneTwo from './OneTwo'
+import GetWeb3 from './GetWeb3'
 import OneTwoThree from './OneTwoThree'
 import Quotes from './Quotes'
 import Accolades from './Accolades'
@@ -25,6 +26,7 @@ export default class HomePage extends Component {
         <Splash />
         <OneLiner />
         <OneTwoThree />
+        <GetWeb3/>
         <Demo/>
         {/*<OneTwo />
         <Quotes/>
