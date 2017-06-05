@@ -15,4 +15,5 @@ export default [
 
   { value: `transmute eventstore write --from 0x23b... --event { type: '...', payload: {...} }` },
   { value: `- write and display a transmute event` },
+  
 ]

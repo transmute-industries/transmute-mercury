@@ -42,7 +42,7 @@ export default class EventCode extends Component {
             theme='monokai'
             onChange={onChange}
             name='EventCode'
-            width={'600px'}
+            width={'500px'}
             height={'400px'}
             value={this.state.defaultCode}
             editorProps={{$blockScrolling: true}}

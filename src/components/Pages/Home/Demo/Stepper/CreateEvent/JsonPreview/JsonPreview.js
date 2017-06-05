@@ -38,7 +38,7 @@ export default class JsonPreview extends Component {
             onChange={onChange}
             name='JsonPreview'
             value={this.state.defaultCode}
-            width={'700px'}
+            width={'500px'}
             height={'400px'}
             editorProps={{$blockScrolling: true}}
             />

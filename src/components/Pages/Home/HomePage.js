@@ -10,6 +10,9 @@ import Quotes from './Quotes'
 import Accolades from './Accolades'
 import Footer from './Footer'
 
+// implement stepper demo...
+
+
 @connect(
   ({ web3 }) => ({
     web3: web3
@@ -22,7 +25,7 @@ export default class HomePage extends Component {
         <Splash />
         <OneLiner />
         <OneTwoThree />
-        {/*<Demo/>*/}
+        <Demo/>
         {/*<OneTwo />
         <Quotes/>
         <Accolades/>*/}

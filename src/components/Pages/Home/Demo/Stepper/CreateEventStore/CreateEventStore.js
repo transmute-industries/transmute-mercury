@@ -15,8 +15,8 @@ import CreateEventStoreForm from './CreateEventStoreForm'
     // action for submitting redux-form
     submitForm: () => (dispatch) => dispatch(submit(CREATE_EVENT_STORE_FORM_NAME)),
     onSubmit: (bindingModel) => (dispatch) => {
-      // console.log('bindingModel: ', bindingModel)
-      dispatch(Mercury.createMercuryEventStore(bindingModel))
+      console.log('bindingModel: ', bindingModel)
+      dispatch(Mercury.createEventStore(bindingModel))
     }
   }
 )
@@ -25,10 +25,10 @@ export default class CreateEventSchemaStep extends React.Component {
     const { web3, submitForm, onSubmit } = this.props
     return (
       <CreateEventStoreForm
-  web3={web3}
-  submitForm={submitForm}
-  onSubmit={onSubmit}
-/>
+        web3={web3}
+        submitForm={submitForm}
+        onSubmit={onSubmit}
+      />
     )
   }
 }

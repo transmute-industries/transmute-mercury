@@ -57,6 +57,26 @@ const handlers = {
     })
   },
 
+  ['EVENT_STORE_ADDRESS_RECEIVED']: (state, action) => {
+
+    if (action.payload.length === 0) {
+      return state
+    }
+
+    let defaultEventStoreAddress = action.payload
+
+    store.dispatch(MercuryActions.syncEventStore({
+      contractAddress: defaultEventStoreAddress,
+      fromAddress: state.defaultAddress
+    }))
+
+    let step = state.step + 1
+    return Object.assign({}, state, {
+      step: step,
+      eventStoreAddress: defaultEventStoreAddress
+    })
+  },
+
   ['EVENT_STORE_RECEIVED']: (state, action) => {
     let step = state.step + 1
     return Object.assign({}, state, {
