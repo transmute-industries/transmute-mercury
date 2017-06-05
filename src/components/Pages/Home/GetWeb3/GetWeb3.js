@@ -18,7 +18,7 @@ export default class GetWeb3 extends React.Component {
         return (
             <div>
                 <h1 style={{ textAlign: 'center'}}>
-                        Please use MetaMask for UPort
+                        Our demo requires MetaMask or UPort
                     </h1>
             <Grid fluid className={classes.container}>
                 <Row>
