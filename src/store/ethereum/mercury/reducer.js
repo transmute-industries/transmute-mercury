@@ -10,7 +10,7 @@ import { reducer } from './mock/faucet/reducer'
 
 export const initialState = {
   events: events,
-  step: 0,
+  step: -1,
   history: [
     {
       value: 'welcome to the transmute framework'

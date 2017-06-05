@@ -21,6 +21,20 @@ const addIndexedObject = (model, objType, objKey, obj) => {
   }
 }
 
+const updateIndexedObjectProperty = (model, objType, objKey, propKey, prop) => {
+  return {
+    model: Object.assign({}, model, {
+      [objType]: {
+        ...model[objType],
+        [objKey]: {
+          ...model[objType][objKey],
+          [propKey]: prop
+        }
+      }
+    })
+  }
+}
+
 const addObjectToIndexedObjectCollection = (
   model,
   objType,
@@ -61,13 +75,13 @@ const handlers = {
   },
 
   [Constants.ACCESS_GRANTED]: (state, action) => {
-    let updatesToModel = addIndexedObject(state.model, 'requestors', action.payload.requestorAddress, action.payload)
+    let updatesToModel = updateIndexedObjectProperty(state.model, 'requestors', action.payload.requestorAddress, 'accessState', action.payload.accessState)
     let updatesToMeta = updatesFromMeta(action.meta)
     return Object.assign({}, state, updatesToModel, updatesToMeta)
   },
 
   [Constants.ACCESS_REVOKED]: (state, action) => {
-    let updatesToModel = addIndexedObject(state.model, 'requestors', action.payload.requestorAddress, action.payload)
+    let updatesToModel = updateIndexedObjectProperty(state.model, 'requestors', action.payload.requestorAddress, 'accessState', action.payload.accessState)
     let updatesToMeta = updatesFromMeta(action.meta)
     return Object.assign({}, state, updatesToModel, updatesToMeta)
   },
