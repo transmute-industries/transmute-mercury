@@ -91,7 +91,7 @@ const handlers = {
       EventStore: action.payload
     })
   },
-  [Constants.DEMO_STEP]: (state, action) => {
+  ['DEMO_STEP']: (state, action) => {
     return Object.assign({}, state, {
       step: action.payload,
     })

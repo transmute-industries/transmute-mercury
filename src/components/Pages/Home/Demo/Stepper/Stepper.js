@@ -30,7 +30,8 @@ import classes from './Stepper.scss'
         fromAddress: fromAddress,
         event: event
       }
-      dispatch(Mercury.saveEvent(bindingModel))
+      console.log('bindingModel....', bindingModel)
+      dispatch(Mercury.writeEvent(bindingModel))
     },
     setStep: (step) => (dispatch) => {
       dispatch(Mercury.setStep(step))
@@ -41,17 +42,17 @@ export default class VerticalLinearStepper extends React.Component {
 
   saveEvent = () => {
     const { saveEvent, mercury, web3 } = this.props
-    saveEvent(mercury.EventStore.ContractAddress, web3.defaultAddress, mercury.events[mercury.step])
+    saveEvent(mercury.EventStore.contractAddress, mercury.defaultAddress, mercury.events[mercury.step])
   }
 
   handleNext = () => {
-    this.props.onNextStep(
+    this.props.setStep(
       this.props.mercury.step + 1
     )
   }
 
   handlePrev = () => {
-    this.props.onNextStep(
+    this.props.setStep(
       this.props.mercury.step - 1
     )
   }
@@ -70,7 +71,7 @@ export default class VerticalLinearStepper extends React.Component {
   }
 
   resetDemo = () => {
-    this.props.onDemoReset()
+    this.props.setStep(0)
   }
 
   render() {
@@ -93,7 +94,7 @@ export default class VerticalLinearStepper extends React.Component {
 
         {this.getStepContent(step)}
 
-        {step === 4 && (
+        {step === 8 && (
           <div style={{ margin: '20px 0', textAlign: 'center' }}>
             <p>
               Click here to reset the example.
@@ -109,13 +110,19 @@ export default class VerticalLinearStepper extends React.Component {
 
         <div className={classes.StepperActions}>
           {
-            step !== 0 &&
+            step !== 0 && step < 8 &&
             <div>
               <FlatButton primary={true} type='buton' label='Reset Demo' onClick={this.resetDemo} />
               <FlatButton
                 label='Back'
                 disabled={step === 0}
                 onTouchTap={this.handlePrev}
+                style={{ marginRight: 12 }}
+              />
+              <FlatButton
+                label='Next'
+                disabled={step === 0}
+                onTouchTap={this.handleNext}
                 style={{ marginRight: 12 }}
               />
               <RaisedButton

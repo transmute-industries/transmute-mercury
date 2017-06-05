@@ -4,7 +4,7 @@ import * as Middleware from './middleware'
 
 export const setStep = (step) => dispatch => {
   dispatch({
-    type: Constants.DEMO_STEP,
+    type: 'DEMO_STEP',
     payload: step
   })
 }
