@@ -15,10 +15,10 @@ import TransmuteFramework from 'transmute-framework'
 
 console.log(TransmuteFramework)
 
-import { 
-  readModel, 
+import {
+  readModel,
   reducer
-} from './mock/healthcare/reducer'
+} from './mock/faucet/reducer'
 
 import * as _ from 'lodash'
 

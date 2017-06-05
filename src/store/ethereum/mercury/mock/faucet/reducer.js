@@ -4,7 +4,7 @@ import Constants from './constants'
 
 export const readModel = {
   readModelStoreKey: '', // readModelType:contractAddress
-  readModelType: 'HealthcareSystem',
+  readModelType: 'Faucet',
   contractAddress: '0x0000000000000000000000000000000000000000',
   lastEvent: null, // Last Event Index Processed
   model: {} // where all the updates from events will be made
@@ -54,68 +54,32 @@ const updatesFromMeta = (meta) => {
 
 const handlers = {
 
-  [Constants.PATIENT_REGISTERED]: (state, action) => {
-    let updatesToModel = addIndexedObject(state.model, 'patient', action.payload.patientId, action.payload)
+  [Constants.ACCESS_REQUESTED]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'requestors', action.payload.requestorAddress, action.payload)
     let updatesToMeta = updatesFromMeta(action.meta)
     return Object.assign({}, state, updatesToModel, updatesToMeta)
   },
 
-  [Constants.PATIENT_REGISTERED]: (state, action) => {
-    let updatesToModel = addIndexedObject(state.model, 'patient', action.payload.patientId, action.payload)
+  [Constants.ACCESS_GRANTED]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'requestors', action.payload.requestorAddress, action.payload)
     let updatesToMeta = updatesFromMeta(action.meta)
     return Object.assign({}, state, updatesToModel, updatesToMeta)
   },
 
-  [Constants.PROVIDER_REGISTERED]: (state, action) => {
-    let updatesToModel = addIndexedObject(state.model, 'provider', action.payload.providerId, action.payload)
+  [Constants.ACCESS_REVOKED]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'requestors', action.payload.requestorAddress, action.payload)
     let updatesToMeta = updatesFromMeta(action.meta)
     return Object.assign({}, state, updatesToModel, updatesToMeta)
   },
 
-  [Constants.INSURER_REGISTERED]: (state, action) => {
-    let updatesToModel = addIndexedObject(state.model, 'insurer', action.payload.insurerId, action.payload)
+  [Constants.ETHER_SENT]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'faucet', action.payload.providerId, action.payload)
     let updatesToMeta = updatesFromMeta(action.meta)
     return Object.assign({}, state, updatesToModel, updatesToMeta)
   },
 
-  [Constants.PATIENT_TREATED]: (state, action) => {
-    let updatesToModel = addObjectToIndexedObjectCollection(
-      state.model,
-      'provider', action.payload.providerId,
-      'encounters', action.payload.encounterId,
-      {
-        notes: action.payload.notes,
-        time: action.payload.timestamp
-      }
-    )
-    let updatesToMeta = updatesFromMeta(action.meta)
-    return Object.assign({}, state, updatesToModel, updatesToMeta)
-  },
-
-  [Constants.CLAIM_FILED]: (state, action) => {
-    let updatesToModel = addObjectToIndexedObjectCollection(
-      state.model,
-      'insurer', action.payload.insurerId,
-      'claims', action.payload.encounterId,
-      {
-        notes: action.payload.notes,
-        amount: action.payload.amount
-      }
-    )
-    let updatesToMeta = updatesFromMeta(action.meta)
-    return Object.assign({}, state, updatesToModel, updatesToMeta)
-  },
-
-  [Constants.CLAIM_PAYED]: (state, action) => {
-    let updatesToModel = addObjectToIndexedObjectCollection(
-      state.model,
-      'provider', action.payload.providerId,
-      'claims', action.payload.encounterId,
-      {
-        notes: action.payload.notes,
-        amount: action.payload.amount
-      }
-    )
+  [Constants.ETHER_RECEIVED]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'faucet', action.payload.providerId, action.payload)
     let updatesToMeta = updatesFromMeta(action.meta)
     return Object.assign({}, state, updatesToModel, updatesToMeta)
   }

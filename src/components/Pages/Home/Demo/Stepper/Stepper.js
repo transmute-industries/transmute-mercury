@@ -34,6 +34,7 @@ import classes from './Stepper.scss'
       dispatch(Mercury.writeEvent(bindingModel))
     },
     setStep: (step) => (dispatch) => {
+      console.log('setStep: ', step)
       dispatch(Mercury.setStep(step))
     }
   }
@@ -63,7 +64,7 @@ export default class VerticalLinearStepper extends React.Component {
 
   getStepContent(step) {
     switch (step) {
-      case 0:
+      case -1:
         return <CreateEventStore />
       default:
         return <CreateEvent />
@@ -71,7 +72,7 @@ export default class VerticalLinearStepper extends React.Component {
   }
 
   resetDemo = () => {
-    this.props.setStep(0)
+    this.props.setStep(-1)
   }
 
   render() {
@@ -110,18 +111,18 @@ export default class VerticalLinearStepper extends React.Component {
 
         <div className={classes.StepperActions}>
           {
-            step !== 0 && step < 8 &&
+            step !== -1 && step < 8 &&
             <div>
-              <FlatButton primary={true} type='buton' label='Reset Demo' onClick={this.resetDemo} />
+              <FlatButton primary={true} type='button' label='Reset Demo' onClick={this.resetDemo} />
               <FlatButton
                 label='Back'
-                disabled={step === 0}
+                disabled={step === -1}
                 onTouchTap={this.handlePrev}
                 style={{ marginRight: 12 }}
               />
               <FlatButton
                 label='Next'
-                disabled={step === 0}
+                disabled={step === -1}
                 onTouchTap={this.handleNext}
                 style={{ marginRight: 12 }}
               />

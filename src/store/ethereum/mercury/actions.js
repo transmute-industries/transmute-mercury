@@ -1,4 +1,4 @@
-import Constants from './mock/healthcare/constants'
+import Constants from './mock/faucet/constants'
 
 import * as Middleware from './middleware'
 
@@ -17,7 +17,7 @@ export const setStep = (step) => dispatch => {
 //     })
 //   })
 // }
-    
+
 export const getEventStoresByCreator = (bindingModel) => dispatch => {
   Middleware.getEventStoresByCreator(bindingModel.fromAddress, (address) => {
     dispatch({
@@ -53,4 +53,3 @@ export const writeEvent = (bindingModel) => dispatch => {
     })
   })
 }
-

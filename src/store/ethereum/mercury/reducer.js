@@ -1,12 +1,12 @@
-import Constants from './mock/healthcare/constants'
+import Constants from './mock/faucet/constants'
 
 import { store } from 'app'
 
 import { actions as MercuryActions } from 'store/ethereum/mercury'
 
-import events from './mock/healthcare/events'
+import events from './mock/faucet/events'
 
-import { reducer } from './mock/healthcare/reducer'
+import { reducer } from './mock/faucet/reducer'
 
 export const initialState = {
   events: events,
@@ -104,5 +104,3 @@ export const mercuryReducer = (state = initialState, action) => {
   }
   return state
 }
-
-

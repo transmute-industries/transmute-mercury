@@ -29,6 +29,7 @@ export default class EventCode extends Component {
 
     componentWillReceiveProps(nextProps){
       let event_code = nextProps.mercury.events[nextProps.mercury.step]
+      console.log('events: ', JSON.stringify(nextProps.mercury.events))
       console.log('can has the correct event code...', event_code)
       this.setState({
         defaultCode:  JSON.stringify(event_code,  null, "\t")
