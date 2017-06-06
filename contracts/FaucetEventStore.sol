@@ -1,44 +1,9 @@
 pragma solidity ^0.4.8;
 import "./TransmuteFramework/EventStore.sol";
 import './TransmuteFramework/zeppelin/lifecycle/Killable.sol';
-import "./TransmuteFramework/SetLib/AddressSet/AddressSetLib.sol";
 import "./TransmuteFramework/Utils/StringUtils.sol";
 
 contract FaucetEventStore is EventStore {
-  using AddressSetLib for AddressSetLib.AddressSet;
-
-  AddressSetLib.AddressSet ACLAddresses;
-
-  mapping (address => ACL) ACLMapping;
-  struct ACL {
-    bool read;
-    bool write;
-  }
-
-  // Modifiers
-  modifier onlyCreator() {
-    if (tx.origin != creator)
-      throw;
-    _;
-  }
-
-  modifier onlyReadAuthorized() {
-    if (!ACLMapping[tx.origin].read)
-      throw;
-    _;
-  }
-
-  modifier onlyWriteAuthorized() {
-    if (!ACLMapping[tx.origin].write)
-      throw;
-    _;
-  }
-
-  modifier onlyReadAndWriteAuthorized() {
-    if (!ACLMapping[tx.origin].write || !ACLMapping[tx.origin].read)
-      throw;
-    _;
-  }
 
   // CONSTRUCTOR
   function () payable {}
