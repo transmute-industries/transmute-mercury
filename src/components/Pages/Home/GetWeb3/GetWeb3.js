@@ -18,11 +18,11 @@ export default class GetWeb3 extends React.Component {
         return (
             <div>
                 <h1 style={{ textAlign: 'center'}}>
-                        Our demo requires MetaMask or UPort
+                        Our demo requires MetaMask
                     </h1>
             <Grid fluid className={classes.container}>
                 <Row>
-                    <Col style={{ width: '45%', margin: 'auto' }}>
+                    {/*<Col style={{ width: '45%', margin: 'auto' }}>
                        <h2 style={{ textAlign: 'center'}}>UPort</h2>
                         <p>
 uPort is an open source software project to establish a global, unified, sovereign identity system 
@@ -38,8 +38,8 @@ for people, businesses, organizations, devices, and bots.
                             style={{ marginRight: 12 }}
                             />
                         </div>
-                    </Col>
-                    <Col style={{ width: '45%', margin: 'auto'}}>
+                    </Col>*/}
+                    <Col style={{ width: '75%', margin: 'auto'}}>
                         <h2 style={{ textAlign: 'center'}}>MetaMask</h2>
                         <p>
 MetaMask is a bridge that allows you to visit the distributed web of tomorrow in your browser today. 
