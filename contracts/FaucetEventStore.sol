@@ -5,12 +5,14 @@ import "./TransmuteFramework/Utils/StringUtils.sol";
 
 contract FaucetEventStore is EventStore {
 
+  bytes32 Domain = 'Faucet';
+
   // CONSTRUCTOR
   function () payable {}
   function FaucetEventStore() payable {
     creator = tx.origin;
     ACLAddresses.add(creator);
-    ACLMapping[creator] = ACL({read:true, write:true});
+    ACLMapping[creator][Domain] = ACL({read:true, write:true});
   }
 
   // VERSION
@@ -21,106 +23,37 @@ contract FaucetEventStore is EventStore {
   }
 
   // ACCESS CONTROL
-  function getACLAddresses() constant
+  function getRequestorAddresses() constant
     returns (address[])
   {
     return ACLAddresses.values;
   }
 
-  function addRequestorAddress(address _requestor) public {
-    if (ACLAddresses.contains(_requestor))
-      throw;
-    ACLAddresses.add(_requestor);
-    ACLMapping[_requestor] = ACL({read:true, write:false});
-
-    writeEvent('EVENT_STORE_ACCESS_REQUESTED', 'v0', 'Address', _requestor, 0, '', 0);
+  function addRequestorAddress(address _address) public {
+    addACLAddress('FAUCET_WRITE_ACCESS_REQUESTED', 'FAUCET_READ_ACCESS_GRANTED', '', _address, Domain);
   }
 
-  function authorizeRequestorAddress(address _requestor)
+  function grantFaucetWriteAccess(address _address)
     public onlyCreator
   {
-    if (!ACLAddresses.contains(_requestor))
-      throw;
-    if (ACLMapping[_requestor].write)
-      throw;
-    ACLMapping[_requestor] = ACL({read:true, write:true});
-
-    writeEvent('EVENT_STORE_ACCESS_GRANTED', 'v0', 'Address', _requestor, 0, '', 0);
+    grantWriteAccess('FAUCET_WRITE_ACCESS_GRANTED', Domain, _address);
   }
 
-  function revokeRequestorAddress(address _requestor)
+  function revokeFaucetWriteAccess(address _address)
     public onlyCreator
   {
-    if (!ACLAddresses.contains(_requestor))
-      throw;
-    if (!ACLMapping[_requestor].write)
-      throw;
-    ACLMapping[_requestor] = ACL({read:true, write:false});
-
-     writeEvent('EVENT_STORE_ACCESS_REVOKED', 'v0', 'Address', _requestor, 0, '', 0);
+    revokeWriteAccess('FAUCET_WRITE_ACCESS_REVOKED', Domain, _address);
   }
 
-  // WRITE EVENT
-  function writeEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, address _addressValue, uint _uintValue, bytes32 _bytes32Value , uint _propCount)
-    public onlyAuthorized
-    returns (uint)
+  function grantFaucetReadAccess(address _address)
+    public onlyCreator
   {
-    uint _created = now;
-
-    EsEventStruct memory solidityEvent;
-    solidityEvent.Id = solidityEventCount;
-    solidityEvent.Type = _type;
-    solidityEvent.Created = _created;
-    solidityEvent.TxOrigin = tx.origin;
-    solidityEvent.Version = _version;
-
-    solidityEvent.ValueType = _valueType;
-    solidityEvent.AddressValue = _addressValue;
-    solidityEvent.UIntValue = _uintValue;
-    solidityEvent.Bytes32Value = _bytes32Value;
-
-    solidityEvent.PropertyCount = _propCount;
-    solidityEvents[solidityEventCount] = solidityEvent;
-
-    EsEvent(solidityEventCount, _type, _version, _valueType, _addressValue, _uintValue, _bytes32Value, tx.origin, _created, _propCount);
-    solidityEventCount += 1;
-    return solidityEventCount;
+    grantWriteAccess('FAUCET_WRITE_ACCESS_GRANTED', Domain, _address);
   }
 
-  function writeEventProperty(uint _eventIndex, uint _eventPropertyIndex, bytes32 _name, bytes32 _type, address _address, uint _uint, bytes32 _string)
-    public onlyAuthorized
-    returns (uint)
+  function revokeFaucetReadAccess(address _address)
+    public onlyCreator
   {
-    if(solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex].ValueType != 0){
-      throw;
-    }
-    EsEventPropertyStruct memory solidityEventProperty;
-    solidityEventProperty.Name = _name;
-    solidityEventProperty.ValueType = _type;
-    solidityEventProperty.AddressValue = _address;
-    solidityEventProperty.UIntValue = _uint;
-    solidityEventProperty.Bytes32Value = _string;
-    solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex] = solidityEventProperty;
-
-    EsEventProperty(_eventIndex, _eventPropertyIndex, _name, _type, _address, _uint, _string);
-    return solidityEventCount;
+    revokeWriteAccess('FAUCET_WRITE_ACCESS_REVOKED', Domain, _address);
   }
-
-  // READ EVENT
-  function readEvent(uint _eventIndex)
-    public onlyAuthorized
-    returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, address, uint, uint)
-  {
-    EsEventStruct memory solidityEvent = solidityEvents[_eventIndex];
-    return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.TxOrigin, solidityEvent.Created, solidityEvent.PropertyCount);
-  }
-
-  function readEventProperty(uint _eventIndex, uint _eventPropertyIndex)
-    public onlyAuthorized
-    returns (uint, uint, bytes32, bytes32, address, uint, bytes32)
-  {
-    EsEventPropertyStruct memory prop = solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex];
-    return (_eventIndex, _eventPropertyIndex, prop.Name, prop.ValueType, prop.AddressValue, prop.UIntValue, prop.Bytes32Value);
-  }
-
 }
