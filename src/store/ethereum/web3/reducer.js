@@ -1,5 +1,4 @@
 import { Constants } from './constants'
-import { getRandomAddress } from 'env'
 
 import { store } from 'app'
 
@@ -21,10 +20,10 @@ const handlers = {
     let defaultAddress  = localStorage.getItem('defaultAddress')
 
     if (!defaultAddress){
-      defaultAddress = getRandomAddress(action.payload)
+      defaultAddress = action.payload[0]
       localStorage.setItem('defaultAddress', defaultAddress)
     }
-    
+
     // store.dispatch(MercuryActions.getMercuryEventStoreAddresses(defaultAddress))
     // store.dispatch(MercuryActions.getMercuryEventStoresByCreator(defaultAddress))
     
