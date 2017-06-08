@@ -99,6 +99,11 @@ export default class Navbar extends Component {
             style={buttonStyle}
           />
         </Link>*/}
+         <FlatButton
+          href='https://news.transmute.industries'
+          label='News'
+          style={buttonStyle}
+        />
         <FlatButton
           href='https://framework.transmute.industries'
           label='Docs'
