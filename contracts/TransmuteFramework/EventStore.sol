@@ -1,7 +1,6 @@
 pragma solidity ^0.4.8;
 import './zeppelin/lifecycle/Killable.sol';
 import "./SetLib/AddressSet/AddressSetLib.sol";
-import "./Utils/StringUtils.sol";
 
 contract EventStore is Killable {
   using AddressSetLib for AddressSetLib.AddressSet;
@@ -74,26 +73,26 @@ contract EventStore is Killable {
     _;
   }
 
-  modifier onlyReadAuthorized(bytes32 _domain) {
-    if (!ACLMapping[tx.origin][_domain].read)
+  modifier onlyReadAuthorized(bytes32 _permissionDomain) {
+    if (!ACLMapping[tx.origin][_permissionDomain].read)
       throw;
     _;
   }
 
-  modifier onlyWriteAuthorized(bytes32 _domain) {
-    if (!ACLMapping[tx.origin][_domain].write)
+  modifier onlyWriteAuthorized(bool _isAuthorizedEvent, bytes32 _permissionDomain) {
+    if (_isAuthorizedEvent && !ACLMapping[tx.origin][_permissionDomain].write)
       throw;
     _;
   }
 
-  modifier onlyReadAndWriteAuthorized(bytes32 _domain) {
-    if (!ACLMapping[tx.origin][_domain].write || !ACLMapping[tx.origin][_domain].read)
+  modifier onlyReadAndWriteAuthorized(bytes32 _permissionDomain) {
+    if (!ACLMapping[tx.origin][_permissionDomain].write || !ACLMapping[tx.origin][_permissionDomain].read)
       throw;
     _;
   }
 
-  modifier isACLAddress(address _address) {
-    if (!ACLAddresses.contains(_address))
+  modifier isACLAddress(address _ACLAddress) {
+    if (!ACLAddresses.contains(_ACLAddress))
       throw;
     _;
   }
@@ -116,73 +115,76 @@ contract EventStore is Killable {
     return ACLAddresses.values;
   }
 
-  function addACLAddress(bytes32 _type, bytes32 _readType, bytes32 _writeType, address _address, bytes32 _domain) public {
-    if (ACLAddresses.contains(_address))
+  function addACLAddress(bytes32 _eventType, bytes32 _readEventType, bytes32 _writeEventType, bool _isAuthorizedEvent, bytes32 _permissionDomain, address _ACLAddress)
+    public
+  {
+    if (ACLAddresses.contains(_ACLAddress))
       throw;
-    ACLAddresses.add(_address);
-    ACLMapping[_address][_domain] = ACL(false, false);
-    writeEvent(_type, 'v0', 'Address', _domain, _address, 0, '', 0);
+    ACLAddresses.add(_ACLAddress);
+    ACLMapping[_ACLAddress][_permissionDomain] = ACL(false, false);
 
-    if (_readType.length != 0)
-      grantReadAccess(_readType, _domain, _address);
-    if (_writeType.length != 0)
-      grantWriteAccess(_writeType, _domain, _address);
+    writeEvent(_eventType, 'v0', 'Address', _isAuthorizedEvent, _permissionDomain, _ACLAddress, 0, '', 0);
+
+    if (_readEventType.length != 0)
+      grantReadAccess(_readEventType, _isAuthorizedEvent, _permissionDomain, _ACLAddress);
+    if (_writeEventType.length != 0)
+      grantWriteAccess(_writeEventType, _isAuthorizedEvent, _permissionDomain, _ACLAddress);
   }
 
-  function grantReadAccess(bytes32 _type, bytes32 _domain, address _address)
-    public isACLAddress(_address)
+  function grantReadAccess(bytes32 _eventType, bool _isAuthorizedEvent, bytes32 _permissionDomain, address _ACLAddress)
+    public isACLAddress(_ACLAddress)
   {
-    if (ACLMapping[_address][_domain].read)
+    if (ACLMapping[_ACLAddress][_permissionDomain].read)
       throw;
-    ACL storage updatedACL = ACLMapping[_address][_domain];
+    ACL storage updatedACL = ACLMapping[_ACLAddress][_permissionDomain];
     updatedACL.read = true;
 
-    writeEvent(_type, 'v0', 'Address', _domain, _address, 0, '', 0);
+    writeEvent(_eventType, 'v0', 'Address', _isAuthorizedEvent, _permissionDomain, _ACLAddress, 0, '', 0);
   }
 
-  function revokeReadAccess(bytes32 _type, bytes32 _domain, address _address)
-    public isACLAddress(_address)
+  function revokeReadAccess(bytes32 _eventType, bool _isAuthorizedEvent, bytes32 _permissionDomain, address _ACLAddress)
+    public isACLAddress(_ACLAddress)
   {
-    if (!ACLMapping[_address][_domain].read)
+    if (!ACLMapping[_ACLAddress][_permissionDomain].read)
       throw;
-    ACL storage updatedACL = ACLMapping[_address][_domain];
+    ACL storage updatedACL = ACLMapping[_ACLAddress][_permissionDomain];
     updatedACL.read = false;
 
-    writeEvent(_type, 'v0', 'Address', _domain, _address, 0, '', 0);
+    writeEvent(_eventType, 'v0', 'Address', _isAuthorizedEvent, _permissionDomain, _ACLAddress, 0, '', 0);
   }
 
-  function grantWriteAccess(bytes32 _type, bytes32 _domain, address _address)
-    public isACLAddress(_address)
+  function grantWriteAccess(bytes32 _eventType, bool _isAuthorizedEvent, bytes32 _permissionDomain, address _ACLAddress)
+    public isACLAddress(_ACLAddress)
   {
-    if (ACLMapping[_address][_domain].write)
+    if (ACLMapping[_ACLAddress][_permissionDomain].write)
       throw;
-    ACL storage updatedACL = ACLMapping[_address][_domain];
+    ACL storage updatedACL = ACLMapping[_ACLAddress][_permissionDomain];
     updatedACL.write = true;
 
-    writeEvent(_type, 'v0', 'Address', _domain, _address, 0, '', 0);
+    writeEvent(_eventType, 'v0', 'Address', _isAuthorizedEvent, _permissionDomain, _ACLAddress, 0, '', 0);
   }
 
-  function revokeWriteAccess(bytes32 _type, bytes32 _domain, address _address)
-    public isACLAddress(_address)
+  function revokeWriteAccess(bytes32 _eventType, bool _isAuthorizedEvent, bytes32 _permissionDomain, address _ACLAddress)
+    public isACLAddress(_ACLAddress)
   {
-    if (!ACLMapping[_address][_domain].write)
+    if (!ACLMapping[_ACLAddress][_permissionDomain].write)
       throw;
-    ACL storage updatedACL = ACLMapping[_address][_domain];
+    ACL storage updatedACL = ACLMapping[_ACLAddress][_permissionDomain];
     updatedACL.write = false;
 
-    writeEvent(_type, 'v0', 'Address', _domain, _address, 0, '', 0);
+    writeEvent(_eventType, 'v0', 'Address', _isAuthorizedEvent, _permissionDomain, _ACLAddress, 0, '', 0);
   }
 
   // WRITE EVENT
-  function writeEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, bytes32 _domain, address _addressValue, uint _uintValue, bytes32 _bytes32Value , uint _propCount)
-    public onlyWriteAuthorized(_domain)
+  function writeEvent(bytes32 _eventType, bytes32 _version, bytes32 _valueType, bool _isAuthorizedEvent, bytes32 _permissionDomain, address _addressValue, uint _uintValue, bytes32 _bytes32Value, uint _propCount)
+    onlyWriteAuthorized(_isAuthorizedEvent, _permissionDomain)
     returns (uint)
   {
     uint _created = now;
 
     EsEventStruct memory solidityEvent;
     solidityEvent.Id = solidityEventCount;
-    solidityEvent.Type = _type;
+    solidityEvent.Type = _eventType;
     solidityEvent.Created = _created;
     solidityEvent.TxOrigin = tx.origin;
     solidityEvent.Version = _version;
@@ -195,13 +197,13 @@ contract EventStore is Killable {
     solidityEvent.PropertyCount = _propCount;
     solidityEvents[solidityEventCount] = solidityEvent;
 
-    EsEvent(solidityEventCount, _type, _version, _valueType, _addressValue, _uintValue, _bytes32Value, tx.origin, _created, _propCount);
+    EsEvent(solidityEventCount, _eventType, _version, _valueType, _addressValue, _uintValue, _bytes32Value, tx.origin, _created, _propCount);
     solidityEventCount += 1;
     return solidityEventCount;
   }
 
-  function writeEventProperty(uint _eventIndex, uint _eventPropertyIndex, bytes32 _name, bytes32 _type, bytes32 _domain, address _address, uint _uint, bytes32 _string)
-    public onlyWriteAuthorized(_domain)
+  function writeEventProperty(uint _eventIndex, uint _eventPropertyIndex, bytes32 _name, bytes32 _propertyType, bool _isAuthorizedEvent, bytes32 _permissionDomain, address _address, uint _uint, bytes32 _string)
+    onlyWriteAuthorized(_isAuthorizedEvent, _permissionDomain)
     returns (uint)
   {
     if(solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex].ValueType != 0){
@@ -209,27 +211,27 @@ contract EventStore is Killable {
     }
     EsEventPropertyStruct memory solidityEventProperty;
     solidityEventProperty.Name = _name;
-    solidityEventProperty.ValueType = _type;
+    solidityEventProperty.ValueType = _propertyType;
     solidityEventProperty.AddressValue = _address;
     solidityEventProperty.UIntValue = _uint;
     solidityEventProperty.Bytes32Value = _string;
     solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex] = solidityEventProperty;
 
-    EsEventProperty(_eventIndex, _eventPropertyIndex, _name, _type, _address, _uint, _string);
+    EsEventProperty(_eventIndex, _eventPropertyIndex, _name, _propertyType, _address, _uint, _string);
     return solidityEventCount;
   }
 
   // READ EVENT
-  function readEvent(bytes32 _domain, uint _eventIndex)
-    public onlyReadAuthorized(_domain)
+  function readEvent(bytes32 _permissionDomain, uint _eventIndex)
+    public onlyReadAuthorized(_permissionDomain)
     returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, address, uint, uint)
   {
     EsEventStruct memory solidityEvent = solidityEvents[_eventIndex];
     return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.TxOrigin, solidityEvent.Created, solidityEvent.PropertyCount);
   }
 
-  function readEventProperty(bytes32 _domain, uint _eventIndex, uint _eventPropertyIndex)
-    public onlyReadAuthorized(_domain)
+  function readEventProperty(bytes32 _permissionDomain, uint _eventIndex, uint _eventPropertyIndex)
+    public onlyReadAuthorized(_permissionDomain)
     returns (uint, uint, bytes32, bytes32, address, uint, bytes32)
   {
     EsEventPropertyStruct memory prop = solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex];
