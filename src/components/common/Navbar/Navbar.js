@@ -100,6 +100,11 @@ export default class Navbar extends Component {
           />
         </Link>*/}
         <FlatButton
+          href='https://framework.transmute.industries'
+          label='Docs'
+          style={buttonStyle}
+        />
+        <FlatButton
           href='https://github.com/transmute-industries/transmute-mercury'
           label='Source'
           style={buttonStyle}

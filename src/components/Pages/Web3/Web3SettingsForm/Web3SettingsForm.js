@@ -25,6 +25,7 @@ export const Web3SettingsForm = ({ web3, handleSubmit, submitForm, submitting })
           <h3>Web3 Provider</h3>
           <Field style={{ width: '100%' }} name='provider' component={SelectField} hintText='Select a provider'>
             <MenuItem value='testrpc' primaryText='Test RPC' />
+            <MenuItem value='metamask' primaryText='MetaMask' />
             <MenuItem value='infura' primaryText='Infura' />
             <MenuItem value='parity' primaryText='Parity' />
           </Field>

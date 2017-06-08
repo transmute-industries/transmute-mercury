@@ -94,7 +94,7 @@
     "redux-form-material-ui": "^4.2.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
-    "transmute-framework": "^0.1.29",
+    "transmute-framework": "^0.1.34",
     "truffle-contract": "^2.0.0",
     "tslib": "^1.7.1",
     "uglify-es": "git://github.com/mishoo/UglifyJS2#harmony",

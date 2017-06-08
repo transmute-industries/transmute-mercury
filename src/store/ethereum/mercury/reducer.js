@@ -1,8 +1,5 @@
 import Constants from './mock/healthcare/constants'
 
-import { store } from 'app'
-
-import { actions as MercuryActions } from 'store/ethereum/mercury'
 
 import events from './mock/healthcare/events'
 
@@ -25,31 +22,17 @@ export const initialState = {
 const handlers = {
 
   ['RECEIVE_WEB3_ACCOUNTS']: (state, action) => {
-
     let defaultAddress = action.payload[0]
-
-    store.dispatch(MercuryActions.getEventStoresByCreator({
-      fromAddress: defaultAddress
-    }))
-
     return Object.assign({}, state, {
       defaultAddress: defaultAddress
     })
   },
 
   ['EVENT_STORE_ADDRESSES_RECEIVED']: (state, action) => {
-
     if (action.payload.length === 0) {
       return state
     }
-
     let defaultEventStoreAddress = action.payload[0]
-
-    store.dispatch(MercuryActions.syncEventStore({
-      contractAddress: defaultEventStoreAddress,
-      fromAddress: state.defaultAddress
-    }))
-
     let step = state.step + 1
     return Object.assign({}, state, {
       step: step,
@@ -58,18 +41,10 @@ const handlers = {
   },
 
   ['EVENT_STORE_ADDRESS_RECEIVED']: (state, action) => {
-
     if (action.payload.length === 0) {
       return state
     }
-
     let defaultEventStoreAddress = action.payload
-
-    store.dispatch(MercuryActions.syncEventStore({
-      contractAddress: defaultEventStoreAddress,
-      fromAddress: state.defaultAddress
-    }))
-
     let step = state.step + 1
     return Object.assign({}, state, {
       step: step,
