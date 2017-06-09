@@ -27,8 +27,7 @@ export const Web3SettingsForm = ({ web3, handleSubmit, submitForm, submitting })
             onChange={event => {
               setTimeout(() => {
                 handleSubmit()
-              }, 1 * 1000)
-
+              }, .25 * 1000)
             }}>
             <MenuItem value='testrpc' primaryText='Test RPC' />
             <MenuItem value='metamask' primaryText='MetaMask' />
@@ -38,7 +37,12 @@ export const Web3SettingsForm = ({ web3, handleSubmit, submitForm, submitting })
         </Row>
         <Row className={classes.settingRow}>
           <h3>Default Address</h3>
-          <Field style={{ width: '100%' }} name='defaultAddress' component={SelectField} hintText='Select a default Address'>
+          <Field style={{ width: '100%' }} name='defaultAddress' component={SelectField} hintText='Select a default Address'
+          onChange={event => {
+              setTimeout(() => {
+                handleSubmit()
+              }, .25 * 1000)
+            }}>
             {
               web3.addresses.map((address) => {
                 return <MenuItem key={address} value={address} primaryText={address} />
@@ -48,13 +52,13 @@ export const Web3SettingsForm = ({ web3, handleSubmit, submitForm, submitting })
         </Row>
       </Grid>
       <CardActions className={classes.actions}>
-        <RaisedButton
+        {/*<RaisedButton
           style={{ marginRight: 'none' }}
           label='Save Changes'
           primary
           type='submit'
           disabled={submitting}
-        />
+        />*/}
       </CardActions>
     </Card>
   </form>

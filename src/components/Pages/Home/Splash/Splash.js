@@ -23,15 +23,32 @@ export default class Splash extends React.Component {
         return (
             <div>
                 <HeroRow renderParticles>
-                    <div style={{textAlign: 'center'}}>
+                    <div style={{ textAlign: 'center' }}>
                         <h1>Transmute Framework</h1>
                         <h3>Smart Contracts Simplified</h3>
                         <RaisedButton
-                        label='Docs'
-                        primary={true}
-                        href='https://framework.transmute.industries'
+                            style={{ marginRight: '8px' }}
+                            label='Docs'
+                            primary={true}
+                            href='https://framework.transmute.industries'
                         />
-                        <TransmuteTerminal/>
+
+                        {
+                            this.props.web3.defaultAddress &&
+                            <TransmuteTerminal />
+                        }
+                        {
+                            !this.props.web3.defaultAddress &&
+                            <RaisedButton
+
+                                label='Get MetaMask'
+                                disableTouchRipple={true}
+                                disableFocusRipple={true}
+                                secondary={true}
+                                href='https://metamask.io/'
+                                style={{ marginRight: 12 }}
+                            />
+                        }
                     </div>
                 </HeroRow>
             </div>

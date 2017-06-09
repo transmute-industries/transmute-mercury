@@ -24,9 +24,9 @@ export default class HomePage extends Component {
     return (
       <div>
         <Splash />
+        <GetWeb3/>
         <OneLiner />
         <OneTwoThree />
-        <GetWeb3/>
         <Demo/>
         {/*<OneTwo />
         <Quotes/>

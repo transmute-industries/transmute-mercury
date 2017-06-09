@@ -17,12 +17,9 @@ export default class GetWeb3 extends React.Component {
     render() {
         return (
             <div>
-                <h1 style={{ textAlign: 'center'}}>
-                        Our demo requires MetaMask
-                    </h1>
-            <Grid fluid className={classes.container}>
-                <Row>
-                    {/*<Col style={{ width: '45%', margin: 'auto' }}>
+                <Grid fluid className={classes.container}>
+                    <Row>
+                        {/*<Col style={{ width: '45%', margin: 'auto' }}>
                        <h2 style={{ textAlign: 'center'}}>UPort</h2>
                         <p>
 uPort is an open source software project to establish a global, unified, sovereign identity system 
@@ -39,27 +36,42 @@ for people, businesses, organizations, devices, and bots.
                             />
                         </div>
                     </Col>*/}
-                    <Col style={{ width: '75%', margin: 'auto'}}>
-                        <h2 style={{ textAlign: 'center'}}>MetaMask</h2>
-                        <p>
-MetaMask is a bridge that allows you to visit the distributed web of tomorrow in your browser today. 
+                        <Col style={{ width: '75%', margin: 'auto', textAlign: 'center' }}>
+                            <h2>MetaMask</h2>
+                            <p>
+MetaMask is a bridge that allows you to visit the distributed web of tomorrow in your browser today.
+<br/>
 It allows you to run Ethereum dApps right in your browser without running a full Ethereum node.
-                        </p>
-                         <div style={{ textAlign: 'center'}}>
-                            <RaisedButton
-                            label='Get Started'
-                            disableTouchRipple={true}
-                            disableFocusRipple={true}
-                            secondary={true}
-                            href='https://metamask.io/'
-                            style={{ marginRight: 12 }}
-                            />
-                         </div>
-                          
-                    </Col>
-                    
-                </Row>
-            </Grid>
+                            </p>
+                            <p>
+You can change your web3 provider, and default address later.
+                            </p>
+                            <div style={{ textAlign: 'center' }}>
+                                <RaisedButton
+                                    label='Web3 Settings'
+                                    disableTouchRipple={true}
+                                    disableFocusRipple={true}
+                                    primary={true}
+                                    href='/web3'
+                                    style={{ marginRight: 12 }}
+                                />
+                                {
+                                    !this.props.web3.defaultAddress &&
+                                    <RaisedButton
+                                        label='Get MetaMask'
+                                        disableTouchRipple={true}
+                                        disableFocusRipple={true}
+                                        secondary={true}
+                                        href='https://metamask.io/'
+                                        style={{ marginRight: 12 }}
+                                    />
+                                }
+                            </div>
+
+                        </Col>
+
+                    </Row>
+                </Grid>
             </div>
         )
     }
