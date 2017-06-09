@@ -138,7 +138,6 @@ contract EventStore is Killable {
 
   // WRITE EVENT
   function writeEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, address _addressValue, uint _uintValue, bytes32 _bytes32Value , uint _propCount) 
-    public onlyAuthorized
     returns (uint)
   {
     uint _created = now;
