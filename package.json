@@ -19,6 +19,7 @@
     "build": "better-npm-run build",
     "build:dev": "better-npm-run build:dev",
     "build:prod": "BABEL_ENV=production better-npm-run build:prod",
+    "deploy:site": "firebase deploy",
     "deploy:testnet": "truffle migrate --compile-all --network ropsten --reset --verbose-rpc"
   },
   "betterScripts": {
