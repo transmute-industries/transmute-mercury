@@ -6,10 +6,12 @@ import Demo from './Demo'
 import OneLiner from './OneLiner'
 import OneTwo from './OneTwo'
 
+import CodeExample from './CodeExample'
 import OneTwoThree from './OneTwoThree'
 import Quotes from './Quotes'
 import Accolades from './Accolades'
 import Footer from './Footer'
+
 
 // implement stepper demo...
 
@@ -27,6 +29,7 @@ export default class HomePage extends Component {
         <OneLiner />
         <OneTwoThree />
         <Demo />
+        <CodeExample/>
         {/*<OneTwo />
         <Quotes/>
         <Accolades/>*/}
