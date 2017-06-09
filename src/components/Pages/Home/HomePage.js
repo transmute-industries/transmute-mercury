@@ -5,14 +5,13 @@ import Splash from './Splash'
 import Demo from './Demo'
 import OneLiner from './OneLiner'
 import OneTwo from './OneTwo'
-import GetWeb3 from './GetWeb3'
+
 import OneTwoThree from './OneTwoThree'
 import Quotes from './Quotes'
 import Accolades from './Accolades'
 import Footer from './Footer'
 
 // implement stepper demo...
-
 
 @connect(
   ({ web3 }) => ({
@@ -27,10 +26,6 @@ export default class HomePage extends Component {
         
         <OneLiner />
         <OneTwoThree />
-        {
-          !this.props.web3.defaultAddress &&
-          <GetWeb3 />
-        }
         <Demo />
         {/*<OneTwo />
         <Quotes/>

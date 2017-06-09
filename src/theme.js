@@ -1,10 +1,9 @@
 import {
-  cyan600,
-  cyan700,
-  cyan800,
-  deepOrange500,
-  deepOrangeA100,
+  teal700,
+  teal800,
+  teal900,
   lightBlue500,
+  lightBlueA100,
   grey900,
   white,
   grey400,
@@ -19,17 +18,17 @@ export default {
   zIndex: zIndex,
   fontFamily: 'Roboto, sans-serif',
   palette: {
-    primary1Color: cyan600,
-    primary2Color: cyan700,
-    primary3Color: cyan800,
-    accent1Color: deepOrange500,
-    accent2Color: deepOrangeA100,
-    accent3Color: deepOrange500,
+    primary1Color: teal700,
+    primary2Color: teal800,
+    primary3Color: teal900,
+    accent1Color: lightBlue500,
+    accent2Color: lightBlueA100,
+    accent3Color: lightBlue500,
     textColor: grey900,
     alternateTextColor: white,
     canvasColor: white,
     borderColor: grey400,
     disabledColor: fade(darkBlack, 0.3),
-    pickerHeaderColor: deepOrange500
+    pickerHeaderColor: lightBlue500
   }
 }

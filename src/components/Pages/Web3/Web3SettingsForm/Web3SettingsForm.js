@@ -59,6 +59,11 @@ export const Web3SettingsForm = ({ web3, handleSubmit, submitForm, submitting })
           type='submit'
           disabled={submitting}
         />*/}
+         <RaisedButton
+          label='Go Home'
+          secondary
+          href='/'
+        />
       </CardActions>
     </Card>
   </form>

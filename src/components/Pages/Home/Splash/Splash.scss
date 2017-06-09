@@ -1,4 +1,10 @@
 @import 'base';
 .container {
     @extend .flex-column-center;
+    
+}
+
+.white {
+    color: white;
+    z-index: 999999;
 }
