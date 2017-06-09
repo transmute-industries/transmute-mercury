@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card'
-import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-flexbox-grid'
 
@@ -37,31 +37,28 @@ for people, businesses, organizations, devices, and bots.
                         </div>
                     </Col>*/}
                         <Col style={{ width: '75%', margin: 'auto', textAlign: 'center' }}>
-                            <h2>MetaMask</h2>
+                            <h2>MetaMask is required for the TestNet Live Demo</h2>
                             <p>
-MetaMask is a bridge that allows you to visit the distributed web of tomorrow in your browser today.
-<br/>
-It allows you to run Ethereum dApps right in your browser without running a full Ethereum node.
-                            </p>
-                            <p>
-You can change your web3 provider, and default address later.
+                                MetaMask is a bridge that allows you to visit the distributed web of tomorrow in your browser today.
+<br />
+                                It allows you to run Ethereum dApps right in your browser without running a full Ethereum node.
                             </p>
                             <div style={{ textAlign: 'center' }}>
-                                <RaisedButton
-                                    label='Web3 Settings'
+                                <FlatButton
+                                    label='Change Provider'
                                     disableTouchRipple={true}
                                     disableFocusRipple={true}
-                                    primary={true}
+                                   
                                     href='/web3'
                                     style={{ marginRight: 12 }}
                                 />
                                 {
                                     !this.props.web3.defaultAddress &&
-                                    <RaisedButton
+                                    <FlatButton
                                         label='Get MetaMask'
                                         disableTouchRipple={true}
                                         disableFocusRipple={true}
-                                        secondary={true}
+                                   
                                         href='https://metamask.io/'
                                         style={{ marginRight: 12 }}
                                     />

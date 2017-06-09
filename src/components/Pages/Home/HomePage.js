@@ -24,10 +24,14 @@ export default class HomePage extends Component {
     return (
       <div>
         <Splash />
-        <GetWeb3/>
+        
         <OneLiner />
         <OneTwoThree />
-        <Demo/>
+        {
+          !this.props.web3.defaultAddress &&
+          <GetWeb3 />
+        }
+        <Demo />
         {/*<OneTwo />
         <Quotes/>
         <Accolades/>*/}
