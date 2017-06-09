@@ -64,6 +64,7 @@ contract EventStoreFactory is EventStore {
     // Interact With Other Contracts
     EventStore _eventStore = EventStore(_address);
     _eventStore.kill();
+
     writeEvent('FACTORY_EVENT_STORE_DESTROYED', 'v0', 'Address', address(_address), 0, '', 0);
   }
 }
