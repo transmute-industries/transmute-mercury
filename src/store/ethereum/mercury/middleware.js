@@ -48,10 +48,7 @@ export const syncEventStore = async (bindingModel, _callback) => {
   if (TransmuteFramework.EventStoreContract) {
     let { contractAddress, fromAddress } = bindingModel
     let eventStore = await TransmuteFramework.EventStoreContract.at(contractAddress)
-    //   console.log('eventStore: ', eventStore)
-    
     let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModel, reducer)
-    //   console.log('updatedReadModel: ', updatedReadModel)
     _callback(updatedReadModel)
   } else {
     _callback(readModel)

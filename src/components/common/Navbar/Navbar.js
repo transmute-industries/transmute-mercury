@@ -147,7 +147,7 @@ export default class Navbar extends Component {
       <AppBar
         title={
           <Link to={accountExists ? `${PROJECTS_PATH}` : '/'} className={classes.brand}>
-            Transmute
+            <img src='transmute.logo.white.png' style={{height: '52px'}}/>
           </Link>
         }
         showMenuIconButton={false}

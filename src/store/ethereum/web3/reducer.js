@@ -1,7 +1,7 @@
 import { Constants } from './constants'
 
 export const initialState = {
-  provider: localStorage.getItem('provider') || 'testrpc',
+  provider: localStorage.getItem('provider') || 'metamask',
   defaultAddress: localStorage.getItem('defaultAddress') || null,
   addresses: [],
   transfers: [],
@@ -12,12 +12,9 @@ export const initialState = {
 
 const handlers = {
   [Constants.RECEIVE_WEB3_ACCOUNTS]: (state, action) => {
-    let defaultAddress  = localStorage.getItem('defaultAddress')
+    let defaultAddress = action.payload[0]
+    localStorage.setItem('defaultAddress', defaultAddress)
 
-    if (!defaultAddress){
-      defaultAddress = action.payload[0]
-      localStorage.setItem('defaultAddress', defaultAddress)
-    }
     return Object.assign({}, state, {
       addresses: action.payload,
       defaultAddress: defaultAddress

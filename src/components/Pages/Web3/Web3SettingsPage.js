@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { submit } from 'redux-form'
 import Web3SettingsForm from './Web3SettingsForm'
 import { WEB3_SETTINGS_FORM_NAME } from 'constants/formNames'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import { updateDebugSettings } from 'store/ethereum/web3'
 
@@ -20,14 +21,16 @@ import { updateDebugSettings } from 'store/ethereum/web3'
   }
 )
 export default class Web3SettingsPage extends Component {
-  render () {
+  render() {
     const { web3, submitForm, onSubmit } = this.props
     return (
-      <Web3SettingsForm
-        web3={web3}
-        submitForm={submitForm}
-        onSubmit={onSubmit}
+      <div>
+        <Web3SettingsForm
+          web3={web3}
+          submitForm={submitForm}
+          onSubmit={onSubmit}
         />
+      </div>
     )
   }
 }

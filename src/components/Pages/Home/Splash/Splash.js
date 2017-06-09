@@ -12,6 +12,7 @@ import classes from './Splash.scss'
 import HeroRow from 'components/common/HeroRow'
 
 import TransmuteTerminal from '../TransmuteTerminal'
+import GetMetaMask from '../GetMetaMask'
 
 @connect(
     ({ web3 }) => ({
@@ -21,20 +22,29 @@ import TransmuteTerminal from '../TransmuteTerminal'
 export default class Splash extends React.Component {
     render() {
         return (
-            <div>
-                <HeroRow renderParticles>
-                    <div style={{textAlign: 'center'}}>
-                        <h1>Transmute Framework</h1>
-                        <h3>Smart Contracts Simplified</h3>
-                        <RaisedButton
+
+            <HeroRow renderParticles>
+                <div style={{ textAlign: 'center' }}>
+                    <h1 className={classes.white} style={{ fontWeight: '400' }}>Transmute Framework</h1>
+                    <h3 className={classes.white}>Smart Contracts Simplified</h3>
+                    <RaisedButton
                         label='Docs'
                         primary={true}
-                        href='https://framework.transmute.industries'
-                        />
-                        <TransmuteTerminal/>
-                    </div>
-                </HeroRow>
-            </div>
+                        onClick={() => {
+                            window.location.href = 'https://framework.transmute.industries'
+                        }}
+                    />
+                    {
+                        this.props.web3.defaultAddress &&
+                        <TransmuteTerminal />
+                    }
+                    {
+                        !this.props.web3.defaultAddress &&
+                        <GetMetaMask />
+                    }
+                </div>
+            </HeroRow>
+
         )
     }
 }
