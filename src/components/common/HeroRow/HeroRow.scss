@@ -5,6 +5,11 @@
     background-position: center;
     background-color: rgba( 0, 0, 0, 0.80);
     background-blend-mode: darken;  
+
+    // fix button conversion error
+    a {
+        margin-top: -1px !important;
+    }
 }
 .center{
     @extend .flex-column-center;

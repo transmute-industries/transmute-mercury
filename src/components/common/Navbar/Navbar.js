@@ -93,12 +93,22 @@ export default class Navbar extends Component {
             style={buttonStyle}
           />
         </Link>
-         <Link to={LOGIN_PATH}>
+         {/*<Link to={LOGIN_PATH}>
           <FlatButton
             label='Login'
             style={buttonStyle}
           />
-        </Link>
+        </Link>*/}
+         <FlatButton
+          href='https://news.transmute.industries'
+          label='News'
+          style={buttonStyle}
+        />
+        <FlatButton
+          href='https://framework.transmute.industries'
+          label='Docs'
+          style={buttonStyle}
+        />
         <FlatButton
           href='https://github.com/transmute-industries/transmute-mercury'
           label='Source'
@@ -137,7 +147,7 @@ export default class Navbar extends Component {
       <AppBar
         title={
           <Link to={accountExists ? `${PROJECTS_PATH}` : '/'} className={classes.brand}>
-            Transmute
+            <img src='transmute.logo.white.png' style={{height: '52px'}}/>
           </Link>
         }
         showMenuIconButton={false}

@@ -1,9 +1,9 @@
 import {
-  blue500,
-  blue700,
-  deepPurple500,
-  deepPurpleA100,
-  lightBlue500,
+  teal400,
+  teal800,
+  teal900,
+  purple400,
+  purpleA100,
   grey900,
   white,
   grey400,
@@ -18,17 +18,17 @@ export default {
   zIndex: zIndex,
   fontFamily: 'Roboto, sans-serif',
   palette: {
-    primary1Color: blue500,
-    primary2Color: blue700,
-    primary3Color: blue500,
-    accent1Color: deepPurple500,
-    accent2Color: deepPurpleA100,
-    accent3Color: deepPurple500,
+    primary1Color: teal900,
+    primary2Color: teal800,
+    primary3Color: teal400,
+    accent1Color: purple400,
+    accent2Color: purpleA100,
+    accent3Color: purple400,
     textColor: grey900,
     alternateTextColor: white,
     canvasColor: white,
     borderColor: grey400,
     disabledColor: fade(darkBlack, 0.3),
-    pickerHeaderColor: deepPurple500
+    pickerHeaderColor: purple400
   }
 }

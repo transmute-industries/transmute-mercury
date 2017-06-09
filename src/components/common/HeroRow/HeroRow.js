@@ -2,9 +2,9 @@ import React from 'react'
 import Navbar from 'components/common/Navbar'
 import classes from './HeroRow.scss'
 
-import { PropTypes } from 'prop-types';
+import { PropTypes } from 'prop-types'
 
-import Particles from 'react-particles-js';
+import Particles from 'react-particles-js'
 import particles from './particles.json'
 
 import Theme from 'theme'
