@@ -1,4 +1,5 @@
 import { Constants } from './constants'
+
 import {
   getAccounts,
   sendTransaction
@@ -6,8 +7,18 @@ import {
 
 import { forEach } from 'lodash'
 
+import { store } from 'app'
+import { actions as MercuryActions } from 'store/ethereum/mercury'
+
 export const getWeb3Accounts = () => dispatch => {
   getAccounts((addresses) => {
+
+    if (addresses.length) {
+      dispatch(MercuryActions.getEventStoresByCreator({
+        fromAddress: addresses[0]
+      }))
+    }
+
     dispatch({
       type: Constants.RECEIVE_WEB3_ACCOUNTS,
       payload: addresses
@@ -25,16 +36,16 @@ export const sendEther = (transactionData) => dispatch => {
 }
 
 const updateLocalStorage = (formModel) => {
-    forEach(formModel, (v, k) => {
-        localStorage.setItem(k, v)
-    })
+  forEach(formModel, (v, k) => {
+    localStorage.setItem(k, v)
+  })
 }
 
 export const updateDebugSettings = (formModel) => dispatch => {
-    updateLocalStorage(formModel)
-    window.location.href = window.location.href
-    dispatch({
-        type: WEB3_SETTINGS_UPDATED,
-        payload: formModel
-    })
+  updateLocalStorage(formModel)
+  window.location.href = window.location.href
+  dispatch({
+    type: WEB3_SETTINGS_UPDATED,
+    payload: formModel
+  })
 }

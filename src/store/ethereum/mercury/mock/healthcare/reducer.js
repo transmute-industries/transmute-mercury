@@ -1,115 +1,129 @@
 import Constants from './constants'
 
+// https://github.com/reactjs/redux/blob/master/docs/recipes/reducers/ImmutableUpdatePatterns.md
+
 export const readModel = {
-  ReadModelStoreKey: '', // CONTRACT_ADDRESS:READ_MODEL_NAME
-  ReadModelType: 'MercuryEventStore', // READ_MODEL_NAME
-  LastEvent: null, // Last Event Index Processed
-  Patients: {},
-  Providers: {},
-  Insurers: {},
-  Encounters: {}
+  readModelStoreKey: '', // readModelType:contractAddress
+  readModelType: 'HealthcareSystem', 
+  contractAddress: '0x0000000000000000000000000000000000000000',
+  lastEvent: null, // Last Event Index Processed
+  model: {} // where all the updates from events will be made
+}
+
+const addIndexedObject = (model, objType, objKey, obj) => {
+  return {
+    model: Object.assign({}, model, {
+      [objType]: {
+        [objKey]: obj,
+        ...model[objType]
+      }
+    })
+  }
+}
+
+const addObjectToIndexedObjectCollection = (
+  model,
+  objType,
+  objKey,
+  collectionType,
+  collectionKey,
+  obj
+) => {
+  return {
+    model: Object.assign({}, model, {
+      ...model,
+      [objType]: {
+        ...model[objType],
+        [objKey]: {
+          ...model[objType][objKey],
+          [collectionType]: {
+            ...model[objType][objKey][collectionType],
+            [collectionKey]: obj
+          }
+        }
+      }
+    })
+  }
+}
+
+const updatesFromMeta = (meta) => {
+  return {
+    lastEvent: meta.id
+  }
 }
 
 const handlers = {
-  [Constants.MERCURY_EVENT_STORE_CREATED]: (state, transmuteEvent) => {
-    return Object.assign({}, state, {
-      Name: transmuteEvent.Name,
-      Creator: transmuteEvent.Creator,
-      LastEvent: transmuteEvent.Id
-    })
-  }, 
 
-  [Constants.PATIENT_REGISTERED]: (state, transmuteEvent) => {
-    return Object.assign({}, state, {
-      Patients: {
-        [transmuteEvent.PatientId]: {
-          Name: transmuteEvent.PatientName,
-          Insurance: transmuteEvent.Insurance,
-        },
-        ...state.Patients
-      },
-      LastEvent: transmuteEvent.Id
-    })
-  }, 
+  [Constants.PATIENT_REGISTERED]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'patient', action.payload.patientId, action.payload)
+    let updatesToMeta = updatesFromMeta(action.meta)
+    return Object.assign({}, state, updatesToModel, updatesToMeta)
+  },
 
-  [Constants.PROVIDER_REGISTERED]: (state, transmuteEvent) => {
-    return Object.assign({}, state, {
-      Providers: {
-        [transmuteEvent.ProviderId]: {
-          Name: transmuteEvent.ProviderName,
-        },
-        ...state.Providers
-      },
-      LastEvent: transmuteEvent.Id
-    })
-  }, 
+  [Constants.PATIENT_REGISTERED]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'patient', action.payload.patientId, action.payload)
+    let updatesToMeta = updatesFromMeta(action.meta)
+    return Object.assign({}, state, updatesToModel, updatesToMeta)
+  },
 
-  [Constants.INSURER_REGISTERED]: (state, transmuteEvent) => {
-    return Object.assign({}, state, {
-      Insurers: {
-        [transmuteEvent.InsurerId]: {
-          Name: transmuteEvent.InsurerName,
-        },
-        ...state.Insurers
-      },
-      LastEvent: transmuteEvent.Id
-    })
-  }, 
+  [Constants.PROVIDER_REGISTERED]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'provider', action.payload.providerId, action.payload)
+    let updatesToMeta = updatesFromMeta(action.meta)
+    return Object.assign({}, state, updatesToModel, updatesToMeta)
+  },
 
-  [Constants.PATIENT_TREATED]: (state, transmuteEvent) => {
-    return Object.assign({}, state, {
-      Encounters: {
-            [transmuteEvent.EncounterId]: {
-              InsurerId: transmuteEvent.InsurerId,
-              PatientId: transmuteEvent.PatientId,
-              Notes: transmuteEvent.Notes,
-              State: transmuteEvent.State,
-              Timestamp: transmuteEvent.Timestamp
-            },
-            ...state.Encounters
-      },
-      LastEvent: transmuteEvent.Id
-    })
-  }, 
+  [Constants.INSURER_REGISTERED]: (state, action) => {
+    let updatesToModel = addIndexedObject(state.model, 'insurer', action.payload.insurerId, action.payload)
+    let updatesToMeta = updatesFromMeta(action.meta)
+    return Object.assign({}, state, updatesToModel, updatesToMeta)
+  },
 
-  [Constants.CLAIM_FILED]: (state, transmuteEvent) => {
-    return Object.assign({}, state, {
-     Claims: {
-          [transmuteEvent.EncounterId]: {
-            ProviderId: transmuteEvent.ProviderId,
-            PatientId: transmuteEvent.PatientId,
-            Notes: transmuteEvent.Notes,
-            Amount: transmuteEvent.Amount
-          },
-          ...state.Claims
-      },
-      LastEvent: transmuteEvent.Id
-    })
-  }, 
+  [Constants.PATIENT_TREATED]: (state, action) => {
+    let updatesToModel = addObjectToIndexedObjectCollection(
+      state.model,
+      'provider', action.payload.providerId,
+      'encounters', action.payload.encounterId,
+      {
+        notes: action.payload.notes,
+        time: action.payload.timestamp
+      }
+    )
+    let updatesToMeta = updatesFromMeta(action.meta)
+    return Object.assign({}, state, updatesToModel, updatesToMeta)
+  },
 
-  [Constants.CLAIM_PAYED]: (state, transmuteEvent) => {
-    return Object.assign({}, state, {
-     Claims: {
-          [transmuteEvent.EncounterId]: {
-            ProviderId: transmuteEvent.ProviderId,
-            PatientId: transmuteEvent.PatientId,
-            Notes: transmuteEvent.Notes,
-            Amount: transmuteEvent.Amount
-          },
-          ...state.Claims
-      },
-      LastEvent: transmuteEvent.Id
-    })
-  }, 
+  [Constants.CLAIM_FILED]: (state, action) => {
+    let updatesToModel = addObjectToIndexedObjectCollection(
+      state.model,
+      'insurer', action.payload.insurerId,
+      'claims', action.payload.encounterId,
+      {
+        notes: action.payload.notes,
+        amount: action.payload.amount
+      }
+    )
+    let updatesToMeta = updatesFromMeta(action.meta)
+    return Object.assign({}, state, updatesToModel, updatesToMeta)
+  },
 
-  
-
+  [Constants.CLAIM_PAYED]: (state, action) => {
+    let updatesToModel = addObjectToIndexedObjectCollection(
+      state.model,
+      'provider', action.payload.providerId,
+      'claims', action.payload.encounterId,
+      {
+        notes: action.payload.notes,
+        amount: action.payload.amount
+      }
+    )
+    let updatesToMeta = updatesFromMeta(action.meta)
+    return Object.assign({}, state, updatesToModel, updatesToMeta)
+  }
 }
 
-export const reducer = (state = readModel, transmuteEvent) => {
-  // console.log('transmuteEvent: ', transmuteEvent)
-  if (handlers[transmuteEvent.Type]) {
-    return handlers[transmuteEvent.Type](state, transmuteEvent)
+export const reducer = (state = readModel, action) => {
+  if (handlers[action.type]) {
+    return handlers[action.type](state, action)
   }
   return state
 }

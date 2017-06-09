@@ -13,6 +13,12 @@
     h2 {
         font-weight: 200;
     }
+    #mount{
+        [data-reactroot]{
+            height: auto !important; 
+        }
+    }
+
     h3,
     h4 {
         font-weight: 400;
@@ -23,7 +29,6 @@
     .heroRowParticles > div {
         height: 400px;
     }
-
     .height100  {
         height: 100%;
     }
@@ -59,4 +64,20 @@
     [type=button] {
         -webkit-appearance: none !important;
     }
+    .ReactBash {
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
+            outline: none;
+        }
+    }
+
+    .term-container {
+        padding: 32px;
+    }
 }
+
+
+
+

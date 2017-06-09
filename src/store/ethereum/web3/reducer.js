@@ -1,10 +1,4 @@
 import { Constants } from './constants'
-import { getRandomAddress } from 'env'
-
-import { store } from 'app'
-
-import { actions as MercuryActions } from 'store/ethereum/mercury'
-
 
 export const initialState = {
   provider: localStorage.getItem('provider') || 'testrpc',
@@ -21,13 +15,9 @@ const handlers = {
     let defaultAddress  = localStorage.getItem('defaultAddress')
 
     if (!defaultAddress){
-      defaultAddress = getRandomAddress(action.payload)
+      defaultAddress = action.payload[0]
       localStorage.setItem('defaultAddress', defaultAddress)
     }
-    
-    // store.dispatch(MercuryActions.getMercuryEventStoreAddresses(defaultAddress))
-    store.dispatch(MercuryActions.getMercuryEventStoreByCreator(defaultAddress))
-    
     return Object.assign({}, state, {
       addresses: action.payload,
       defaultAddress: defaultAddress

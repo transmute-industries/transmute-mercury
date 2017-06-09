@@ -1,79 +1,81 @@
-import { web3 } from 'env'
 
 const contract = require('truffle-contract')
 
-import MercuryEventStore from '../../../../build/contracts/MercuryEventStore.json'
-import MercuryEventStoreFactory from '../../../../build/contracts/MercuryEventStoreFactory.json'
+import TransmuteFramework from 'env'
 
-const mercuryEventStoreContract = contract(MercuryEventStore)
-mercuryEventStoreContract.setProvider(web3.currentProvider)
+let { getCachedReadModel } = TransmuteFramework.EventStore.ReadModel
 
-const mercuryEventStoreFactory = contract(MercuryEventStoreFactory)
-mercuryEventStoreFactory.setProvider(web3.currentProvider)
-
-import TransmuteFramework from 'transmute-framework'
-
-import { 
-  readModel, 
+import {
+  readModel,
   reducer
 } from './mock/healthcare/reducer'
 
+import * as _ from 'lodash'
 
-import { extend, cloneDeep } from 'lodash'
-
-export const getMercuryEventStoreByCreator = async (fromAddress, _callback) => {
-  let factory = await mercuryEventStoreFactory.deployed()
-  let eventStoreAddress = await factory.getMercuryEventStoreByCreator({
-    from: fromAddress
-  })
-  _callback(eventStoreAddress)
+export const getEventStoresByCreator = async (fromAddress, _callback) => {
+  if (TransmuteFramework.EventStoreFactoryContract) {
+    let factory = await TransmuteFramework.EventStoreFactoryContract.deployed()
+    let eventStoreAddresses = await factory.getEventStoresByCreator({
+      from: fromAddress
+    })
+    // console.log('from middleware: ', eventStoreAddresses)
+    _callback(eventStoreAddresses)
+  } else {
+    _callback([])
+  }
 }
 
-export const getMercuryEventStoreAddresses = async (fromAddress, _callback) => {
-  let factory = await mercuryEventStoreFactory.deployed()
-  let mercuryEventStoreContractAddresses = await factory.getMercuryEventStores({
-    from: fromAddress
-  })
-  _callback(mercuryEventStoreContractAddresses)
-}
-
-export const createMercuryEventStore = async (bindingModel, _callback) => {
-  let {fromAddress, name} = bindingModel
-  let factory = await mercuryEventStoreFactory.deployed()
-  let tx = await factory.createMercuryEventStore(name, {
+export const createEventStore = async (bindingModel, _callback) => {
+  let { fromAddress, name } = bindingModel
+  if (TransmuteFramework.EventStoreFactoryContract) {
+    let factory = await TransmuteFramework.EventStoreFactoryContract.deployed()
+    let tx = await factory.createEventStore({
       from: fromAddress,
       gas: 2000000,
-  })
-  console.warn(`transactionToEventCollection has a known issue handling multiple multi property events: 
-  https://github.com/transmute-industries/transmute-framework/issues/27`)
-  let events = TransmuteFramework.Transactions.transactionToEventCollection(tx)
-  let createdEvent = events[1]
-  _callback(createdEvent.ContractAddress)
+    })
+    console.log('tx: ', tx)
+    let events = await Promise.all(TransmuteFramework.EventStore.EventTypes.reconstructTransmuteEventsFromTxs([tx]))
+    let createdEvent = events[0]
+    _callback(createdEvent.payload)
+  } else {
+    _callback({})
+  }
 }
 
-export const getCachedReadModel = async (contractAddress, eventStore, readModel, reducer) =>{
-  readModel.ReadModelStoreKey = `${readModel.ReadModelType}:${contractAddress}`
-  readModel.ContractAddress = contractAddress
-  return await TransmuteFramework.ReadModel.maybeSyncReadModel(eventStore, readModel, reducer)
+
+export const syncEventStore = async (bindingModel, _callback) => {
+  // console.log(TransmuteFramework)
+  if (TransmuteFramework.EventStoreContract) {
+    let { contractAddress, fromAddress } = bindingModel
+    let eventStore = await TransmuteFramework.EventStoreContract.at(contractAddress)
+    //   console.log('eventStore: ', eventStore)
+    
+    let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModel, reducer)
+    //   console.log('updatedReadModel: ', updatedReadModel)
+    _callback(updatedReadModel)
+  } else {
+    _callback(readModel)
+  }
 }
 
-export const rebuild = async (bindingModel, _callback) =>{
-  let { contractAddress } = bindingModel
-  let eventStore = await mercuryEventStoreContract.at(contractAddress)
-  let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, readModel, reducer)
+export const writeEvent = async (bindingModel, _callback) => {
+  let { contractAddress, fromAddress, event } = bindingModel
+  event = _.cloneDeep(event)
+  let eventStore = await TransmuteFramework.EventStoreContract.at(contractAddress)
+  let events = await TransmuteFramework.EventStore.writeTransmuteCommand(eventStore, fromAddress, event)
+  let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModel, reducer)
   _callback(updatedReadModel)
 }
 
-export const saveEvent = async(bindingModel, _callback) => {
-  let { contractAddress, fromAddress,  event } = bindingModel
-  event = cloneDeep(event)
-  let eventStore = await mercuryEventStoreContract.at(contractAddress)
-  let events = await TransmuteFramework.EventStore.writeEvent(eventStore, event, fromAddress)
-  let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, readModel, reducer)
-  _callback(updatedReadModel)
-}
+// export const getMercuryEventStoreAddresses = async (fromAddress, _callback) => {
+//   let factory = await mercuryEventStoreFactory.deployed()
+//   let mercuryEventStoreContractAddresses = await factory.getMercuryEventStores({
+//     from: fromAddress
+//   })
+//   _callback(mercuryEventStoreContractAddresses)
+// }
 
 
-// move this to another function... for later..
-// let events = await TransmuteFramework.EventStore.readEvents(eventStore, 0)
-// console.log('all-events: ', events)
+// // move this to another function... for later..
+// // let events = await TransmuteFramework.EventStore.readEvents(eventStore, 0)
+// // console.log('all-events: ', events)
