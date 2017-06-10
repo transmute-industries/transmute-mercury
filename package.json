@@ -9,7 +9,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "welcome": "echo 🤖  && say welcome to transmute mercury, an awesome react blockchain seed app",
+    "welcome": "echo 🤖  && say transmute framework initialized",
     "transmute": "node ./node_modules/transmute-framework/build/cli/index.js",
     "compile": "better-npm-run compile",
     "lint": "eslint src tests bin build server",
