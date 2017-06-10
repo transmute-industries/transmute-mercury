@@ -13,7 +13,8 @@ import {
   PROJECTS_PATH,
   ACCOUNT_PATH,
   WEB3_PATH,
-  LOGIN_PATH
+  LOGIN_PATH,
+  FACTORY_PATH
 } from 'constants/paths'
 
 // Components
@@ -25,6 +26,9 @@ import FlatButton from 'material-ui/FlatButton'
 import DownArrow from 'material-ui/svg-icons/hardware/keyboard-arrow-down'
 import Avatar from 'material-ui/Avatar'
 
+import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more'
+
+import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar'
 
 const buttonStyle = {
   color: 'white',
@@ -85,37 +89,62 @@ export default class Navbar extends Component {
       </IconButton>
     )
 
-    const mainMenu = (
-      <div className={classes.menu}>
 
-        {/*<Link to={LOGIN_PATH}>
-          <FlatButton
-            label='Login'
-            style={buttonStyle}
-          />
-        </Link>*/}
+    const mainMenu = (
+
+       <ToolbarGroup>
         <FlatButton
+          className='visible-sm'
           href='https://news.transmute.industries'
           label='News'
           style={buttonStyle}
         />
         <FlatButton
+          className='visible-sm'
           href='https://framework.transmute.industries'
           label='Docs'
           style={buttonStyle}
         />
         <FlatButton
-          href='https://github.com/transmute-industries/transmute-mercury'
+          className='visible-sm'
+          href=''
           label='Source'
           style={buttonStyle}
         />
-        <Link to={WEB3_PATH}>
-          <FlatButton
-            label='Web3'
-            style={buttonStyle}
-          />
-        </Link>
-      </div>
+  
+        <ToolbarSeparator />
+          <IconMenu
+            iconButtonElement={
+              <IconButton touch={true}>
+                <NavigationExpandMoreIcon color='white'/>
+              </IconButton>
+            }
+          >
+            <MenuItem
+              primaryText='Factory'
+              onTouchTap={() => this.context.router.push(FACTORY_PATH)}
+            />
+            <MenuItem
+              primaryText='Web3'
+              onTouchTap={() => this.context.router.push(WEB3_PATH)}
+            />
+            <MenuItem
+              className='hidden-sm'
+              primaryText='News'
+              onTouchTap={() => window.location.href = 'https://news.transmute.industries'}
+            />
+            <MenuItem
+              className='hidden-sm'
+              primaryText='Docs'
+              onTouchTap={() => window.location.href = 'https://framework.transmute.industries'}
+            />
+            <MenuItem
+              className='hidden-sm'
+              primaryText='Source'
+              onTouchTap={() => window.location.href = 'https://github.com/transmute-industries/transmute-mercury'}
+            />
+          </IconMenu>
+        </ToolbarGroup>
     )
 
     const rightMenu = accountExists ? (
@@ -148,7 +177,7 @@ export default class Navbar extends Component {
       <AppBar
         title={
           <Link to={accountExists ? `${PROJECTS_PATH}` : '/'} className={classes.brand}>
-            <img src='transmute.logo.white.png' style={{ height: '52px' }} />
+            <img src='/transmute.logo.white.png' style={{ height: '52px' }} />
           </Link>
         }
         showMenuIconButton={false}

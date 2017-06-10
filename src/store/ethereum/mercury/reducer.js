@@ -14,6 +14,8 @@ export const initialState = {
     }
   ],
   defaultAddress: null,
+  factoryEventStores: [],
+  factoryLoaded: false
 }
 
 const handlers = {
@@ -25,7 +27,7 @@ const handlers = {
     })
   },
 
-  ['EVENT_STORE_ADDRESSES_RECEIVED']: (state, action) => {
+  ['FACTORY_EVENT_STORE_ADDRESSES_RECEIVED']: (state, action) => {
     if (action.payload.length === 0) {
       return state
     }
@@ -63,6 +65,14 @@ const handlers = {
       EventStore: action.payload
     })
   },
+
+  ['FACTORY_EVENT_STORES_RECEIVED']: (state, action) => {
+    return Object.assign({}, state, {
+      factoryEventStores: action.payload,
+      factoryLoaded: true
+    })
+  },
+
   ['DEMO_STEP']: (state, action) => {
     return Object.assign({}, state, {
       step: action.payload,

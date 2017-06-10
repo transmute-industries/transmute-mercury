@@ -18,7 +18,6 @@ export const getEventStoresByCreator = async (fromAddress, _callback) => {
     let eventStoreAddresses = await factory.getEventStoresByCreator({
       from: fromAddress
     })
-    // console.log('from middleware: ', eventStoreAddresses)
     _callback(eventStoreAddresses)
   } else {
     _callback([])
@@ -42,14 +41,16 @@ export const createEventStore = async (bindingModel, _callback) => {
   }
 }
 
-
-export const syncEventStore = async (bindingModel, _callback) => {
+export const syncEventStore = async (bindingModel, _callback = ()=>{}) => {
   // console.log(TransmuteFramework)
   if (TransmuteFramework.EventStoreContract) {
     let { contractAddress, fromAddress } = bindingModel
+    let readModelBase = _.cloneDeep(readModel)
+    readModelBase.contractAddress = contractAddress
     let eventStore = await TransmuteFramework.EventStoreContract.at(contractAddress)
-    let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModel, reducer)
+    let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModelBase , reducer)
     _callback(updatedReadModel)
+    return updatedReadModel
   } else {
     _callback(readModel)
   }
@@ -58,11 +59,15 @@ export const syncEventStore = async (bindingModel, _callback) => {
 export const writeEvent = async (bindingModel, _callback) => {
   let { contractAddress, fromAddress, event } = bindingModel
   event = _.cloneDeep(event)
+  let readModelBase = _.cloneDeep(readModel)
+  readModelBase.contractAddress = contractAddress
   let eventStore = await TransmuteFramework.EventStoreContract.at(contractAddress)
   let events = await TransmuteFramework.EventStore.writeTransmuteCommand(eventStore, fromAddress, event)
-  let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModel, reducer)
+  let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModelBase, reducer)
   _callback(updatedReadModel)
 }
+
+
 
 // export const getMercuryEventStoreAddresses = async (fromAddress, _callback) => {
 //   let factory = await mercuryEventStoreFactory.deployed()

@@ -28,15 +28,14 @@ import { connect } from 'react-redux'
 export default class CreateEvent extends React.Component {
 
   state = {
-    eventCode: JSON.stringify(this.props.mercury.events[this.props.mercury.step], null, "\t")
+    eventCode: JSON.stringify(this.props.mercury.events[this.props.mercury.step], null, '\t')
   }
 
   componentWillReceiveProps(nextProps) {
     let event_code = nextProps.mercury.events[nextProps.mercury.step]
-    console.log('can has the correct event code...', event_code)
     this.setState({
-      eventCode: JSON.stringify(event_code, null, "\t"),
-      eventStoreState: JSON.stringify(nextProps.mercury.EventStore, null, "\t")
+      eventCode: JSON.stringify(event_code, null, '\t'),
+      eventStoreState: JSON.stringify(nextProps.mercury.EventStore, null, '\t')
     })
   }
   render() {

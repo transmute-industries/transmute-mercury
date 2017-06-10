@@ -24,7 +24,6 @@
   align-items: flex-start;
   flex-wrap: wrap;
   flex-grow: 1;
-  height: 64px;
 }
 .avatar {
   margin-right: 1rem;
@@ -51,6 +50,7 @@
 }
 .menu {
   // margin-top: 6px;
+  display: inline-block;
 }
 .link {
   text-decoration: none;

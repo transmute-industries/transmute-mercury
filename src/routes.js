@@ -10,7 +10,7 @@ import {
   EVENT_SUMMARY_PATH,
   READ_MODEL_PATH,
   PROJECTION_PATH,
-  TOKENS_PATH
+  FACTORY_PATH
 } from './constants/paths'
 
 import CoreLayout from './layouts/CoreLayout/CoreLayout'
@@ -24,7 +24,7 @@ import ProjectPage from './components/Pages/Projects/Project'
 import EventSummaryPage from './components/Pages/EventStore/EventSummary'
 import ReadModelPage from './components/Pages/EventStore/ReadModel'
 import ProjectionPage from './components/Pages/EventStore/Projection'
-import TokenPage from './components/Pages/Token'
+import FactoryPage from './components/Pages/EventStore/Factory'
 
 const routes = (store) => {
   return (
@@ -38,9 +38,8 @@ const routes = (store) => {
       <Route path={READ_MODEL_PATH} component={ReadModelPage} />
       <Route path={PROJECTION_PATH} component={ProjectionPage} />
 
-      <Route path={TOKENS_PATH} component={TokenPage} />
+      <Route path={FACTORY_PATH} component={FactoryPage} />
 
-      
       <Redirect from='*' to='/' />
     </Route>
   )
