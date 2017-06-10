@@ -144,9 +144,9 @@ export default class EventsTable extends Component {
 
   handleRowSelection(selectedRows) {
     // console.log('selectedRows: ' + selectedRows)
-    let selectedEs = this.props.mercury.transmuteEvents[selectedRows]
-    console.log('selectedEs.contractAddress: ', selectedEs.contractAddress)
-    browserHistory.push(`/eventstore/${selectedEs.contractAddress}/events`)
+    // let selectedEs = this.props.mercury.transmuteEvents[selectedRows]
+    // console.log('selectedEs.contractAddress: ', selectedEs.contractAddress)
+    // browserHistory.push(`/eventstore/${selectedEs.contractAddress}/events`)
   }
 
   handlePreviousPageClick() {
