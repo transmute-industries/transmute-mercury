@@ -17,6 +17,8 @@ contract EventStore is Killable {
 
     address TxOrigin;
     uint Created;
+    bool IsAuthorized;
+    bytes32 PermissionDomain;
     uint PropertyCount;
     mapping (uint => EsEventPropertyStruct) PropertyValues;
   }
@@ -73,20 +75,21 @@ contract EventStore is Killable {
     _;
   }
 
-  modifier onlyReadAuthorized(bytes32 _permissionDomain) {
-    if (!ACLMapping[tx.origin][_permissionDomain].read)
+  modifier onlyReadAuthorized(uint _eventIndex) {
+    EsEventStruct memory solidityEvent = solidityEvents[_eventIndex];
+    if (solidityEvent.IsAuthorized && (!ACLAddresses.contains(tx.origin) || !ACLMapping[tx.origin][solidityEvent.PermissionDomain].read))
       throw;
     _;
   }
 
   modifier onlyWriteAuthorized(bool _isAuthorizedEvent, bytes32 _permissionDomain) {
-    if (_isAuthorizedEvent && !ACLMapping[tx.origin][_permissionDomain].write)
+    if (_isAuthorizedEvent && !ACLAddresses.contains(tx.origin))
       throw;
     _;
   }
 
-  modifier onlyReadAndWriteAuthorized(bytes32 _permissionDomain) {
-    if (!ACLMapping[tx.origin][_permissionDomain].write || !ACLMapping[tx.origin][_permissionDomain].read)
+  modifier onlyReadAndWriteAuthorized(bool _isAuthorizedEvent, bytes32 _permissionDomain) {
+    if (_isAuthorizedEvent && (!ACLAddresses.contains(tx.origin) || !ACLMapping[tx.origin][_permissionDomain].write || !ACLMapping[tx.origin][_permissionDomain].read))
       throw;
     _;
   }
@@ -125,9 +128,9 @@ contract EventStore is Killable {
 
     writeEvent(_eventType, 'v0', 'Address', _isAuthorizedEvent, _permissionDomain, _ACLAddress, 0, '', 0);
 
-    if (_readEventType.length != 0)
+    if (_readEventType != '')
       grantReadAccess(_readEventType, _isAuthorizedEvent, _permissionDomain, _ACLAddress);
-    if (_writeEventType.length != 0)
+    if (_writeEventType != '')
       grantWriteAccess(_writeEventType, _isAuthorizedEvent, _permissionDomain, _ACLAddress);
   }
 
@@ -186,6 +189,8 @@ contract EventStore is Killable {
     solidityEvent.Id = solidityEventCount;
     solidityEvent.Type = _eventType;
     solidityEvent.Created = _created;
+    solidityEvent.IsAuthorized = _isAuthorizedEvent;
+    solidityEvent.PermissionDomain = _permissionDomain;
     solidityEvent.TxOrigin = tx.origin;
     solidityEvent.Version = _version;
 
@@ -222,16 +227,16 @@ contract EventStore is Killable {
   }
 
   // READ EVENT
-  function readEvent(bytes32 _permissionDomain, uint _eventIndex)
-    public onlyReadAuthorized(_permissionDomain)
+  function readEvent(uint _eventIndex)
+    public onlyReadAuthorized(_eventIndex)
     returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, address, uint, uint)
   {
     EsEventStruct memory solidityEvent = solidityEvents[_eventIndex];
     return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.TxOrigin, solidityEvent.Created, solidityEvent.PropertyCount);
   }
 
-  function readEventProperty(bytes32 _permissionDomain, uint _eventIndex, uint _eventPropertyIndex)
-    public onlyReadAuthorized(_permissionDomain)
+  function readEventProperty(uint _eventIndex, uint _eventPropertyIndex)
+    public onlyReadAuthorized(_eventIndex)
     returns (uint, uint, bytes32, bytes32, address, uint, bytes32)
   {
     EsEventPropertyStruct memory prop = solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex];
