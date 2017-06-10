@@ -6,7 +6,7 @@ export const styles = {
   fontSize: '13px',
   fontWeight: '400',
   // height: '100%',
-  overflow: 'hidden',
+  overflow: 'scroll',
   textAlign: 'left',
   prefix: {
     color: '#00E5FF',

@@ -25,11 +25,15 @@ export default class HomePage extends Component {
     return (
       <div>
         <Splash />
-        
+
         <OneLiner />
         <OneTwoThree />
         <Demo />
-        <CodeExample/>
+        {
+          !this.props.web3.defaultAddress &&
+          <CodeExample />
+        }
+
         {/*<OneTwo />
         <Quotes/>
         <Accolades/>*/}

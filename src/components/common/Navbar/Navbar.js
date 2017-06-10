@@ -63,7 +63,7 @@ export default class Navbar extends Component {
     this.context.router.push('/')
   }
 
-  render () {
+  render() {
     let defaultAvatar = 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg'
     const { account } = this.props
     const accountExists = isLoaded(account) && !isEmpty(account)
@@ -87,19 +87,14 @@ export default class Navbar extends Component {
 
     const mainMenu = (
       <div className={classes.menu}>
-          <Link to={WEB3_PATH}>
-          <FlatButton
-            label='Web3'
-            style={buttonStyle}
-          />
-        </Link>
-         {/*<Link to={LOGIN_PATH}>
+
+        {/*<Link to={LOGIN_PATH}>
           <FlatButton
             label='Login'
             style={buttonStyle}
           />
         </Link>*/}
-         <FlatButton
+        <FlatButton
           href='https://news.transmute.industries'
           label='News'
           style={buttonStyle}
@@ -114,6 +109,12 @@ export default class Navbar extends Component {
           label='Source'
           style={buttonStyle}
         />
+        <Link to={WEB3_PATH}>
+          <FlatButton
+            label='Web3'
+            style={buttonStyle}
+          />
+        </Link>
       </div>
     )
 
@@ -128,7 +129,7 @@ export default class Navbar extends Component {
           primaryText='Account'
           onTouchTap={() => this.context.router.push(ACCOUNT_PATH)}
         />
-         <MenuItem
+        <MenuItem
           primaryText='Projects'
           onTouchTap={() => this.context.router.push(PROJECTS_PATH)}
         />
@@ -147,7 +148,7 @@ export default class Navbar extends Component {
       <AppBar
         title={
           <Link to={accountExists ? `${PROJECTS_PATH}` : '/'} className={classes.brand}>
-            <img src='transmute.logo.white.png' style={{height: '52px'}}/>
+            <img src='transmute.logo.white.png' style={{ height: '52px' }} />
           </Link>
         }
         showMenuIconButton={false}

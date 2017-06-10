@@ -10,10 +10,7 @@ export const initialState = {
   step: 0,
   history: [
     {
-      value: 'welcome to the transmute framework'
-    },
-    {
-      value: 'type transmute help'
+      value: '👑   Transmute Framework   👑'
     }
   ],
   defaultAddress: null,

@@ -42,32 +42,40 @@ export default class TransmuteTerminal extends React.Component {
     open: false,
   }
 
+
   handleOpen = () => {
     this.setState({ open: true })
-
-    let from = this.props.mercury.defaultAddress
-
-    let simpleEvent = JSON.stringify({
-      type: "PATIENT_REGISTERED",
-      payload: {
-          patientId: 'patient-0',
-          patientName: 'Hilary',
-          insurance: 'Medicare'
-      }
-    })
-
-    let writeESEventCommand =  `transmute eventstore write --from ${from} --event ${simpleEvent}`
-    let createESCommand = `transmute eventstore create --from ${from}`
-
     setTimeout(() => {
       let input = document.querySelector('.ReactBash input:enabled')
-      // input.value = createESCommand
-      input.value = writeESEventCommand
+      input.value = 'transmute help'
     }, 1 * 1000)
   }
 
   handleClose = () => {
     this.setState({ open: false })
+  }
+
+  handleSelectDemoCommand = (command) => {
+    console.log('demo command...', command)
+    let input = document.querySelector('.ReactBash input:enabled')
+    let from = this.props.mercury.defaultAddress
+    let simpleEvent = JSON.stringify({
+      type: "PATIENT_REGISTERED",
+      payload: {
+        patientId: 'patient-0',
+        patientName: 'Hilary',
+        insurance: 'Medicare'
+      }
+    })
+
+    let writeESEventCommand = `transmute eventstore write --from ${from} --event ${simpleEvent}`
+    let createESCommand = `transmute eventstore create --from ${from}`
+
+    switch (command) {
+      case 'create': input.value = createESCommand; break
+      case 'write': input.value = writeESEventCommand; break
+      case 'show': input.value = `transmute eventstore show`; break
+    }
   }
 
   render() {
@@ -77,20 +85,38 @@ export default class TransmuteTerminal extends React.Component {
       createEventStore,
       writeEvent
     }
-    
     let extensions = buildExtensions(mercury, actions)
-    
+
     return (
       <div style={{ display: 'inline', paddingLeft: '16px' }}>
         <RaisedButton label='Demo' secondary={true} onTouchTap={this.handleOpen} />
         <Dialog
           title='Terminal Demo'
           actions={[
+            <RaisedButton
+              label='Create'
+              secondary={true}
+              onTouchTap={() => { this.handleSelectDemoCommand('create') }}
+              style={{ marginRight: '8px' }}
+            />,
+            <RaisedButton
+              label='Write'
+              secondary={true}
+              onTouchTap={() => { this.handleSelectDemoCommand('write') }}
+              style={{ marginRight: '8px' }}
+            />,
+            <RaisedButton
+              label='Show'
+              secondary={true}
+              onTouchTap={() => { this.handleSelectDemoCommand('show') }}
+              style={{ marginRight: '8px' }}
+            />,
             <FlatButton
               label='Close'
               primary={true}
               onTouchTap={this.handleClose}
             />
+
           ]}
           modal={true}
           contentStyle={customContentStyle}

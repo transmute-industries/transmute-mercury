@@ -4,7 +4,7 @@ import Constants from './constants'
 
 export const readModel = {
   readModelStoreKey: '', // readModelType:contractAddress
-  readModelType: 'HealthcareSystem', 
+  readModelType: 'Healthcare', 
   contractAddress: '0x0000000000000000000000000000000000000000',
   lastEvent: null, // Last Event Index Processed
   model: {} // where all the updates from events will be made
