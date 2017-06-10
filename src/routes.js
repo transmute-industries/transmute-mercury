@@ -7,7 +7,7 @@ import {
   ACCOUNT_PATH,
   PROJECTS_PATH,
   PROJECT_PATH,
-  EVENT_SUMMARY_PATH,
+  EVENTS_PAGE,
   READ_MODEL_PATH,
   PROJECTION_PATH,
   FACTORY_PATH
@@ -21,10 +21,11 @@ import AccountPage from './components/Pages/Account'
 import ProjectsPage from './components/Pages/Projects'
 import ProjectPage from './components/Pages/Projects/Project'
 
-import EventSummaryPage from './components/Pages/EventStore/EventSummary'
+
 import ReadModelPage from './components/Pages/EventStore/ReadModel'
 import ProjectionPage from './components/Pages/EventStore/Projection'
 import FactoryPage from './components/Pages/EventStore/Factory'
+import EventsPage from './components/Pages/EventStore/Events'
 
 const routes = (store) => {
   return (
@@ -34,11 +35,12 @@ const routes = (store) => {
       <Route path={LOGIN_PATH} component={SignupPage} />
       <Route path={ACCOUNT_PATH} component={AccountPage} />
       <Route path={PROJECTS_PATH} component={ProjectsPage} />
-      <Route path={EVENT_SUMMARY_PATH} component={EventSummaryPage} />
+      
       <Route path={READ_MODEL_PATH} component={ReadModelPage} />
       <Route path={PROJECTION_PATH} component={ProjectionPage} />
 
       <Route path={FACTORY_PATH} component={FactoryPage} />
+      <Route path={EVENTS_PAGE} component={EventsPage} />
 
       <Redirect from='*' to='/' />
     </Route>

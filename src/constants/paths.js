@@ -6,7 +6,7 @@ export const PROJECTS_PATH = '/projects'
 export const PROJECT_PATH = '/projects/:projectname'
 
 export const FACTORY_PATH = '/eventstore/factory'
-export const EVENT_SUMMARY_PATH = '/eventstore/:address/events'
+export const EVENTS_PAGE = '/eventstore/:address/events'
 export const READ_MODEL_PATH = '/eventstore/:address/read-model/:address'
 export const PROJECTION_PATH = '/eventstore/:address/projection/:address'
 
@@ -18,7 +18,7 @@ export default {
   LOGIN_PATH,
   PROJECTS_PATH,
   PROJECT_PATH,
-  EVENT_SUMMARY_PATH,
+  EVENTS_PAGE,
   READ_MODEL_PATH,
   PROJECTION_PATH,
   FACTORY_PATH

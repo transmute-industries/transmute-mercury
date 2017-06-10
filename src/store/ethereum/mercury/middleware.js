@@ -42,7 +42,6 @@ export const createEventStore = async (bindingModel, _callback) => {
 }
 
 export const syncEventStore = async (bindingModel, _callback = ()=>{}) => {
-  // console.log(TransmuteFramework)
   if (TransmuteFramework.EventStoreContract) {
     let { contractAddress, fromAddress } = bindingModel
     let readModelBase = _.cloneDeep(readModel)
@@ -65,19 +64,16 @@ export const writeEvent = async (bindingModel, _callback) => {
   let events = await TransmuteFramework.EventStore.writeTransmuteCommand(eventStore, fromAddress, event)
   let updatedReadModel = await getCachedReadModel(contractAddress, eventStore, fromAddress, readModelBase, reducer)
   _callback(updatedReadModel)
+  return updatedReadModel
 }
 
-
-
-// export const getMercuryEventStoreAddresses = async (fromAddress, _callback) => {
-//   let factory = await mercuryEventStoreFactory.deployed()
-//   let mercuryEventStoreContractAddresses = await factory.getMercuryEventStores({
-//     from: fromAddress
-//   })
-//   _callback(mercuryEventStoreContractAddresses)
-// }
-
-
-// // move this to another function... for later..
-// // let events = await TransmuteFramework.EventStore.readEvents(eventStore, 0)
-// // console.log('all-events: ', events)
+export const readEvents = async (bindingModel, _callback) => {
+  let { contractAddress, fromAddress, eventIndex } = bindingModel
+  let eventStore = await TransmuteFramework.EventStoreContract.at(contractAddress)
+  let events = await TransmuteFramework.EventStore.readTransmuteEvents(eventStore, fromAddress, eventIndex || 0)
+  events = events.map((event) =>{
+    return TransmuteFramework.EventStore.EventTypes.flatten(event)
+  })
+  _callback(events)
+  return events
+}

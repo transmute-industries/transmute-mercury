@@ -15,7 +15,9 @@ export const initialState = {
   ],
   defaultAddress: null,
   factoryEventStores: [],
-  factoryLoaded: false
+  factoryLoaded: false,
+  transmuteEvents: [],
+  transmuteEventsLoaded: false
 }
 
 const handlers = {
@@ -77,7 +79,15 @@ const handlers = {
     return Object.assign({}, state, {
       step: action.payload,
     })
+  },
+
+  ['EVENTS_READ']: (state, action) => {
+    return Object.assign({}, state, {
+      transmuteEvents: action.payload,
+      transmuteEventsLoaded: true
+    })
   }
+
 }
 
 export const mercuryReducer = (state = initialState, action) => {

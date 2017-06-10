@@ -15,14 +15,6 @@ export const setStep = (step) => dispatch => {
   })
 }
 
-// export const getMercuryEventStoreAddresses = (fromAddress) => dispatch => {
-//   Middleware.getMercuryEventStoreAddresses(fromAddress, (addresses) => {
-//     dispatch({
-//       type: Constants.FACTORY_EVENT_STORE_ADDRESSES_RECEIVED,
-//       payload: addresses
-//     })
-//   })
-// }
 
 
 export const syncEventStore = (bindingModel) => dispatch => {
@@ -43,25 +35,25 @@ export const getEventStoresByCreator = (bindingModel) => dispatch => {
       payload: addresses
     })
 
-    if(addresses.length){
+    // if(addresses.length){
 
-      let eventStoreModels = await Promise.all(addresses.map((addr) => {
-        return Middleware.syncEventStore({
-          contractAddress: addr,
-          fromAddress: bindingModel.fromAddress
-        })
-      }))
+    //   let eventStoreModels = await Promise.all(addresses.map((addr) => {
+    //     return Middleware.syncEventStore({
+    //       contractAddress: addr,
+    //       fromAddress: bindingModel.fromAddress
+    //     })
+    //   }))
 
-      dispatch({
-        type: 'FACTORY_EVENT_STORES_RECEIVED',
-        payload: eventStoreModels
-      })
+    //   dispatch({
+    //     type: 'FACTORY_EVENT_STORES_RECEIVED',
+    //     payload: eventStoreModels
+    //   })
 
-      dispatch({
-        type: 'EVENT_STORE_RECEIVED',
-        payload: eventStoreModels[0]
-      })
-    }
+    //   dispatch({
+    //     type: 'EVENT_STORE_RECEIVED',
+    //     payload: eventStoreModels[0]
+    //   })
+    // }
 
    
   })
@@ -95,3 +87,11 @@ export const writeEvent = (bindingModel) => dispatch => {
   })
 }
 
+export const readEvents = (bindingModel) => dispatch => {
+  Middleware.readEvents(bindingModel, (events) => {
+    dispatch({
+      type: 'EVENTS_READ',
+      payload: events
+    })
+  })
+}
