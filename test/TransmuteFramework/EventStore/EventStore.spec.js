@@ -26,6 +26,17 @@ contract('EventStore', (accounts) => {
             Bytes32Value: '',
             PropertyCount: 0
         },
+        testUnauthorizedAddressValueEventWithProperty: {
+            Type: 'TEST_AUTH_EVENT',
+            Version: 'v0',
+            ValueType: 'Object',
+            IsAuthorizedEvent: false,
+            PermissionDomain: 'ES',
+            AddressValue: web3.eth.accounts[1],
+            UIntValue: 0,
+            Bytes32Value: '',
+            PropertyCount: 1
+        },
         testAuthorizedAddressValueEventWithProperty: {
             Type: 'TEST_AUTH_EVENT',
             Version: 'v0',
@@ -179,7 +190,7 @@ contract('EventStore', (accounts) => {
         it('emits a EsEvent, ES_WRITE_GRANTED of ValueType Address', async () => {
             let adminTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', 'ES_WRITE_GRANTED', false, 'ES', accounts[0])
             let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', '', '', false, 'ES', accounts[1])
-            let grantTX = await _eventStore.grantWriteAccess('ES_WRITE_GRANTED', true, 'ES', accounts[1]);
+            let grantTX = await _eventStore.grantWriteAccess('ES_WRITE_GRANTED', true, 'ES', accounts[1])
             assert(reqTX.logs.length === 1)
             assert(grantTX.logs.length === 1)
             assert(grantTX.logs[0].event === 'EsEvent')
@@ -196,7 +207,7 @@ contract('EventStore', (accounts) => {
     })
 
     contract('revokeWriteAccess', async () => {
-        it('emits a EsEvent, ES_WRITE_REVOKED of ValueType Address', async () => {
+        it('emits an EsEvent, ES_WRITE_REVOKED of ValueType Address', async () => {
             let adminTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', 'ES_WRITE_GRANTED', false, 'ES', accounts[0])
             let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', '', 'ES_WRITE_GRANTED', false, 'ES', accounts[1])
             let revokeTX = await _eventStore.revokeWriteAccess('ES_WRITE_REVOKED', true, 'ES', accounts[1])
@@ -225,29 +236,34 @@ contract('EventStore', (accounts) => {
     // })
 
     contract('writeEvent', async () => {
-        // it('throws a type error if called by an unauthorized address and event is authorized', async () => {
-        //     try {
-        //         let tx = await writeEvent(Events.testAuthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
-        //         console.log('tx: ', tx)
-        //     } catch (e) {
-        //         console.log('e: ', e)
-        //         assert.equal(isTypeError(e), true, "expected an unauthorized write to cause a type error")
-        //     }
-        // })
-        //
-        // it('throws a vm exception if called by an unauthorized ACLAddress and event is authorized', async () => {
-        //     try {
-        //         let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', '', false, 'ES', accounts[1])
-        //         let tx = await writeEvent(Events.testAuthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
-        //         console.log('tx: ', tx)
-        //     } catch (e) {
-        //         console.log('e: ', e)
-        //         assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
-        //     }
-        // })
+        it('throws a vm exception if called by an unauthorized address and event is authorized', async () => {
+            try {
+                let tx = await writeEvent(Events.testAuthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
+            } catch (e) {
+                assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
+            }
+        })
 
-        it('emits EsEvent ' + Events.testAuthorizedAddressValueEvent.Type + ' of ValueType Address if called by an authorized ACLAddress', async () => {
-            let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', '', false, 'ES', accounts[1])
+        it('throws a vm exception if called by an unauthorized ACLAddress and event is authorized', async () => {
+            try {
+                let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', '', false, 'ES', accounts[1])
+                let tx = await writeEvent(Events.testAuthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
+            } catch (e) {
+                assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
+            }
+        })
+
+        it('emits an EsEvent ' + Events.testAuthorizedAddressValueEvent.Type + ' of ValueType Address if called by an unauthorized ACLAddress and event is unauthorized', async () => {
+            let tx = await writeEvent(Events.testUnauthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
+
+            let solidityEvent = tx.logs[0].args
+            assert.equal(toAscii(solidityEvent.Type), Events.testUnauthorizedAddressValueEvent.Type, 'expected event to be on type ' + Events.testUnauthorizedAddressValueEvent.Type)
+            assert.equal(web3.isAddress(solidityEvent.TxOrigin), true, "expected TxOrigin to be an address")
+            assert.equal(solidityEvent.TxOrigin, accounts[1], "expected TxOrigin to be accounts[1]")
+        })
+
+        it('emits an EsEvent ' + Events.testAuthorizedAddressValueEvent.Type + ' of ValueType Address if called by an authorized ACLAddress and event is authorized', async () => {
+            let adminTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', 'ES_WRITE_GRANTED', false, 'ES', accounts[0])
             let grantTX = await _eventStore.grantWriteAccess('ES_WRITE_GRANTED', true, 'ES', accounts[1])
             let tx = await writeEvent(Events.testAuthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
 
@@ -257,204 +273,265 @@ contract('EventStore', (accounts) => {
             assert.equal(solidityEvent.TxOrigin, accounts[1], "expected TxOrigin to be accounts[1]")
         })
     })
-    //
-    // contract('writeEventProperty', async () => {
-    //     it('throws a type error if called by an unauthorized address and event is authorized', async () => {
-    //         let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', 'ES_WRITE_GRANTED', false, 'ES', accounts[1])
-    //         let eventTX = await writeEvent(Events.testAuthorizedAddressValueEventWithProperty, {from: accounts[1], gas: 2000000})
-    //         let solidityEvent = eventTX.logs[0].args
-    //         try {
-    //             let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'Ls', 0, 0, 'CustomValue', {
-    //                 from: accounts[2],
-    //                 gas: 2000000
-    //             })
-    //         } catch (e) {
-    //             console.log('e: ', e)
-    //             assert.equal(isTypeError(e), true, "expected an unauthorized write to cause a type error")
-    //         }
-    //     })
-    //
-    //     it('throws a vm exception if called by an unauthorized ACLAddress and event is authorized', async () => {
-    //         let eventTX = await writeEvent(Events.testAuthorizedAddressValueEventWithProperty, {from: accounts[1], gas: 2000000})
-    //         let revokeTX = await _eventStore.revokeWriteAccess('ES_WRITE_REVOKED', true, 'ES', accounts[1])
-    //         let solidityEvent = eventTX.logs[0].args
-    //         try {
-    //             let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'ES', 0, 0, 'CustomValue', {
-    //                 from: accounts[1],
-    //                 gas: 2000000
-    //             })
-    //         } catch (e) {
-    //             assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
-    //         }
-    //     })
-        //
-        // it('throws an error if property already exists', async () => {
-        //     let reqTX = await _eventStore.addRequestorAddress(accounts[6])
-        //     let authTX = await _eventStore.authorizeRequestorAddress(accounts[6])
-        //     let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
-        //         from: accounts[6],
-        //         gas: 2000000
-        //     })
-        //     let solidityEvent = eventTx.logs[0].args
-        //     let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
-        //         from: accounts[6],
-        //         gas: 2000000
-        //     })
-        //     try {
-        //         let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue2', {
-        //             from: accounts[6],
-        //             gas: 2000000
-        //         })
-        //         // console.log(propTx)
-        //     } catch (e) {
-        //         assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
-        //     }
-        // })
-        //
-        // it('emit a EsEventProperty', async () => {
-        //     let reqTX = await _eventStore.addRequestorAddress(accounts[7])
-        //     let authTX = await _eventStore.authorizeRequestorAddress(accounts[7])
-        //     let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
-        //         from: accounts[7],
-        //         gas: 2000000
-        //     })
-        //     let solidityEvent = eventTx.logs[0].args
-        //     let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
-        //         from: accounts[7],
-        //         gas: 2000000
-        //     })
-        //     // console.log(propTx)
-        //     assert(propTx.logs.length === 1)
-        //     assert(propTx.logs[0].event === 'EsEventProperty')
-        //     let solidityEventProp = propTx.logs[0].args
-        //     assert.equal(toAscii(solidityEventProp.ValueType), 'Bytes32', 'expected event prop type to be Bytes32')
-        //     assert.equal(toAscii(solidityEventProp.Bytes32Value), 'CustomValue', 'expected event prop bytes32Value to be CustomValue')
-        // })
-    // })
 
-    //
-    // contract('readEvent', async () => {
-    //     it('throws an error if called by an unauthorized address', async () => {
-    //         let reqTX = await _eventStore.addRequestorAddress(accounts[2])
-    //         let authTX = await _eventStore.authorizeRequestorAddress(accounts[2])
-    //         let eventTx = await _eventStore.writeEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount, {
-    //             from: accounts[2],
-    //             gas: 2000000
-    //         })
-    //         let solidityEvent = eventTx.logs[0].args
-    //         try {
-    //             let eventType = await _eventStore.readEvent.call(solidityEvent.Id, {
-    //                 from: accounts[4],
-    //                 gas: 2000000
-    //             })
-    //             // console.log(eventType)
-    //         } catch (e) {
-    //             assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
-    //         }
-    //     })
-    //     it('emits a EsEvent', async () => {
-    //         let reqTX = await _eventStore.addRequestorAddress(accounts[3])
-    //         let authTX = await _eventStore.authorizeRequestorAddress(accounts[3])
-    //         let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
-    //             from: accounts[3],
-    //             gas: 2000000
-    //         })
-    //         let solidityEvent = eventTx.logs[0].args
-    //         let returnVals = await _eventStore.readEvent.call(solidityEvent.Id, {
-    //             from: accounts[3]
-    //         })
-    //
-    //         // console.log(returnVals)
-    //
-    //         let eventId = returnVals[0].toNumber()
-    //         assert.equal(eventId, solidityEvent.Id, 'expected read to match write')
-    //
-    //         let eventType = toAscii(returnVals[1])
-    //         assert.equal(eventType, toAscii(solidityEvent.Type), 'expected read to match write')
-    //
-    //         let eventVersion = toAscii(returnVals[2])
-    //         assert.equal(eventVersion, toAscii(solidityEvent.Version), 'expected read to match write')
-    //
-    //         let valueType = toAscii(returnVals[3])
-    //         assert.equal(valueType, toAscii(solidityEvent.ValueType), 'expected read to match write')
-    //
-    //         let addressValue = returnVals[4]
-    //         assert.equal(addressValue, solidityEvent.AddressValue, 'expected read to match write')
-    //
-    //         let uintValue = returnVals[5].toNumber()
-    //         assert.equal(uintValue, solidityEvent.UIntValue.toNumber(), 'expected read to match write')
-    //
-    //         let bytes32Value = toAscii(returnVals[6])
-    //         assert.equal(bytes32Value, toAscii(solidityEvent.Bytes32Value), 'expected read to match write')
-    //
-    //         let txOrigin = returnVals[7]
-    //         assert.equal(txOrigin, solidityEvent.TxOrigin, 'expected read to match write')
-    //
-    //         let created = returnVals[8].toNumber()
-    //         assert.equal(created, solidityEvent.Created.toNumber(), 'expected read to match write')
-    //
-    //         let propCount = returnVals[9].toNumber()
-    //         assert.equal(propCount, solidityEvent.PropertyCount.toNumber(), 'expected read to match write')
-    //
-    //     })
-    // })
-    //
-    // contract('readEventProperty', async () => {
-    //     it('throws an error if called by an unauthorized address', async () => {
-    //         let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1)
-    //         let solidityEvent = eventTx.logs[0].args
-    //         let lastEventId = solidityEvent.Id.toNumber()
-    //         let propWriteTx = await _eventStore.writeEventProperty(lastEventId, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue')
-    //         try {
-    //             let eventType = await _eventStore.readEventProperty.call(lastEventId, 0, {
-    //                 from: accounts[5],
-    //                 gas: 2000000
-    //             })
-    //             // console.log(eventType)
-    //         } catch (e) {
-    //             // console.log(e)
-    //             assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
-    //         }
-    //     })
-    //     it('emits a EsEventProperty', async () => {
-    //         let reqTX = await _eventStore.addRequestorAddress(accounts[3])
-    //         let authTX = await _eventStore.authorizeRequestorAddress(accounts[3])
-    //         let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
-    //             from: accounts[3],
-    //             gas: 2000000
-    //         })
-    //         let solidityEvent = eventTx.logs[0].args
-    //         let lastEventId = solidityEvent.Id.toNumber()
-    //         let propWriteTx = await _eventStore.writeEventProperty(lastEventId, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
-    //             from: accounts[3],
-    //             gas: 2000000
-    //         })
-    //          let returnVals = await _eventStore.readEventProperty.call(lastEventId, 0, {
-    //             from: accounts[3]
-    //         })
-    //
-    //         // console.log(returnVals)
-    //
-    //         let eventId = returnVals[0].toNumber()
-    //         assert.equal(eventId, solidityEvent.Id, 'expected read to match write')
-    //
-    //         let propIndex = returnVals[1].toNumber()
-    //         assert.equal(propIndex, 0, 'expected read to match write')
-    //
-    //         let propName = toAscii(returnVals[2])
-    //         assert.equal(propName, 'CustomKey', 'expected read to match write')
-    //
-    //         let propType = toAscii(returnVals[3])
-    //         assert.equal(propType, 'Bytes32', 'expected read to match write')
-    //
-    //         let addressValue = returnVals[4]
-    //         assert.equal(addressValue, 0, 'expected read to match write')
-    //
-    //         let uintValue = returnVals[5].toNumber()
-    //         assert.equal(uintValue, 0, 'expected read to match write')
-    //
-    //         let bytes32Value = toAscii(returnVals[6])
-    //         assert.equal(bytes32Value, 'CustomValue', 'expected read to match write')
-    //     })
-    // })
+    contract('writeEventProperty', async () => {
+        it('throws a vm exception if called by an unauthorized address and event is authorized', async () => {
+            let adminTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', 'ES_WRITE_GRANTED', false, 'ES', accounts[0])
+            let eventTX = await writeEvent(Events.testAuthorizedAddressValueEventWithProperty, {from: accounts[0], gas: 2000000})
+            let solidityEvent = eventTX.logs[0].args
+            try {
+                let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'Ls', 0, 0, 'CustomValue', {
+                    from: accounts[1],
+                    gas: 2000000
+                })
+            } catch (e) {
+                assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
+            }
+        })
+
+        it('throws a vm exception if called by an unauthorized ACLAddress and event is authorized', async () => {
+            let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', '', false, 'ES', accounts[1])
+            let eventTX = await writeEvent(Events.testAuthorizedAddressValueEventWithProperty, {from: accounts[0], gas: 2000000})
+            let solidityEvent = eventTX.logs[0].args
+            try {
+                let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'ES', 0, 0, 'CustomValue', {
+                    from: accounts[1],
+                    gas: 2000000
+                })
+            } catch (e) {
+                assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
+            }
+        })
+
+        it('throws a vm exception if property already exists', async () => {
+            let grantTX = await _eventStore.grantWriteAccess('ES_WRITE_GRANTED', true, 'ES', accounts[1])
+            let eventTx = await writeEvent(Events.testAuthorizedAddressValueEventWithProperty, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTx.logs[0].args
+            let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'ES', 0, 0, 'CustomValue', {
+                from: accounts[1],
+                gas: 2000000
+            })
+            try {
+                let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'ES', 0, 0, 'CustomValue2', {
+                    from: accounts[1],
+                    gas: 2000000
+                })
+            } catch (e) {
+                assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
+            }
+        })
+
+        it('emits an EsEventProperty if called by an unauthorized ACLAddress and event is unauthorized', async () => {
+            let revokeTX = await _eventStore.revokeWriteAccess('ES_WRITE_REVOKED', true, 'ES', accounts[1])
+            let eventTx = await writeEvent(Events.testUnauthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTx.logs[0].args
+            let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', false, 'ES', 0, 0, 'CustomValue', {
+                from: accounts[1],
+                gas: 2000000
+            })
+            assert(propTx.logs.length === 1)
+            assert(propTx.logs[0].event === 'EsEventProperty')
+            let solidityEventProp = propTx.logs[0].args
+            assert.equal(toAscii(solidityEventProp.ValueType), 'Bytes32', 'expected event prop type to be Bytes32')
+            assert.equal(toAscii(solidityEventProp.Bytes32Value), 'CustomValue', 'expected event prop bytes32Value to be CustomValue')
+        })
+
+        it('emits an EsEventProperty if called by an authorized ACLAddress and event is authorized', async () => {
+            let grantTX = await _eventStore.grantWriteAccess('ES_WRITE_GRANTED', true, 'ES', accounts[1])
+            let eventTx = await writeEvent(Events.testAuthorizedAddressValueEventWithProperty, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTx.logs[0].args
+            let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'ES', 0, 0, 'CustomValue', {
+                from: accounts[1],
+                gas: 2000000
+            })
+            assert(propTx.logs.length === 1)
+            assert(propTx.logs[0].event === 'EsEventProperty')
+            let solidityEventProp = propTx.logs[0].args
+            assert.equal(toAscii(solidityEventProp.ValueType), 'Bytes32', 'expected event prop type to be Bytes32')
+            assert.equal(toAscii(solidityEventProp.Bytes32Value), 'CustomValue', 'expected event prop bytes32Value to be CustomValue')
+        })
+    })
+
+
+    contract('readEvent', async () => {
+        it('throws an error if called by an unauthorized ACLAddress and event is authorized', async () => {
+            let adminTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', 'ES_WRITE_GRANTED', false, 'ES', accounts[0])
+            let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', '', 'ES_WRITE_GRANTED', false, 'ES', accounts[1])
+            let eventTx = await writeEvent(Events.testAuthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTx.logs[0].args
+            try {
+                let eventType = await _eventStore.readEvent.call(solidityEvent.Id, {
+                    from: accounts[1]
+                })
+            } catch (e) {
+                assert.equal(isVmException(e), true, "expected an unauthorized read to cause a vm exception")
+            }
+        })
+
+        it('emits a EsEvent if called by an unauthorized ACLAddress and event is unauthorized', async () => {
+            let eventTx = await writeEvent(Events.testUnauthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTx.logs[0].args
+            let returnVals = await _eventStore.readEvent.call(solidityEvent.Id, {
+                from: accounts[1]
+            })
+
+            let eventId = returnVals[0].toNumber()
+            assert.equal(eventId, solidityEvent.Id, 'expected read to match write')
+
+            let eventType = toAscii(returnVals[1])
+            assert.equal(eventType, toAscii(solidityEvent.Type), 'expected read to match write')
+
+            let eventVersion = toAscii(returnVals[2])
+            assert.equal(eventVersion, toAscii(solidityEvent.Version), 'expected read to match write')
+
+            let valueType = toAscii(returnVals[3])
+            assert.equal(valueType, toAscii(solidityEvent.ValueType), 'expected read to match write')
+
+            let addressValue = returnVals[4]
+            assert.equal(addressValue, solidityEvent.AddressValue, 'expected read to match write')
+
+            let uintValue = returnVals[5].toNumber()
+            assert.equal(uintValue, solidityEvent.UIntValue.toNumber(), 'expected read to match write')
+
+            let bytes32Value = toAscii(returnVals[6])
+            assert.equal(bytes32Value, toAscii(solidityEvent.Bytes32Value), 'expected read to match write')
+
+            let txOrigin = returnVals[7]
+            assert.equal(txOrigin, solidityEvent.TxOrigin, 'expected read to match write')
+
+            let created = returnVals[8].toNumber()
+            assert.equal(created, solidityEvent.Created.toNumber(), 'expected read to match write')
+
+            let propCount = returnVals[9].toNumber()
+            assert.equal(propCount, solidityEvent.PropertyCount.toNumber(), 'expected read to match write')
+        })
+
+        it('emits a EsEvent if called by an authorized ACLAddress and event is authorized', async () => {
+            let grantTX = await _eventStore.grantReadAccess('ES_READ_GRANTED', true, 'ES', accounts[1])
+            let eventTx = await writeEvent(Events.testAuthorizedAddressValueEvent, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTx.logs[0].args
+            let returnVals = await _eventStore.readEvent.call(solidityEvent.Id, {
+                from: accounts[1]
+            })
+
+            let eventId = returnVals[0].toNumber()
+            assert.equal(eventId, solidityEvent.Id, 'expected read to match write')
+
+            let eventType = toAscii(returnVals[1])
+            assert.equal(eventType, toAscii(solidityEvent.Type), 'expected read to match write')
+
+            let eventVersion = toAscii(returnVals[2])
+            assert.equal(eventVersion, toAscii(solidityEvent.Version), 'expected read to match write')
+
+            let valueType = toAscii(returnVals[3])
+            assert.equal(valueType, toAscii(solidityEvent.ValueType), 'expected read to match write')
+
+            let addressValue = returnVals[4]
+            assert.equal(addressValue, solidityEvent.AddressValue, 'expected read to match write')
+
+            let uintValue = returnVals[5].toNumber()
+            assert.equal(uintValue, solidityEvent.UIntValue.toNumber(), 'expected read to match write')
+
+            let bytes32Value = toAscii(returnVals[6])
+            assert.equal(bytes32Value, toAscii(solidityEvent.Bytes32Value), 'expected read to match write')
+
+            let txOrigin = returnVals[7]
+            assert.equal(txOrigin, solidityEvent.TxOrigin, 'expected read to match write')
+
+            let created = returnVals[8].toNumber()
+            assert.equal(created, solidityEvent.Created.toNumber(), 'expected read to match write')
+
+            let propCount = returnVals[9].toNumber()
+            assert.equal(propCount, solidityEvent.PropertyCount.toNumber(), 'expected read to match write')
+        })
+    })
+
+    contract('readEventProperty', async () => {
+        it('throws an error if called by an unauthorized ACLAddress and event is authorized', async () => {
+            let adminTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', 'ES_READ_GRANTED', 'ES_WRITE_GRANTED', false, 'ES', accounts[0])
+            let reqTX = await _eventStore.addACLAddress('ES_ACCESS_REQUESTED', '', 'ES_WRITE_GRANTED', false, 'ES', accounts[1])
+            let eventTx = await writeEvent(Events.testAuthorizedAddressValueEventWithProperty, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTx.logs[0].args
+            let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'ES', 0, 0, 'CustomValue', {
+                from: accounts[1],
+                gas: 2000000
+            })
+            try {
+                let eventType = await _eventStore.readEvent.call(solidityEvent.Id, {
+                    from: accounts[1]
+                })
+            } catch (e) {
+                assert.equal(isVmException(e), true, "expected an unauthorized read to cause a vm exception")
+            }
+        })
+
+        it('emits a EsEventProperty if called by an unauthorized ACLAddress and event is unauthorized', async () => {
+            let eventTX = await writeEvent(Events.testUnauthorizedAddressValueEventWithProperty, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTX.logs[0].args
+            let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'ES', 0, 0, 'CustomValue', {
+                from: accounts[1],
+                gas: 2000000
+            })
+
+            let returnVals = await _eventStore.readEventProperty.call(solidityEvent.Id, 0, {
+                from: accounts[1]
+            })
+
+            let eventId = returnVals[0].toNumber()
+            assert.equal(eventId, solidityEvent.Id, 'expected read to match write')
+
+            let propIndex = returnVals[1].toNumber()
+            assert.equal(propIndex, 0, 'expected read to match write')
+
+            let propName = toAscii(returnVals[2])
+            assert.equal(propName, 'CustomKey', 'expected read to match write')
+
+            let propType = toAscii(returnVals[3])
+            assert.equal(propType, 'Bytes32', 'expected read to match write')
+
+            let addressValue = returnVals[4]
+            assert.equal(addressValue, 0, 'expected read to match write')
+
+            let uintValue = returnVals[5].toNumber()
+            assert.equal(uintValue, 0, 'expected read to match write')
+
+            let bytes32Value = toAscii(returnVals[6])
+            assert.equal(bytes32Value, 'CustomValue', 'expected read to match write')
+        })
+
+        it('emits a EsEventProperty if called by an authorized ACLAddress and event is authorized', async () => {
+            let grantTX = await _eventStore.grantReadAccess('ES_READ_GRANTED', true, 'ES', accounts[1])
+            let eventTX = await writeEvent(Events.testAuthorizedAddressValueEventWithProperty, {from: accounts[1], gas: 2000000})
+            let solidityEvent = eventTX.logs[0].args
+            let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', true, 'ES', 0, 0, 'CustomValue', {
+                from: accounts[1],
+                gas: 2000000
+            })
+
+            let returnVals = await _eventStore.readEventProperty.call(solidityEvent.Id, 0, {
+                from: accounts[1]
+            })
+
+            let eventId = returnVals[0].toNumber()
+            assert.equal(eventId, solidityEvent.Id, 'expected read to match write')
+
+            let propIndex = returnVals[1].toNumber()
+            assert.equal(propIndex, 0, 'expected read to match write')
+
+            let propName = toAscii(returnVals[2])
+            assert.equal(propName, 'CustomKey', 'expected read to match write')
+
+            let propType = toAscii(returnVals[3])
+            assert.equal(propType, 'Bytes32', 'expected read to match write')
+
+            let addressValue = returnVals[4]
+            assert.equal(addressValue, 0, 'expected read to match write')
+
+            let uintValue = returnVals[5].toNumber()
+            assert.equal(uintValue, 0, 'expected read to match write')
+
+            let bytes32Value = toAscii(returnVals[6])
+            assert.equal(bytes32Value, 'CustomValue', 'expected read to match write')
+        })
+    })
 })
